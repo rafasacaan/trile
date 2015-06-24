@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="Dashboard">
+  <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+  <title>Trile</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'master-application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+  <section id="container" >
+	<%= render "layouts/header"%>
+	<%= render "layouts/sidebar"%>  
+<section id="main-content">
+  <section class="wrapper">
+    <div class="row">
+    <!--  MAIN CONTENT -->
+    <div class="col-lg-12 main-chart">                    
+    <%= render 'layouts/alerts'%>
+    <%= yield %>
+    </div><!-- /col-lg-9 END SECTION MIDDLE -->
+    <%#= render 'layouts/right_side_bar'%>   
+   </div><!--/row -->
+  </section><!--/wrapper -->
+</section><!--/main-content -->
+<%= render "layouts/footer"%> 
+</section><!--/main-content -->
+<%= javascript_include_tag @js_file.to_s + '-application', 'data-turbolinks-track' => true %>
+</body>
+</html>

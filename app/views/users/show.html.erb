@@ -1,0 +1,26 @@
+<div class="panel panel-default tab-box">
+	<div class="panel-heading">
+		<div class="panel-title">
+			<h4><i class="fa fa-angle-right"></i>Api Keys
+<!-- Button trigger modal -->
+<button class="btn btn-success btn-md pull-right" data-toggle="modal" data-target="#myModal">Ver mis Api Keys</button>
+<!-- Modal --></h4>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	        <h4 class="modal-title" id="myModalLabel">Esta es tu llave para subir datos a Trile</h4>
+	      </div>
+	      <div class="modal-body">
+	        <%= current_user.auth_token %>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	       </div>
+	    </div>
+	  </div>
+	</div>      				
+   </div>
+  </div>
+</div>

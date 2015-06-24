@@ -1,0 +1,40 @@
+<div>
+<h2><%= current_user.name.titleize %>, estos son tus circuitos</h2>
+</div>
+<div class="row mt mb">
+ <div class="col-md-12">
+      <section class="task-panel tasks-widget">
+  <div class="panel-heading">
+        <div class="pull-left"><h5><i class="fa fa-tasks"></i> Mis  Circuitos</h5></div>
+        <br>
+  </div>
+    <div class="panel-body">
+      <div class="task-content">
+        <ul id="sortable" class="task-list">
+          <% @circuits.each do |circuit| %>
+            <li class="list-<%= dashgum_list_type(circuit.type)%>">
+              <i class=" fa fa-ellipsis-v"></i>                                   
+              <div class="task-title">
+                <span class="badegeShow">
+                <span class="task-title-sp"><%= link_to sti_circuit_path(circuit.type, circuit) do %>
+                  <%=circuit.description.titleize %>
+                  <%end%>
+                </span>
+                </span>
+                <span class="badge <%= dashgum_badge_type(circuit.type) %>"><%= circuit.type%></span>
+                <div class="pull-right hidden-phone">
+                <%= link_to '', sti_circuit_path(circuit.type, circuit, :edit,), { class: "btn btn-primary btn-xs fa fa-pencil"} %>
+                <%= link_to '', sti_circuit_path(circuit.type, circuit), method: :delete, data: { confirm: 'Are you sure?'}, class: "btn btn-danger btn-xs fa fa-trash-o" %>
+                </div>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+        <div class=" add-task-row">
+          <%= link_to "Nuevo Circuito", sti_circuit_path(@type, nil, :new), class: "btn btn-success btn-sm pull-left" %>
+          <%= link_to 'Ver todos los Circuitos', sti_circuit_path, class: "btn btn-default btn-sm pull-right"  %>
+      </div>
+    </div>                    
+ </div>
+</div>

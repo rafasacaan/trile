@@ -1,0 +1,31 @@
+<%= form_for(@circuit ,  html: {:class => 'form-login'}) do |f| %>
+<h2 class="form-login-heading"> New <%=  "#{@type.capitalize}" %> </h2>
+<div class="login-wrap">
+  <% if @circuit.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@circuit.errors.count, "error") %> prohibited this circuit from being saved:</h2>
+      <ul>
+      <% @circuit.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.text_field :user_id, class: 'form-control', placeholder: 'Nombre', disabled: true %>
+  </div>
+  <div class="field">
+    <%= f.text_area :description, class: 'form-control', placeholder: 'Description' %>
+  </div>
+  <div class="field">
+    <%= f.text_field :alarm_time, class: 'form-control', placeholder: 'Alarm Time in minutes', disabled: true %>
+  </div>
+  <div class="field">
+    <%= f.text_field :type, class: 'form-control', placeholder: 'Type', disabled: true %>
+  </div>
+  <div class="actions">
+    <%= f.submit "Crear",  :class =>"btn btn-theme btn-block" %>
+  </div>
+<% end %>
+ 

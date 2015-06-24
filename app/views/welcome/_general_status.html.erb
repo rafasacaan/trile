@@ -1,0 +1,103 @@
+<div class="col-md-offset-4" id="main-title"><h2><b>Resumen General</b></h2></div>
+  <div class="row mtbox">          		
+    <div class="col-md-2 col-sm-2 col-md-offset-2 box0">
+      <div class="box1">
+      <span> <i class="fa fa-bolt"></i></span>
+      <h3><%= @circuits.count %></h3>
+      </div>
+      <p>Tienes <%= @circuits.count %>  circuitos configurados actualmente</p>
+    </div>
+    <div class="col-md-2 col-sm-2 box0">
+      <div class="box1">
+      <span class="li_fire"></span>
+      <h3>3</h3>
+      </div>
+      <p>Tienes 3 alarmas por atender.</p>
+    </div>
+    <div class="col-md-2 col-sm-2 box0">
+      <div class="box1">
+      <span class="li_news"></span>
+      <h3>+2</h3>
+      </div>
+      <p>Se han agregado dos reportes a tu carpeta.</p>
+    </div> 
+    
+    <div class="col-md-2 col-sm-2 box0">
+      <div class="box1">
+      <span class="li_data"></span>
+      <h3>OK!</h3>
+      </div>
+        <% @circuits.each do |c| %>
+        <% if c.last_measure == nil %>
+        <p>El circuito <%=c.id%> no tiene registros</p>
+          <% else %>
+        <p><%=time_ago_in_words(c.last_measure.created_at)%></p>
+          <% end %>
+        <% end %>
+    </div>
+  </div><!-- /row mtbox -->	
+              <div class="row mt">
+                <div class="col-md-4 mb">
+                 <div class="white-panel pn">
+                <div class="white-header">
+                  <h5>Energia Acumulada Anual</h5>
+                </div>
+                <p style="font-size: 50px"><b>38,500</b></p>
+                <p><b>kWh</b></p>
+                <div class="row">
+                  <div class="col-md-6">
+                    <p class="small mt"><i class="fa fa-calendar"></i></p>
+                    <p>2015</p>
+                  </div>
+                  <div class="col-md-6">
+                    <p class="small mt">COSTO TOTAL</p>
+                    <p>$ 475,567</p>
+                  </div>
+                </div>
+              </div>
+            </div><!-- /col-md-4 -->
+           	
+            <div class="col-md-4 mb">
+               <div class="white-panel pn">
+                <div class="white-header">
+                <h5>Energia Acumulada Semana</h5>
+                </div>
+                 <p style="font-size: 50px"><b>5,824</b></p>
+                 <p><b>kWh</b></p>
+                 <div class="row">
+                 <div class="col-md-6">
+                  <p class="small mt"><i class="fa fa-calendar"></i></p>
+                  <p>21/04/15</p>
+                   </div>
+                   <div class="col-md-6">
+                    <p class="small mt">COSTO TOTAL</p>
+                     <p>$ 15,597</p>
+                  </div>
+                 </div>
+               </div>
+            </div><!-- /col-md-4 -->
+            	
+    			<div class="col-md-4 mb">
+                    <div class="white-panel pn">
+                      <div class="white-header">
+                      <h5>Energia Acumulada Anual</h5>
+                    </div>
+                    <p style="font-size: 50px"><b>38,500</b></p>
+                    <p><b>kWh</b></p>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p class="small mt"><i class="fa fa-calendar"></i></p>
+                        <p>2015</p>
+                      </div>
+                      <div class="col-md-6">
+                        <p class="small mt">COSTO TOTAL</p>
+                        <p>$ 475,567</p>
+                      </div>
+                    </div>
+                  </div>
+                </div><!-- /col-md-4 -->
+            </div><!-- /row -->
+
+            <% @circuits.each do |c| %>
+            <%= c.status + "id= "+c.id.to_s%> 
+            <% end %>

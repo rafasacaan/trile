@@ -1,0 +1,106 @@
+<%= render 'general_status'%>       
+	<div class="row">
+		<div class="col-md-4 mb">
+   		<div class="darkblue-panel pn">
+   			<div class="darkblue-header">
+	  			<h5>Capacidad Máxima</h5>
+   			</div>
+						<canvas id="serverstatus02" height="120" width="120"></canvas>
+						<script>
+							var doughnutData = [
+									{
+										value: 60,
+										color:"#68dff0"
+									},
+									{
+										value : 40,
+										color : "#444c57"
+									}
+								];
+								var myDoughnut = new Chart(document.getElementById("serverstatus02").getContext("2d")).Doughnut(doughnutData);
+						</script>
+						<p>21 de abril de 2015</p>
+						<footer>
+							<div class="pull-left">
+                <h5><i class="fa fa-hdd-o"></i> 100 kW</h5>
+              </div>
+              <div class="pull-right">
+                <h5>60% Utilizado</h5>
+             	</div>
+						</footer>
+      </div><!-- /darkblue panel -->
+		</div><!-- /col-md-4 -->
+	<div class="col-md-4 col-sm-4 mb">
+      <div class="darkblue-panel pn">
+        <div class="darkblue-header">
+          <h5>Precio Potencia</h5>
+        </div>
+        <div class="chart mt">
+          <div class="sparkline" data-type="line" data-resize="true" data-height="75" data-width="90%" data-line-width="1" data-line-color="#fff" data-spot-color="#fff" data-fill-color="" data-highlight-line-color="#fff" data-spot-radius="4" data-data="[24,26,25,25,25,28,27,26]"></div>
+        </div>
+        <p class="mt"><br/>Promedio Últimos 8 Meses<br><b>$ 12 W</b></p>
+      </div>
+    </div><!-- /col-md-4 -->
+        
+    <div class="col-md-4 col-sm-4 mb">
+      <div class="darkblue-panel pn">
+        <div class="darkblue-header">
+          <h5>Precio Energía</h5>
+        </div>
+        <div class="chart mt">
+          <div class="sparkline" data-type="line" data-resize="true" data-height="75" data-width="90%" data-line-width="1" data-line-color="#fff" data-spot-color="#fff" data-fill-color="" data-highlight-line-color="#fff" data-spot-radius="4" data-data="[90,97,110,102,99,120,118,117,111]"></div>
+        </div>
+        <p class="mt"><br/>Promedio Últimos 8 Meses<br><b>$ 122 Wh</b></p>
+      </div>
+    </div><!-- /col-md-4 -->
+ </div><!-- /row -->
+
+<div class="row mt">
+  <div class="border-head">
+      <h3>Kilowatts Generados</h3>
+  </div>  
+  <div class="custom-bar-chart">
+      <ul class="y-axis">
+          <li><span>10.000</span></li>
+          <li><span>8.000</span></li>
+          <li><span>6.000</span></li>
+          <li><span>4.000</span></li>
+          <li><span>2.000</span></li>
+          <li><span>0</span></li>
+      </ul>
+
+      <div class="bar">
+          <div class="title">JAN</div>
+          <div class="value tooltips" data-original-title="8.500" data-toggle="tooltip" data-placement="top">85%</div>
+      </div>
+      <div class="bar ">
+          <div class="title">FEB</div>
+          <div class="value tooltips" data-original-title="5.000" data-toggle="tooltip" data-placement="top">50%</div>
+      </div>
+      <div class="bar ">
+          <div class="title">MAR</div>
+          <div class="value tooltips" data-original-title="6.000" data-toggle="tooltip" data-placement="top">60%</div>
+      </div>
+      <div class="bar ">
+          <div class="title">APR</div>
+          <div class="value tooltips" data-original-title="4.500" data-toggle="tooltip" data-placement="top">45%</div>
+      </div>
+      <div class="bar">
+          <div class="title">MAY</div>
+          <div class="value tooltips" data-original-title="3.200" data-toggle="tooltip" data-placement="top">32%</div>
+      </div>
+      <div class="bar ">
+          <div class="title">JUN</div>
+          <div class="value tooltips" data-original-title="6.200" data-toggle="tooltip" data-placement="top">62%</div>
+      </div>
+      <div class="bar">
+          <div class="title">JUL</div>
+          <div class="value tooltips" data-original-title="7.500" data-toggle="tooltip" data-placement="top">75%</div>
+      </div>
+  </div><!--custom chart end-->
+</div><!-- /row -->					
+                       
+         
+    
+
+      

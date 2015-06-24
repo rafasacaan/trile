@@ -1,0 +1,12 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: two
+  description: MyText
+  type: Demand
+
+
+two:
+  user: one
+  description: MyText
+  type: Generation

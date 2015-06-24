@@ -1,0 +1,25 @@
+<div id="monitor" class="panel panel-default tab-box">
+    <div class="panel-heading">
+      <div class="panel-title">
+    	<i class="fa fa-signal"> Monitoring report</i>
+    	<ul class="nav nav-tabs pull-right">
+    		<li><input type="text" id="datepicker" class="form-control" ></li>
+    	</ul>  
+	  	<ul class="nav nav-tabs pull-right">
+	  		<li class="active"><a class="nav-tab-action" data-chart="day">Diario</a></li>
+	  		<li><a href="#" class="nav-tab-action" data-chart="week">Semanal</a></li>
+	  		<li><a href="#" class="nav-tab-action" data-chart="month">Mensual</a></li>
+	  		<li><a href="#" class="nav-tab-action" data-chart="year">Anual</a></li>
+	  	</ul>
+	  </div>
+	</div>
+	<div class="panel-body">
+		<div class="tab-content">
+			<div id="chartcontainer" class="tab-pane active">	
+				<div id="testchart" data-circuit="<%= @circuit.id %>" style="height: 250px;" class="loading"></div>
+			</div>
+		</div>
+	</div>
+</div>
+<div></div>
+

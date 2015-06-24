@@ -1,0 +1,41 @@
+//= require jquery-1.8.3.min
+//= require jquery-ui-1.9.2.custom.min
+//= require bootstrap.min
+//= require jquery.dcjqaccordion.2.7
+//= require jquery.scrollTo.min
+//= require jquery.nicescroll
+//= require jquery.sparkline
+//= require common-scripts
+//= require gritter/js/jquery.gritter
+//= require gritter-conf
+//= require sparkline-chart
+//= require zabuto_calendar
+//= require tasks.js
+//= require raphael-min
+//= require morris-0.4.3.min
+//= require common-scripts
+
+  jQuery(document).ready(function() {
+      TaskList.initTaskWidget();
+  });
+
+  $(function() {
+      $( "#sortable" ).sortable();
+      $( "#sortable" ).disableSelection();
+    var today_graph = {
+              element: 'myfirstchart',
+              hideHover: 'auto',
+              data: gon.today,
+              xkey: 'created_at',
+              ykeys: ['watts', 'id'],
+              labels: [gon.type],
+              resize: true,
+              lineColors: ['#A52A2A', '#72A0C1']
+          };
+      line1 = Morris.Line(today_graph); 
+});
+
+
+        
+
+

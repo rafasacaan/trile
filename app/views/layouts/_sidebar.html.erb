@@ -1,0 +1,42 @@
+<aside><!--  MAIN SIDEBAR MENU -->
+  <div id="sidebar"  class="nav-collapse"><!-- sidebar menu start-->
+      <ul class="sidebar-menu" id="nav-accordion">       
+        <li>
+         <%= link_to root_url do %>
+        <i class="fa fa-home fa-2x centered" id="home"></br><p>Home</p></i>
+        <% end %>
+        </li> 
+
+        <li class="sub-menu">
+          <a href="javascript:;"><i class="fa fa-flash centered"></br><p>Mis Circuitos</p></i></a>
+          <ul class="sub-menu">
+             <li><%= link_to "Generacion",  generations_path() %></li>
+             <li><%= link_to "Demanda", demands_path() %></li>                    
+             <li><%= link_to "Todos", circuits_path() %></li>                     
+           </ul>
+        </li>
+       
+        <li class="sub-menu">
+            <a href="javascript:;"><i class="fa fa-file-text centered" id="report"></br><p>Reportes</p></i></a>
+          <ul class="sub-menu">
+          </ul>
+        </li>
+         
+        <li class="sub-menu">
+         <a href="javascript:;"><i class="fa fa-cogs fa-2x centered"></br><p>Config Panel</p></i></a>
+        <ul class="sub-menu">
+          <% if user_signed_in? %>
+              <li><%= link_to 'Edit Account', edit_user_registration_path %></li>
+              <li><%= link_to 'Api Key', user_path(current_user.id) %></li>
+          <% else %>
+              <li><%= link_to 'Sign in', new_user_session_path %></li>
+              <li><%= link_to 'Sign up', new_user_registration_path %></li>
+          <% end %>                       
+          </ul>
+        </li>
+
+        </ul><!-- sidebar menu end-->
+    </div>
+</aside>
+  <!--sidebar end-->
+      
