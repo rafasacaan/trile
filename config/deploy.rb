@@ -3,7 +3,7 @@ lock '3.4.0'
  
 set :application, 'trile'
 set :scm, :git
-set :repo_url, 'git@github.com:sbstn-jmnz/trile.git'
+set :repo_url, 'git@bitbucket.org:sbstn/trile.git'
 set :branch, "master"
 set :deploy_via, :copy
 set :user, 'deploy'
