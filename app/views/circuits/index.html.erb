@@ -1,6 +1,13 @@
 <div>
 <h2><%= current_user.name.titleize %>, estos son tus circuitos</h2>
 </div>
+<div class="panel-body">
+    <div class="tab-content">
+      <div id="chartcontainer" class="tab-pane active"> 
+        <div id="testchart" data-circuit="<%= @circuits.count %>" style="height: 250px;" class="loading"></div>
+      </div>
+    </div>
+</div>
 <div class="row mt mb">
  <div class="col-md-12">
       <section class="task-panel tasks-widget">
@@ -38,3 +45,6 @@
     </div>                    
  </div>
 </div>
+</br>
+<%#= @circuits.klass %>
+<%#= @circuits.inspect %>

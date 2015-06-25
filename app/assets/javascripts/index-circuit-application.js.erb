@@ -15,25 +15,45 @@
 //= require morris-0.4.3.min
 //= require common-scripts
 
-  jQuery(document).ready(function() {
-      TaskList.initTaskWidget();
-  });
+graph = {
+    element: 'testchart',
+    hideHover: 'auto',
+    data: [],
+    xkey: 'created_at',
+    ykeys: ['photo','temperatura'],
+    labels: ['photo','temperatura'],
+    resize: false,
+    lineColors: ['#00E676','#1E88E5'],
+    lineWidth: 2,
+    fillOpacity: 0.03,
+    pointSize: 3,
+    resize: true,
+    ymax: 'auto',
+    dateFormat: function(date) {
+          d = new Date(date);
+          var hours = d.getHours();
+          var minutes = "0" + d.getMinutes();
+          var seconds = "0" + d.getSeconds();
+          return d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear()+' '+hours+':'+minutes.substr(-2); 
+    }
+};
+    testchart = Morris.Line(graph);
 
-  $(function() {
-      $( "#sortable" ).sortable();
-      $( "#sortable" ).disableSelection();
-    var today_graph = {
-              element: 'myfirstchart',
-              hideHover: 'auto',
-              data: gon.today,
-              xkey: 'created_at',
-              ykeys: ['watts', 'id'],
-              labels: [gon.type],
-              resize: true,
-              lineColors: ['#A52A2A', '#72A0C1']
-          };
-      line1 = Morris.Line(today_graph); 
+$(function() {
+
+  TaskList.initTaskWidget();
+  $( "#sortable" ).sortable();
+  $( "#sortable" ).disableSelection();
+
+    $.getJSON("/reports/index_measures", function(data) {
+    $("#testchart").removeClass("loading");
+    console.log(data);
+    testchart.setData(data);
+
+  });
 });
+
+  
 
 
         

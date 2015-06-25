@@ -139,6 +139,39 @@ def specific_day_measures(date)
                           ])
  	#self.measures.where("created_at >= ?", 1.year.ago.utc).select("created_at, watts").order(:created_at)
   end
+
+  def index_measures
+    data = Circuit.find_by_sql(["SELECT * FROM(              "+
+                         "SELECT                             "+
+                         "circuits.description,              "+
+                         "measures.watts,                    "+
+                         "measures.created_at,               "+
+                         "row_number() OVER () as rnum       "+
+                         "FROM                               "+ 
+                         "public.measures,                   "+
+                         "public.circuits                    "+
+                         "WHERE                              "+ 
+                         "circuits.id = measures.circuit_id  "+
+                         "AND                                "+
+                         "measures.created_at >= ?           "+
+                         "AND                                "+
+                         "measures.created_at <= ?           "+
+                         "AND                                "+
+                         "circuits.user_id = ?               "+
+                         "ORDER BY                           "+
+                         "measures.created_at ASC ) AS stats "+
+                         "WHERE                              "+
+                         "mod(rnum,5) = 0;                   ",
+                          Time.now.midnight,
+                          Time.now,
+                          self.user_id])
+        a = []   
+        data.each do |d|
+          hash = {d.description.parameterize.underscore.to_sym => d.watts, :created_at => d.created_at}
+          a.push(hash)
+        end
+        return a
+  end
   
  private
 

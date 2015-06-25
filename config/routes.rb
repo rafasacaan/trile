@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   get  'reports/year_measures/:id', to: 'reports#year_measures'
   get  'reports/circuit_type/:id', to: 'reports#circuit_type'
   get  'reports/specific_date_measures/:id/:date', to: 'reports#specific_date_measures'
+  get  'reports/index_measures/', to: 'reports#index_measures'
 
   namespace :api, path: '/', constraints: { subdomain: 'api' } do
     resources :circuits do
@@ -25,3 +26,4 @@ Rails.application.routes.draw do
     end
   end
 end
+
