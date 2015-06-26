@@ -1,6 +1,6 @@
 class ReportsController < ApplicationController
-before_action :set_circuit, except:[:index_measures] 
-before_action :set_circuits, only:[:index_measures]
+before_action :set_circuit, except:[:index_measures, :labels] 
+before_action :set_circuits, only:[:index_measures, :labels]
 
 	def today_measures
 		render json: @circuit.today_measures
@@ -29,6 +29,14 @@ before_action :set_circuits, only:[:index_measures]
 
 	def circuit_type
 		render json: @circuit.type.to_json
+	end
+
+	def labels
+		a = []
+		@circuits.each do |c|
+		a.push(c.description) 
+		end
+		render json: a.to_json
 	end
 
 	def set_circuit

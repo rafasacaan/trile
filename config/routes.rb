@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   get  'reports/circuit_type/:id', to: 'reports#circuit_type'
   get  'reports/specific_date_measures/:id/:date', to: 'reports#specific_date_measures'
   get  'reports/index_measures/', to: 'reports#index_measures'
+  get  'reports/labels/', to: 'reports#labels'
 
   namespace :api, path: '/', constraints: { subdomain: 'api' } do
     resources :circuits do

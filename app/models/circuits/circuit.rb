@@ -91,7 +91,7 @@ def specific_day_measures(date)
                          "ORDER BY                           "+
                          "measures.created_at ASC ) AS stats "+
                          "WHERE                              "+
-                         "mod(rnum,3) = 0;                   ",
+                         "mod(rnum,15) = 0;                   ",
                           self.id,
                           1.week.ago.utc
                           ])
@@ -112,7 +112,7 @@ def specific_day_measures(date)
                          "ORDER BY                           "+
                          "measures.created_at ASC ) AS stats "+
                          "WHERE                              "+
-                         "mod(rnum,4) = 0;                   ",
+                         "mod(rnum,30) = 0;                   ",
                           self.id,
                           1.month.ago.utc
                           ])
@@ -133,11 +133,10 @@ def specific_day_measures(date)
                          "ORDER BY                           "+
                          "measures.created_at ASC ) AS stats "+
                          "WHERE                              "+
-                         "mod(rnum,5) = 0;                   ",
+                         "mod(rnum,50) = 0;                   ",
                           self.id,
                           1.year.ago.utc
                           ])
- 	#self.measures.where("created_at >= ?", 1.year.ago.utc).select("created_at, watts").order(:created_at)
   end
 
   def index_measures
@@ -161,18 +160,20 @@ def specific_day_measures(date)
                          "ORDER BY                           "+
                          "measures.created_at ASC ) AS stats "+
                          "WHERE                              "+
-                         "mod(rnum,5) = 0;                   ",
-                          Time.now.midnight,
-                          Time.now,
-                          self.user_id])
+                         "mod(rnum,5) = 0;                   ",Time.now.midnight,Time.now,self.user_id])
+        #Data formating
         a = []   
         data.each do |d|
           hash = {d.description.parameterize.underscore.to_sym => d.watts, :created_at => d.created_at}
           a.push(hash)
         end
         return a
-  end
+    end
   
+
+
+
+
  private
 
 	def ensure_not_referenced_by_any_measure

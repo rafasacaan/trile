@@ -41,39 +41,20 @@ graph = {
 testchart = Morris.Area(graph);
 
 //This function displays the initial graph (today_measures)
-$(document).ready(function() {
+$(function() {
     $.getJSON("/reports/today_measures/" + parseInt($("#testchart").data("circuit")), function(data) {
     $("#testchart").removeClass("loading");
     testchart.setData(data);
   });
 
-//format date 
-
-    var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth()+1; //January is 0!
-    var yyyy = today.getFullYear();
-    
-    if(dd<10){
-        dd='0'+dd
-    } 
-    if(mm<10){
-        mm='0'+mm
-    } 
-    var today = dd+'/'+mm+'/'+yyyy;
-
-  $("#datepicker").val(today); 
-  $("#datepicker").datepicker({
-                                dateFormat: 'dd/mm/yy',
-                                inline: true
-                              });
-
+//Datepicker formater
+  $("#datepicker").datepicker({dateFormat: 'dd/mm/yy',inline: true});
   //Needs Refactoring. This is piece of code is called 3 times in this page
   $.getJSON("/reports/circuit_type/" + parseInt($("#testchart").data("circuit")), function(data) {
     graph.labels.push(data);
   });
-});
-//Fin del ready
+});//End ready function
+
 
 //This function takes the element "a.nav-tab-action" when is clicked and grabs the data element value, which
 //can be day, week, month or year and assigns that value to the variable chart. See show.html.erb
