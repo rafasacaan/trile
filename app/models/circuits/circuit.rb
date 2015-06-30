@@ -170,8 +170,9 @@ def specific_day_measures(date)
         return a
     end
   
-
-
+    def last_five_measures
+      self.measures.take(5)
+    end
 
 
  private

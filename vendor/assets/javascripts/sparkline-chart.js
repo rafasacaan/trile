@@ -11,9 +11,6 @@ var Script = function () {
             '<span style="color: {{color}}">&#9679;</span> {{offset:names}} ({{percent.1}}%)</span>'
         });
 
-
-
-
     });
 
 //sparkline chart
@@ -29,26 +26,19 @@ var Script = function () {
 
     });
 
-
     $("#linechart").sparkline([1,5,3,7,9,3,6,4,7,9,7,6,2], {
         type: 'line',
-        width: '300',
+        resize: true,
         height: '75',
-        fillColor: '',
+        width: '90%',        
+        lineWidth: 1,
         lineColor: '#fff',
-        lineWidth: 2,
         spotColor: '#fff',
-        minSpotColor: '#fff',
-        maxSpotColor: '#fff',
-        highlightSpotColor: '#fff',
+        fillColor: '',
         highlightLineColor: '#ffffff',
         spotRadius: 4,
-        highlightLineColor: '#ffffff'
-//        tooltipFormat: '<span style="display:block; padding:0px 10px 12px 0px;">' +
-//            '<span style="color: {{color}}">&#9679;</span> {{offset:names}} ({{percent.1}}%)</span>'
-
-
-
+        tooltipFormat: '<span style="display:block; padding:0px 10px 12px 0px;">' +
+        '<span style="color: {{color}}">&#9679;</span> {{offset:names}} ({{percent.1}}%)</span>'
     });
 
     $("#pie-chart").sparkline([2,1,1,1], {

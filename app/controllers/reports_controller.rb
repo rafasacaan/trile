@@ -27,6 +27,10 @@ before_action :set_circuits, only:[:index_measures, :labels]
 		render json: @circuit.index_measures
 	end
 
+	def method_name
+		
+	end
+
 	def circuit_type
 		render json: @circuit.type.to_json
 	end

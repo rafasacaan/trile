@@ -11,7 +11,7 @@
 //= require zabuto_calendar
 
 
-$(document).ready(function () {
+$(function () {
         var unique_id = $.gritter.add({
             // (string | mandatory) the heading of the notification
             title: 'Bienvenido a Tu Trile',
@@ -26,12 +26,13 @@ $(document).ready(function () {
             // (string | optional) the class name you want to apply to that specific message
             class_name: 'my-sticky-class'
         });
+      
+  return false;
 
-        return false;
 });        
   
   
-$(document).ready(function () {
+$(function () {
             $("#date-popover").popover({html: true, trigger: "manual"});
             $("#date-popover").hide();
             $("#date-popover").click(function (e) {
@@ -54,6 +55,36 @@ $(document).ready(function () {
                     {type: "block", label: "Regular event", }
                 ]
             });
+
+    $.getJSON("/reports/index_measures", function(data) {
+      $("#testchart").removeClass("loading");
+      testchart.setData(data);
+    });
+
+        $("#linechart").sparkline([1,5,3,7,9,3,6,4,7,9,7,6,2], {
+        type: 'line',
+        resize: true,
+        height: '75',
+        width: '90%',        
+        lineWidth: 1,
+        lineColor: '#fff',
+        spotColor: '#fff',
+        fillColor: '',
+        highlightLineColor: '#ffffff',
+        spotRadius: 4,
+        tooltipFormat: '<span style="display:block; padding:0px 10px 12px 0px;">' +
+        '<span style="color: {{color}}">&#9679;</span> {{offset:names}} ({{percent.1}}%)</span>'
+    
+    });
+
+    
+
+
+
+
+
+
+
         });
         
         
@@ -64,6 +95,5 @@ $(document).ready(function () {
             console.log('nav ' + nav + ' to: ' + to.month + '/' + to.year);
         }  
     
-
-     
+        
  
