@@ -4,6 +4,7 @@ class WelcomeController < ApplicationController
   #is include the module and set a callback or use the methods directly in the functions
   include CircuitsStatus
   before_action :circuits_status, only:[:index]
+  before_action :general_status, only:[:index]
   ########################################################################################################################
   
   def index
