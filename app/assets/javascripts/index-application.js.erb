@@ -33,35 +33,7 @@ $(function () {
   
   
 $(function () {
-            $("#date-popover").popover({html: true, trigger: "manual"});
-            $("#date-popover").hide();
-            $("#date-popover").click(function (e) {
-                $(this).hide();
-            });
-        
-            $("#my-calendar").zabuto_calendar({
-                action: function () {
-                    return myDateFunction(this.id, false);
-                },
-                action_nav: function () {
-                    return myNavFunction(this.id);
-                },
-                ajax: {
-                    url: "",
-                    modal: true
-                },
-                legend: [
-                    {type: "text", label: "Special event", badge: "00"},
-                    {type: "block", label: "Regular event", }
-                ]
-            });
-
-    $.getJSON("/reports/index_measures", function(data) {
-      $("#testchart").removeClass("loading");
-      testchart.setData(data);
-    });
-
-        $("#linechart").sparkline([1,5,3,7,9,3,6,4,7,9,7,6,2], {
+    var options = {
         type: 'line',
         resize: true,
         height: '75',
@@ -72,28 +44,30 @@ $(function () {
         fillColor: '',
         highlightLineColor: '#ffffff',
         spotRadius: 4,
-        tooltipFormat: '<span style="display:block; padding:0px 10px 12px 0px;">' +
-        '<span style="color: {{color}}">&#9679;</span> {{offset:names}} ({{percent.1}}%)</span>'
-    
+        valueSpots: {':49': 'white', '50:': 'red'}};
+        
+            
+    $.getJSON("/reports/welcome_index", function(data) {
+      for (i = 0; i < data.length; i++){
+        $.getJSON("/reports/last_five/" + data[i].id, function(data){
+            $("#linechart-"+data[0]).sparkline(data[1], options);
+            $("#p-"+data[0]).html('<br/>Promedio Últimos 20 minutos<br><b>' + average(data[1]) +'</b>');
+            });
+        };    
     });
+});
 
-    
-
-
-
-
-
-
-
-        });
+function average(array) {
+    var sum = 0;
+    for( var i = 0; i < array.length; i++ ){
+        sum += parseInt( array[i], 10 ); //don't forget to add the base
+    };
+     var avg = sum/array.length;        // The function returns the product of p1 and p2
+     return avg;
+};
         
         
-        function myNavFunction(id) {
-            $("#date-popover").hide();
-            var nav = $("#" + id).data("navigation");
-            var to = $("#" + id).data("to");
-            console.log('nav ' + nav + ' to: ' + to.month + '/' + to.year);
-        }  
+        
     
         
  

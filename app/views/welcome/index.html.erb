@@ -11,10 +11,10 @@
           <h5><%=c.description.titleize%></h5>
         </div>
         <div class="chart mt">
-        <div id="linechart-<%=c.id%>">
+        <div id="linechart-<%=c.id%>" data-circuit="c.id">
        </div>
      </div>
-    <p class="mt"><br/>Promedio Últimos 8 Meses<br><b>$ 122 Wh</b></p>
+    <p class="mt" id="p-<%=c.id%>"></p>
 </div>
   </div><!-- /col-md-4 -->
    <% count += 1%>

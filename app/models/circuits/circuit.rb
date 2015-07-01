@@ -171,7 +171,16 @@ def specific_day_measures(date)
     end
   
     def last_five_measures
-      self.measures.take(5)
+      #retrieve the last five measures as object
+       data = self.measures.select("watts").order(:created_at).take(10).to_a
+       #two empty arrays one for the circuit id an another for the data itself
+       arr = []
+       a = []
+       arr.push(self.id)
+       data.each do |d|
+        a.push(d.watts)
+       end
+       arr.push(a)
     end
 
 
