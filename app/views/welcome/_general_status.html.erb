@@ -39,20 +39,19 @@
       <div class="box1">
       <span class="fa-stack fa-lg">
       <i class="fa fa-database fa-stack-1x"></i>
-      <% if @status = "Problem" %>
+      <% if @status == "Problem" %>
         <i class="fa fa-ban fa-stack-2x text-danger"></i>
       <% end %>
       </span>
       <h3><%= @status %>!</h3>
       </div>
-      <% if @status = "Problem" %>
+      <% if @status == "Problem" %>
         <p><%= sanitize flash["error"]%></p>
       <% else %>
         <p><%= sanitize flash["success"]%></p>
       <% end %>
     </div>
-  
-  </div><!-- /row mtbox -->	
+ </div><!-- /row mtbox -->	
   
 
             
