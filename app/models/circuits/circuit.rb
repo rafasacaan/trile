@@ -93,7 +93,7 @@ def specific_day_measures(date)
                          "WHERE                              "+
                          "mod(rnum,15) = 0;                   ",
                           self.id,
-                          1.week.ago.utc
+                          1.week.ago
                           ])
    #measures.where("created_at >= ?", 1.week.ago.utc).select("created_at, watts").order(:created_at)
   end
@@ -114,7 +114,7 @@ def specific_day_measures(date)
                          "WHERE                              "+
                          "mod(rnum,30) = 0;                   ",
                           self.id,
-                          1.month.ago.utc
+                          1.month.ago
                           ])
  	#self.measures.where("created_at >= ?", 1.month.ago.utc).select("created_at, watts").order(:created_at)
   end
@@ -135,7 +135,7 @@ def specific_day_measures(date)
                          "WHERE                              "+
                          "mod(rnum,50) = 0;                   ",
                           self.id,
-                          1.year.ago.utc
+                          1.year.ago
                           ])
   end
 
