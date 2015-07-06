@@ -15,8 +15,10 @@
   </div>
     <!--logo end-->
     <%#= render "layouts/notifications" %>
-   
-   <ul class="nav pull-right top-menu">
+  <ul class="nav pull-right top-menu">
+      <li class="notify-row" id= "top_menu_date">
+        <h5> <%= Date.today.strftime("%A, %d %B %Y") %> </h5>
+      </li>
       <li class="dropdown" id="logoutico">
       <%= link_to destroy_user_session_path, method: :delete, class: 'dropdown-toggle' do %>
       <i class="fa fa-sign-out"></i>
