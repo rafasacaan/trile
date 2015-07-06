@@ -865,8 +865,8 @@ ul.top-menu > li > a:hover, ul.top-menu > li > a:focus {
 /* LINE ICONS CONFIGURATION */
 
 .mtbox {
-    margin-top: 80px;
-    margin-bottom: 40px;
+    margin-top: 10px;
+    margin-bottom: 20px;
 }
 
 .box1 {
@@ -906,7 +906,6 @@ ul.top-menu > li > a:hover, ul.top-menu > li > a:focus {
 
 /* MAIN CHART CONFIGURATION */
 .main-chart {
-    padding-top: 20px;
 }
 
 .mleft {
@@ -1112,24 +1111,25 @@ PANELS CONFIGURATIONS
 /*White Panel */
 .white-panel {
     text-align: center;
-    background: #ffffff;
-    color: #ccd1d9;
+    background: #EEEEEE;
+    color: #64FFDA;
 }
 
 .white-panel p {
     margin-top: 5px;
     font-weight: 700;
     margin-left: 15px;
+
 }
 .white-panel .white-header {
-    background: #f4f4f4;
+    background: #BDBDBD;
     padding: 3px;
     margin-bottom: 15px;
-    color: #c6c6c6;
+    color: #ffffff;
 }
 .white-panel .small {
     font-size: 10px;
-    color: #ccd1d9;
+    color: #4C8AED;
 }
 
 .white-panel i {

@@ -1,0 +1,24 @@
+<% if @circuits.count  %>
+<% count = 0 %>
+  <% @circuits.each do |c| %>
+  <% if count.modulo(2) == 0 %>
+    <div class="row"><!-- New row every 3 circuit-->
+  <% end %>
+  <div class="col-md-6 col-sm-6 mb">
+    <div class="darkblue-panel pn">
+        <div class="darkblue-header">
+          <h5><%=c.description.titleize%></h5>
+        </div>
+        <div class="chart mt">
+        <div id="linechart-<%=c.id%>" data-circuit="c.id">
+       </div>
+     </div>
+    <p class="mt" id="p-<%=c.id%>"></p>
+</div>
+  </div><!-- /col-md-4 -->
+   <% count += 1%>
+   <% if count.modulo(2) == 0 || count == @circuits.count %>
+    </div><!-- New row every 3 circuit-->
+  <% end %>
+  <% end %>
+<% end %>

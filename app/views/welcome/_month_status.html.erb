@@ -1,0 +1,31 @@
+<% if@energy.count %>
+<% count = 0 %>
+<% @energy.each do |c| %>
+<% if count.modulo(2) == 0 %>
+  <div class="row mt">
+<% end %>
+  <div class="col-md-6 mb">
+     <div class="white-panel pn">
+      <div class="white-header">
+      <h5>Energia Acumulada Mensual en los circuitos <%= c.type %></h5>
+      </div>
+       <p style="font-size: 50px; margin-top: 40px"><b><%= number_to_human(c.Wattshora/1000) %></b></p>
+       <p><b>KWh</b></p>
+       <div class="row">
+       <div class="col-md-6">
+        <p class="small mt"><i class="fa fa-calendar"></i></p>
+        <p><%=c.mon+"/"+ number_with_precision(c.year, precision: 0).to_s%></p>
+         </div>
+         <div class="col-md-6">
+          <p class="small mt">MONTO EN PESOS</p>
+           <p><%= number_to_currency(c.Wattshora/1000*100) %></p>
+        </div>
+       </div>
+     </div>
+  </div><!-- /col-md-4 -->
+    <% count += 1%>
+   <% if count.modulo(2) == 0 || count == @circuits.count %>
+    </div><!-- New row every 3 circuit-->
+      <% end %>
+   <% end %>
+  <% end %>
