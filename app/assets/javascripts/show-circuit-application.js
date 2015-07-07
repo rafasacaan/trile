@@ -13,42 +13,45 @@
   testchart is a Morris object and its attributes will change deppending on the circuit and the tab cliked
 */
 
-var graph, testchart, barchart;
+var graph, testchart;
 
-graph = { element: "testchart",  hideHover: 'auto', data: [], xkey: 'created_at', ykeys: ['watts'], labels: [], resize: false, lineColors: ['#00E676'],
-          lineWidth: 2, fillOpacity: 0.03, pointSize: 3, resize: true, ymax: 'auto',
-          dateFormat: function(date) {
+graph = {
+  element: 'testchart',
+  hideHover: 'auto',
+  data: [],
+  xkey: 'created_at',
+  ykeys: ['watts'],
+  labels: [],
+  resize: false,
+  lineColors: ['#00E676'],
+  lineWidth: 2,
+  fillOpacity: 0.03,
+  pointSize: 3,
+  resize: true,
+  ymax: 'auto',
+  dateFormat: function(date) {
           d = new Date(date);
           var hours = d.getHours();
           var minutes = "0" + d.getMinutes();
           var seconds = "0" + d.getSeconds();
           return d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear()+' '+hours+':'+minutes.substr(-2); 
-        }};
+          }
+};
 
-
-linechart = { element: "testchart",  hideHover: 'auto', data: [], xkey: 'created_at', ykeys: ['watts'], labels: [], resize: false, lineColors: ['#00E676'],
-          lineWidth: 2, fillOpacity: 0.03, pointSize: 3, resize: true, ymax: 'auto',
-          dateFormat: function(date) {
-          d = new Date(date);
-          var hours = d.getHours();
-          var minutes = "0" + d.getMinutes();
-          var seconds = "0" + d.getSeconds();
-          return d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear()+' '+hours+':'+minutes.substr(-2); 
-        }};
-
+testchart = Morris.Area(graph);
 
 //This function displays the initial graph (today_measures)
 $(function() {
     $.getJSON("/reports/today_measures/" + parseInt($("#testchart").data("circuit")), function(data) {
     $("#testchart").removeClass("loading");
-    Morris.Area(graph).setData(data);
+    testchart.setData(data);
   });
 
 //Datepicker formater
-$("#datepicker").datepicker({dateFormat: 'dd/mm/yy',inline: true});
+  $("#datepicker").datepicker({dateFormat: 'dd/mm/yy',inline: true});
   //Needs Refactoring. This is piece of code is called 3 times in this page
-$.getJSON("/reports/circuit_type/" + parseInt($("#testchart").data("circuit")), function(data) {
-  graph.labels.push(data);
+  $.getJSON("/reports/circuit_type/" + parseInt($("#testchart").data("circuit")), function(data) {
+    graph.labels.push(data);
   });
 });//End ready function
 
@@ -56,18 +59,16 @@ $.getJSON("/reports/circuit_type/" + parseInt($("#testchart").data("circuit")), 
 //This function takes the element "a.nav-tab-action" when is clicked and grabs the data element value, which
 //can be day, week, month or year and assigns that value to the variable chart. See show.html.erb
 $("a.nav-tab-action").click(function(e) {
-  data = []
-  Morris.Area(graph).setData(data);
-  //This adds the spinnig
-  $("#testchart").addClass("loading");
-  //First prevent default
-  e.preventDefault(); 
   //sets the labels of the graph
   $.getJSON("/reports/circuit_type/" + parseInt($("#testchart").data("circuit")), function(data) {
     graph.labels.push(data);
   });
   //This delete the current graph
-  
+  data = []
+  testchart.setData(data);
+  //This adds the spinnig
+  $("#testchart").addClass("loading");
+
   chart = $(this).data("chart");
   //Depending of the chart value, a url variable is assigned
   if (chart == "day") {
@@ -80,12 +81,15 @@ $("a.nav-tab-action").click(function(e) {
     url = "/reports/year_measures/";
   }
 
+  e.preventDefault();  
+
   //With the url set, the data to be displeyed is searched, plus the circuit id wich cames form data("circuit")
   $.getJSON(url + parseInt($("#testchart").data("circuit")), function(data) {
     //Removes the spinning class
     $("#testchart").removeClass("loading");
-    Morris.Area(graph).setData(data);
+    Morris.Bar(graph).setData(data);
   });
+
   //This takes care of .active class fot the navs
   $(this).parent().parent().find(".active").removeClass("active");
   $(this).parent().addClass("active");
