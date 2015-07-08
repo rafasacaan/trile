@@ -16,7 +16,7 @@
 //CONFIG VALUES//
 var graph_options, testchart, bargraph, graph, chart;
 
-graph_options = { element: 'testchart', hideHover: 'auto', data: [], xkey: 'created_at', ykeys: ['watts'], labels: [], resize: false,
+graph_options = { element: 'testchart', data: [], xkey: 'created_at', ykeys: ['watts'], labels: [], resize: false,
                   lineColors: ['#00E676'], lineWidth: 2, fillOpacity: 0.03, pointSize: 3, resize: true, ymax: 'auto',
                   dateFormat: function(date) {
                           d = new Date(date);
@@ -27,7 +27,7 @@ graph_options = { element: 'testchart', hideHover: 'auto', data: [], xkey: 'crea
                 }};
 
 testchart = Morris.Area(graph_options);
-barchart = Morris.Bar(graph_options);
+//barchart = Morris.Bar(graph_options);
 //END CONFIG//
 
     //This code block displays the initial graph (today_measures) when document is ready
@@ -51,6 +51,7 @@ $("a.nav-tab-action").click(function(e) {
   //First, prevent default of the event
   e.preventDefault();
   //Then, delete the current graph
+  $('#testchart').unbind( "click" );
   data = []
   graph.setData(data);
   //After, adds the spinnig for loading
@@ -79,7 +80,12 @@ $("a.nav-tab-action").click(function(e) {
   $.getJSON(url + parseInt($("#testchart").data("circuit")), function(data) {
     //Removes the spinning class
     $("#testchart").removeClass("loading");
+    if (chart == "month" || chart == "year") {
+      graph = Morris.Bar(graph_options)
+      graph.setData(data);
+    } else {
     graph.setData(data);
+    }
   });
 
   //This takes care of .active class for the navs
@@ -107,6 +113,7 @@ $("#datepicker").change(function(e) {
   //AJAX call for labels
   $.getJSON("/reports/circuit_type/" + parseInt($("#testchart").data("circuit")), function(data) {
     graph_options.labels.push(data);
+  $("a.nav-tab-action").parent().parent().find(".active").removeClass("active");
   });
 });
 
