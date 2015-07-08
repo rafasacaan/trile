@@ -99,23 +99,28 @@ def specific_day_measures(date)
   end
 
   def month_measures
-    Circuit.find_by_sql(["SELECT * FROM(                     "+
-                         "SELECT                             "+
-                         "measures.watts,                    "+
-                         "measures.created_at,               "+
-                         "row_number() OVER () as rnum       "+
-                         "FROM                               "+ 
-                         "public.measures                    "+
-                         "WHERE                              "+ 
-                         "measures.circuit_id = ? AND        "+
-                         "measures.created_at >= ?           "+
-                         "ORDER BY                           "+
-                         "measures.created_at ASC ) AS stats "+
-                         "WHERE                              "+
-                         "mod(rnum,30) = 0;                   ",
+    Circuit.find_by_sql(["SELECT SUM(Watts) AS \"watts\", date(created_at) as \"created_at\"   "+
+                         "FROM(                                                                "+
+                         "SELECT                                                               "+
+                         "measures.watts *                                                     "+   
+                         "EXTRACT(epoch FROM (measures.created_at - lag(measures.created_at)   "+ 
+                         "over (order by measures.created_at)))/3600 AS Watts,                 "+
+                         "measures.created_at,                                                 "+
+                         "row_number() OVER () as rnum                                         "+
+                         "FROM                                                                 "+ 
+                         "public.circuits,                                                     "+
+                         "public.measures                                                      "+
+                         "WHERE                                                                "+ 
+                         "circuits.id = ? AND                                                  "+
+                         "measures.circuit_id = ? AND                                          "+
+                         "measures.created_at >= ? ) AS stats                                  "+
+                         "WHERE                                                                "+
+                         "mod(rnum,30) = 0                                                     "+
+                         "GROUP BY 2                                                           "+
+                         "ORDER BY \"created_at\" ASC;                                         ",
                           self.id,
-                          1.month.ago
-                          ])
+                          self.id,
+                          Time.now.at_beginning_of_month])
  	#self.measures.where("created_at >= ?", 1.month.ago.utc).select("created_at, watts").order(:created_at)
   end
  
