@@ -1963,12 +1963,19 @@ label {
 /*LOGIN CONFIGURATION PAGE*/
 .form-login {
     max-width: 330px;
-    margin: 100px auto 0;
+    margin-left: 15px;
+    margin-top: 200px;
     background: rgba(255, 255, 255, 0.6);
     border-radius: 5px;
     -webkit-border-radius: 5px;
 }
 
+#logoSignIn{
+    margin-top: 200px;
+    margin-left: 0px;
+    padding-left: 200px;
+
+}
 .form-login h2.form-login-heading {
     margin: 0;
     padding: 25px 20px;
