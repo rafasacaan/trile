@@ -48,6 +48,9 @@ testchart = Morris.Area(graph_options);
 //This function takes the element "a.nav-tab-action" when is clicked and grabs the data element value, which
 //can be day, week, month or year and assigns that value to the variable chart. See show.html.erb
 $("a.nav-tab-action").click(function(e) {
+  $('svg').remove();
+  $(".morris-hover.morris-default-style").remove();
+
   //First, prevent default of the event
   e.preventDefault();
   //Then, delete the current graph
@@ -81,9 +84,10 @@ $("a.nav-tab-action").click(function(e) {
     //Removes the spinning class
     $("#testchart").removeClass("loading");
     if (chart == "month" || chart == "year") {
-      graph = Morris.Bar(graph_options)
+      graph = Morris.Bar(graph_options);
       graph.setData(data);
     } else {
+    graph = Morris.Area(graph_options);
     graph.setData(data);
     }
 
