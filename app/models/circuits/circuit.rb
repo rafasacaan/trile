@@ -125,29 +125,29 @@ def specific_day_measures(date)
   end
  
   def year_measures
-    Circuit.find_by_sql(["SELECT SUM(Watts) AS \"watts\", to_char(created_at,'TMmon') as \"Month\"   "+
-                         "FROM(                                                                "+
-                         "SELECT                                                               "+
-                         "measures.watts *                                                     "+   
-                         "EXTRACT(epoch FROM (measures.created_at - lag(measures.created_at)   "+ 
-                         "over (order by measures.created_at)))/3600 AS Watts,                 "+
-                         "measures.created_at,                                                 "+
-                         "row_number() OVER () as rnum                                         "+
-                         "FROM                                                                 "+ 
-                         "public.circuits,                                                     "+
-                         "public.measures                                                      "+
-                         "WHERE                                                                "+ 
-                         "circuits.id = ? AND                                                  "+
-                         "measures.circuit_id = ? AND                                          "+
-                         "measures.created_at >= ? ) AS stats                                  "+
-                         "WHERE                                                                "+
-                         "mod(rnum,30) = 0                                                     "+
-                         "GROUP BY 2                                                           "+
-                         "ORDER BY \"Month\" ASC;                                              ",
+    Circuit.find_by_sql(["SELECT  \"Wattshora\" as \"watts\", t1.dt as \"created_at\" "+
+                         "FROM ( SELECT to_char(dt,'TMmon') as dt "+
+                         "FROM generate_series('2015-01-01 00:00'::timestamp, '2015-12-31 00:00'::timestamp, '1 month'::interval) dt) AS t1 "+
+                         "LEFT OUTER JOIN (SELECT SUM (stats.Watts) AS \"Wattshora\", stats.mon "+
+                         "FROM ( SELECT "+                             
+                         "measures.watts * EXTRACT(epoch FROM (measures.created_at - lag(measures.created_at) over (order by measures.created_at)))/3600 AS Watts, "+                   
+                         "to_char(measures.created_at,'TMmon') AS mon, "+               
+                         "row_number() OVER () as rnum "+       
+                         "FROM "+
+                         "public.circuits, "+                               
+                         "public.measures "+                   
+                         "WHERE "+
+                         "circuits.id = ? AND "+                               
+                         "measures.circuit_id = ? AND "+        
+                         "measures.created_at >= ?) AS stats "+
+                         "WHERE  "+
+                         "mod(rnum,30) = 0 "+
+                         "GROUP BY 2) AS t2 "+
+                         "ON (t1.dt = t2.mon);",
                           self.id,
                           self.id,
-                          Time.now.at_beginning_of_year
-                          ])
+                          Time.now.at_beginning_of_year ])
+  
   end
 
   def index_measures
