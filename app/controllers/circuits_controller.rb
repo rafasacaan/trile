@@ -1,6 +1,7 @@
 class CircuitsController < ApplicationController
   include CircuitsStatus
   before_action :set_circuit, only: [:show, :edit, :update, :destroy]
+  before_action :set_circuits, only: [:index, :data_tool]
   before_action :set_js
   before_action :set_type
   before_action :access_only_to_own_circuits, only: [:show]
@@ -9,12 +10,15 @@ class CircuitsController < ApplicationController
   # GET /circuits
   # GET /circuits.json
   def index
-    #Rescata todos los circuitos del usuario actual
-    @circuits = type_class.where(user_id: current_user.id)
-    #Define el archivo js que usara el template es importante pq ahi van a dar las gon_variables para los 
-    #graficos
+    #Defines the js file to be loaded
     @js_file = "index-circuit"
   end
+
+  #get /circuits/data_tool
+  def data_tool
+     @js_file = "data-tool"      
+  end
+
   # GET /circuits/1
   # GET /circuits/1.json
   def show
@@ -88,6 +92,11 @@ class CircuitsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_circuit
       @circuit = type_class.find(params[:id])
+    end
+
+    def set_circuits
+    #Retrieves the circuits for current user
+    @circuits = type_class.where(user_id: current_user.id)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

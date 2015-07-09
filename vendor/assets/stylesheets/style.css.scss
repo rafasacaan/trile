@@ -1963,7 +1963,7 @@ label {
 /*LOGIN CONFIGURATION PAGE*/
 .form-login {
     max-width: 330px;
-    margin-left: 15px;
+    margin-right: 45%;
     margin-top: 200px;
     background: rgba(255, 255, 255, 0.6);
     border-radius: 5px;
@@ -1971,10 +1971,8 @@ label {
 }
 
 #logoSignIn{
-    margin-top: 200px;
-    margin-left: 0px;
-    padding-left: 200px;
-
+    margin-right: 0%;
+   margin-left: 45%;
 }
 .form-login h2.form-login-heading {
     margin: 0;

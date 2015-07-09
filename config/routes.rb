@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
-  resources :circuits
+  resources :circuits do
+      get 'data_tool', on: :collection, as: :"data-tool"
+    end
+
   resources :demands, controller: 'circuits', type: 'Demand'
   resources :generations, controller: 'circuits', type: 'Generation' 
   devise_for :users

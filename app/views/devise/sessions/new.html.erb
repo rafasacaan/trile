@@ -1,45 +1,43 @@
-            <div id="login-page">  
-              <div class="container">
-                <div class="row mt">
-                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 desc" id="logoSignIn">
-                   <div class="project-wrapper">
-                    <div class="project">
-                      <%=image_tag("trilemedalla.png", size: "330x382")%>
-                    </div>
-                  </div>      
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 desc">
-
-                  <%= form_for(resource, as: resource_name, url: session_path(resource_name), :html => {:class => 'form-login'}) do |f| %>
-                  <h2 class="form-login-heading">Ingresa a Tu Trile</h2>            
-                  <div class="login-wrap">
-                    <%= render 'layouts/alerts'%>
-                    <%= f.text_field :login, autofocus: true, class: 'form-control', placeholder: 'Nombre o Email' %>
-                    <br>
-                    <%= f.password_field :password, autocomplete: "off", class: 'form-control', placeholder: 'Password' %>
-                    <br>
-                    <span class="pull-right">
-                      <%= link_to "Olvidaste tu password?", new_password_path(resource_name) %><br />
-                    </span>
-                  </br> 
-                  <button class="btn btn-theme btn-block" href="index.html" type="submit"><i class="fa fa-lock"></i> SIGN IN</button>
-                  <% if devise_mapping.rememberable? -%>
-                  <span class="pull-right">
-                   <%= f.check_box :remember_me %>  Recuerdame!
-                 </span>
-                 <% end %>
-                 <% end %>            
-               </br>
-               <hr>
-               <div class="registration">
-                Todavia no usas trile?<br/>
-                <%= link_to "Crear Cuenta", new_registration_path(resource_name) %><br /><br />
-              </a>  
-            </div>
-          </div>
-        </div>
+<div class="container">
+  <div class="row mt">
+    
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 desc">
+      <div class="form-login" id="logoSignIn">
+       <%=image_tag("trilemedalla.png", size: "330x382")%>
       </div>
     </div>
+
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 desc">
+     <%= form_for(resource, as: resource_name, url: session_path(resource_name), :html => {:class => 'form-login'}) do |f| %>
+     <h2 class="form-login-heading">Ingresa a Tu Trile</h2>            
+      <div class="login-wrap">
+         <%= render 'layouts/alerts'%>
+         <%= f.text_field :login, autofocus: true, class: 'form-control', placeholder: 'Nombre o Email' %>
+         <br>
+         <%= f.password_field :password, autocomplete: "off", class: 'form-control', placeholder: 'Password' %>
+         <br>
+         <span class="pull-right">
+         <%= link_to "Olvidaste tu password?", new_password_path(resource_name) %><br />
+         </span>
+         </br> 
+         <button class="btn btn-theme btn-block" href="index.html" type="submit"><i class="fa fa-lock"></i> SIGN IN</button>
+          <% if devise_mapping.rememberable? -%>
+         <span class="pull-right">
+           <%= f.check_box :remember_me %>  Recuerdame!
+         </span>
+          <% end %>
+         <% end %>            
+          </br>
+          <hr>
+         <div class="registration">
+          Todavia no usas trile?<br/>
+         <%= link_to "Crear Cuenta", new_registration_path(resource_name) %><br/><br/>
+         </div>
+      </div>
+    </div>
+
   </div>
+</div>
+
 
 

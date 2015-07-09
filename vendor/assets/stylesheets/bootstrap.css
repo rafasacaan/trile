@@ -1407,16 +1407,19 @@ pre code {
 @media (min-width: 768px) {
   .container {
     width: 100%;
+    height: 90%;
   }
 }
 @media (min-width: 992px) {
   .container {
     width: 100%;
+    height: 90%;
   }
 }
 @media (min-width: 1300px) {
   .container {
     width: 1350px;
+    height: 90%;
   }
 }
 .container-fluid {

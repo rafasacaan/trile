@@ -3,11 +3,11 @@
 <head>
   <title>Trile</title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'master-application', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'master', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
 <body>
 	<%= yield %>
-<%= javascript_include_tag @js_file.to_s + '-application', 'data-turbolinks-track' => true %>
+<%= javascript_include_tag @js_file.to_s, 'data-turbolinks-track' => true %>
 </body>
 </html>
