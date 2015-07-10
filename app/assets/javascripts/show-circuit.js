@@ -26,8 +26,9 @@ graph_options = { element: 'testchart', data: [], xkey: 'created_at', ykeys: ['w
                           return d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear()+' '+hours+':'+minutes.substr(-2); 
                 }};
 
+bar_options = { element: 'testchart', data: [], xkey: 'created_at', ykeys: ['watts'], labels: []}
+
 testchart = Morris.Area(graph_options);
-//barchart = Morris.Bar(graph_options);
 //END CONFIG//
 
     //This code block displays the initial graph (today_measures) when document is ready
@@ -41,57 +42,58 @@ testchart = Morris.Area(graph_options);
       $("#datepicker").datepicker({dateFormat: 'dd/mm/yy',inline: true});
     //Labels are set in this line into the graph_options  
       $.getJSON("/reports/circuit_type/" + parseInt($("#testchart").data("circuit")), function(data) {
-        //graph_options.labels.push(data);
+        graph_options.labels.push(data);
       });
     });//End ready function
 
 //This function takes the element "a.nav-tab-action" when is clicked and grabs the data element value, which
 //can be day, week, month or year and assigns that value to the variable chart. See show.html.erb
 $("a.nav-tab-action").click(function(e) {
+  
+  //Remove from DOM the elements created by morris before, so they don't crush on each click event
   $('svg').remove();
   $(".morris-hover.morris-default-style").remove();
-
-  //First, prevent default of the event
-  e.preventDefault();
-  //Then, delete the current graph
-  $('#testchart').unbind( "click" );
-  data = []
+  //Then, delete the current graph and labels
+  data = [];
+  labels = [];
   graph.setData(data);
+  graph_options.labels.push(labels);
+  bar_options.labels.push(labels);
   //After, adds the spinnig for loading
   $("#testchart").addClass("loading");
-  //sets the labels of the graph
-  $.getJSON("/reports/circuit_type/" + parseInt($("#testchart").data("circuit")), function(data) {
-    graph_options.labels.push(data);
-  });
-
   chart = $(this).data("chart");
   //Depending of the chart value, a url variable is assigned
   if (chart == "day") {
     url = "/reports/today_measures/";
-    graph = testchart;
   } else if (chart == "week") {
     url = "/reports/week_measures/";
-    graph = testchart;
   } else if (chart == "month") {
     url = "/reports/month_measures/";
-    graph = testchart;
   } else if (chart == "year") {
     url = "/reports/year_measures/";
-    graph = testchart;
   }
+
   //With the url set, the data to be displeyed is searched, plus the circuit id wich cames form data("circuit")
   $.getJSON(url + parseInt($("#testchart").data("circuit")), function(data) {
     //Removes the spinning class
     $("#testchart").removeClass("loading");
+    //If the chart is month or year then,
     if (chart == "month" || chart == "year") {
-      graph = Morris.Bar(graph_options);
+      //find the proper labels and push them into the options
+      $.getJSON("/reports/circuit_type/" + parseInt($("#testchart").data("circuit")), function(data) {
+      bar_options.labels.push(data);
+      });
+      //Set chart as morris.bar with bar_options
+      graph = Morris.Bar(bar_options);
       graph.setData(data);
     } else {
-    graph = Morris.Area(graph_options);
-    graph.setData(data);
-    }
-
-  });
+      //find the proper labels and push them into the options
+      $.getJSON("/reports/circuit_type/" + parseInt($("#testchart").data("circuit")), function(data) {
+      graph_options.labels.push(data);
+      });
+      graph = Morris.Area(graph_options);
+      graph.setData(data);
+    }});
 
   //This takes care of .active class for the navs
   $(this).parent().parent().find(".active").removeClass("active");
