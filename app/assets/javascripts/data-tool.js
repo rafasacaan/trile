@@ -33,15 +33,16 @@ var testchart = Morris.Line(graph);
 
 $(function() {
 
-    $.getJSON("/reports/index_measures", function(data) {
-      $("#testchart").removeClass("loading");
-      testchart.setData(data);
-    });
+  $.getJSON("/reports/labels", function(data) {
+    for(i=0; i < data.length; i++){
+      graph.ykeys.push(data[i]);
+      graph.labels.push(data[i]);          
+    }
+  });
 
-    $.getJSON("/reports/labels", function(data) {
-      for(i=0; i < data.length; i++){
-        graph.ykeys.push(data[i]);
-        graph.labels.push(data[i]);          
-      }
-    });
+  $.getJSON("/reports/index_measures", function(data) {
+   $("#testchart").removeClass("loading");
+    testchart.setData(data);
+  });
+
 });

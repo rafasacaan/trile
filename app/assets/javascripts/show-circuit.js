@@ -13,53 +13,53 @@
   testchart is a Morris object and its attributes will change deppending on the circuit and the tab cliked
 */
 
-//CONFIG VALUES//
-var graph_options, testchart, bargraph, graph, chart;
+var area_options = {
+  element: 'testchart',
+  data: [],
+  xkey: 'created_at',
+  ykeys: ['watts'],
+  labels: [],
+  lineColors: ['#00E676'],
+  lineWidth: 2,
+  fillOpacity: 0.03,
+  pointSize: 3,
+  resize: true,
+  ymax: 'auto',
+  dateFormat: function(date) {
+    d = new Date(date);
+    var hours = d.getHours();
+    var minutes = "0" + d.getMinutes();
+    var seconds = "0" + d.getSeconds();
+    return d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear()+' '+hours+':'+minutes.substr(-2); 
+  }},
+  current_chart = null,
+  bar_options = {
+    element: 'testchart',
+    data: [],
+    xkey: 'created_at',
+    ykeys: ['watts'],
+    labels: []
+  }
 
-graph_options = { element: 'testchart', data: [], xkey: 'created_at', ykeys: ['watts'], labels: [], resize: false,
-                  lineColors: ['#00E676'], lineWidth: 2, fillOpacity: 0.03, pointSize: 3, resize: true, ymax: 'auto',
-                  dateFormat: function(date) {
-                          d = new Date(date);
-                          var hours = d.getHours();
-                          var minutes = "0" + d.getMinutes();
-                          var seconds = "0" + d.getSeconds();
-                          return d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear()+' '+hours+':'+minutes.substr(-2); 
-                }};
+$.getJSON("/reports/today_measures/" + parseInt($("#testchart").data("circuit")), function(data) {
+  $("#testchart").removeClass("loading");
+  $.getJSON("/reports/circuit_type/" + parseInt($("#testchart").data("circuit")), function(data) {
+    area_options.labels.push(data);
+  });
+  current_chart = Morris.Area(area_options);
+  current_chart.setData(data);
+});
+$("#datepicker").datepicker({dateFormat: 'dd/mm/yy',inline: true});
 
-bar_options = { element: 'testchart', data: [], xkey: 'created_at', ykeys: ['watts'], labels: []}
 
-testchart = Morris.Area(graph_options);
-//END CONFIG//
 
-    //This code block displays the initial graph (today_measures) when document is ready
-    $(function() {
-        $.getJSON("/reports/today_measures/" + parseInt($("#testchart").data("circuit")), function(data) {
-        $("#testchart").removeClass("loading");
-        graph = testchart;
-        graph.setData(data);
-      });
-    //Datepicker formater
-      $("#datepicker").datepicker({dateFormat: 'dd/mm/yy',inline: true});
-    //Labels are set in this line into the graph_options  
-      $.getJSON("/reports/circuit_type/" + parseInt($("#testchart").data("circuit")), function(data) {
-        graph_options.labels.push(data);
-      });
-    });//End ready function
-
-//This function takes the element "a.nav-tab-action" when is clicked and grabs the data element value, which
-//can be day, week, month or year and assigns that value to the variable chart. See show.html.erb
 $("a.nav-tab-action").click(function(e) {
-  
   //Remove from DOM the elements created by morris before, so they don't crush on each click event
   $('svg').remove();
   $(".morris-hover.morris-default-style").remove();
   //Then, delete the current graph and labels
-  data = [];
-  labels = [];
-  graph.setData(data);
-  graph_options.labels.push(labels);
-  bar_options.labels.push(labels);
-  //After, adds the spinnig for loading
+  //current_chart.setData(data);
+  //After, adds the spinner for loading
   $("#testchart").addClass("loading");
   chart = $(this).data("chart");
   //Depending of the chart value, a url variable is assigned
@@ -79,21 +79,20 @@ $("a.nav-tab-action").click(function(e) {
     $("#testchart").removeClass("loading");
     //If the chart is month or year then,
     if (chart == "month" || chart == "year") {
-      //find the proper labels and push them into the options
       $.getJSON("/reports/circuit_type/" + parseInt($("#testchart").data("circuit")), function(data) {
-      bar_options.labels.push(data);
+        bar_options.labels = [];
+        bar_options.labels.push(data);
       });
-      //Set chart as morris.bar with bar_options
-      graph = Morris.Bar(bar_options);
-      graph.setData(data);
+      current_chart = Morris.Bar(bar_options);
+      current_chart.setData(data);
     } else {
-      //find the proper labels and push them into the options
       $.getJSON("/reports/circuit_type/" + parseInt($("#testchart").data("circuit")), function(data) {
-      graph_options.labels.push(data);
+        area_options.labels = [];
+        area_options.labels.push(data);
       });
-      graph = Morris.Area(graph_options);
-      graph.setData(data);
-    }});
+      current_chart = Morris.Area(area_options);
+      current_chart.setData(data);
+  }});
 
   //This takes care of .active class for the navs
   $(this).parent().parent().find(".active").removeClass("active");
@@ -106,20 +105,20 @@ $("#datepicker").change(function(e) {
   date = $( "#datepicker" ).datepicker( "getDate" );
   //Set data to empty array
   data = []
-  //Clear the curent data with empty array
-  graph.setData(data);
+  //Clear the current data with empty array
+  current_chart.setData(data);
   //Add css class with the spinning wheel
   $("#testchart").addClass("loading");
   //Make de AJAX call to the server
   $.getJSON("/reports/specific_date_measures/" + parseInt($("#testchart").data("circuit")) + "/" + date, function(data) {
   //Set the new data
-    graph.setData(data);
+    current_chart.setData(data);
   //Remove the spinnig wheel  
     $("#testchart").removeClass("loading");
   });
   //AJAX call for labels
   $.getJSON("/reports/circuit_type/" + parseInt($("#testchart").data("circuit")), function(data) {
-    graph_options.labels.push(data);
+    area_options.labels.push(data);
   $("a.nav-tab-action").parent().parent().find(".active").removeClass("active");
   });
 });
