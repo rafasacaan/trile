@@ -125,7 +125,7 @@ def specific_day_measures(date)
   end
  
   def year_measures
-    Circuit.find_by_sql(["SELECT  \"Wattshora\" as \"watts\", t1.dt as \"created_at\" "+
+    Circuit.find_by_sql(["SELECT  \"Wattshora\" AS \"watts\", t1.dt as \"created_at\" "+
                          "FROM ( SELECT to_char(dt,'TMmon') as dt "+
                          "FROM generate_series('2015-01-01 00:00'::timestamp, '2015-12-31 00:00'::timestamp, '1 month'::interval) dt) AS t1 "+
                          "LEFT OUTER JOIN (SELECT SUM (stats.Watts) AS \"Wattshora\", stats.mon "+
@@ -146,8 +146,7 @@ def specific_day_measures(date)
                          "ON (t1.dt = t2.mon);",
                           self.id,
                           self.id,
-                          Time.now.at_beginning_of_year ])
-  
+                          Time.now.at_beginning_of_year ])  
   end
 
   def index_measures

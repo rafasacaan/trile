@@ -31,7 +31,7 @@ var area_options = {
     var minutes = "0" + d.getMinutes();
     var seconds = "0" + d.getSeconds();
     return d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear()+' '+hours+':'+minutes.substr(-2); 
-  }},
+  }};
   current_chart = null;
   bar_options = {
     element: 'testchart',
@@ -39,10 +39,7 @@ var area_options = {
     xkey: 'created_at',
     ykeys: ['watts'],
     labels: [],
-    dateFormat: function(date) {
-
-    },
-  }
+  };
 
 $.getJSON("/reports/today_measures/" + parseInt($("#testchart").data("circuit")), function(data) {
   $("#testchart").removeClass("loading");
@@ -86,7 +83,7 @@ $("a.nav-tab-action").click(function(e) {
         bar_options.labels = [];
         bar_options.labels.push(data);
       });
-      console.log(data);
+      console.log(data)
       current_chart = Morris.Bar(bar_options);
       current_chart.setData(data);
     } else {
@@ -97,7 +94,6 @@ $("a.nav-tab-action").click(function(e) {
       current_chart = Morris.Area(area_options);
       current_chart.setData(data);
   }});
-
   //This takes care of .active class for the navs
   $(this).parent().parent().find(".active").removeClass("active");
   $(this).parent().addClass("active");
