@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
   has_many :circuits
   delegate :demands, :generations, to: :circuits  
   before_create :set_auth_token
+  validates :email, :uniqueness => { :case_sensitive => false }
 
 
   

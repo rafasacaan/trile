@@ -5,7 +5,18 @@ Rails.application.routes.draw do
 
   resources :demands, controller: 'circuits', type: 'Demand'
   resources :generations, controller: 'circuits', type: 'Generation' 
-  devise_for :users
+  devise_for :users, skip: :registrations
+  devise_scope :user do
+  resource :registration,
+    only: [:new, :create, :edit, :update],
+    path: 'users',
+    path_names: { new: 'sign_up' },
+    controller: 'devise/registrations',
+    as: :user_registration do
+      get :cancel
+      end
+  end
+  
   resources :users, only: :show
   
   get 'welcome/index'
