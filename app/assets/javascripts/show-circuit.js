@@ -32,13 +32,16 @@ var area_options = {
     var seconds = "0" + d.getSeconds();
     return d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear()+' '+hours+':'+minutes.substr(-2); 
   }},
-  current_chart = null,
+  current_chart = null;
   bar_options = {
     element: 'testchart',
     data: [],
     xkey: 'created_at',
     ykeys: ['watts'],
-    labels: []
+    labels: [],
+    dateFormat: function(date) {
+
+    },
   }
 
 $.getJSON("/reports/today_measures/" + parseInt($("#testchart").data("circuit")), function(data) {
@@ -83,6 +86,7 @@ $("a.nav-tab-action").click(function(e) {
         bar_options.labels = [];
         bar_options.labels.push(data);
       });
+      console.log(data);
       current_chart = Morris.Bar(bar_options);
       current_chart.setData(data);
     } else {

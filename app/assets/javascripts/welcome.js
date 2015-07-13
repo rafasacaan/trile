@@ -22,7 +22,7 @@ $(function () {
             // (bool | optional) if you want it to fade out on its own or just sit there
             sticky: false,
             // (int | optional) the time you want it to be alive for before fading out
-            time: '2500',
+            time: '3000',
             // (string | optional) the class name you want to apply to that specific message
             class_name: 'my-sticky-class'
         });
