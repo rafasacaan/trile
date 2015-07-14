@@ -36,9 +36,10 @@ var area_options = {
   bar_options = {
     element: 'testchart',
     data: [],
-    xkey: 'created_at',
+    xkey: 'dt',
     ykeys: ['watts'],
     labels: [],
+    barColors:['#F44336']
   };
 
 $.getJSON("/reports/today_measures/" + parseInt($("#testchart").data("circuit")), function(data) {

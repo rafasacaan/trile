@@ -99,7 +99,7 @@ def specific_day_measures(date)
   end
 
   def month_measures
-    Circuit.find_by_sql(["SELECT SUM(Watts) AS \"watts\", date(created_at) as \"created_at\"   "+
+    measures = Circuit.find_by_sql(["SELECT SUM(Watts) AS \"watts\", to_char((created_at),'YYYY-MM-DD') as dt               "+
                          "FROM(                                                                "+
                          "SELECT                                                               "+
                          "measures.watts *                                                     "+   
@@ -117,15 +117,29 @@ def specific_day_measures(date)
                          "WHERE                                                                "+
                          "mod(rnum,30) = 0                                                     "+
                          "GROUP BY 2                                                           "+
-                         "ORDER BY \"created_at\" ASC;                                         ",
+                         "ORDER BY dt ASC;                                                     ",
                           self.id,
                           self.id,
                           Time.now.at_beginning_of_month])
  	#self.measures.where("created_at >= ?", 1.month.ago.utc).select("created_at, watts").order(:created_at)
-  end
+  #array_of_days_in_current_month = (1..(Time.days_in_month Date.today.month, Date.today.year)).to_a
+
+    days_in_month = (Date.today.at_beginning_of_month..Date.today.at_end_of_month).map{ |date| date.strftime("%Y-%m-%d") }
+    data = []
+    days_in_month.each {|day| data << {"dt" => day, "watts" => 0}} 
+        
+    data.each do |d|
+      measures.each do |m|
+        if d["dt"] == m.dt.to_s
+        d["watts"] = m.watts
+        end
+      end
+    end
+    return data
+end
  
   def year_measures
-    Circuit.find_by_sql(["SELECT  \"Wattshora\" AS \"watts\", t1.dt as \"created_at\" "+
+    Circuit.find_by_sql(["SELECT dt, trunc(cast(\"Wattshora\" AS numeric),2) AS \"watts\"  "+
                          "FROM ( SELECT to_char(dt,'TMmon') as dt "+
                          "FROM generate_series('2015-01-01 00:00'::timestamp, '2015-12-31 00:00'::timestamp, '1 month'::interval) dt) AS t1 "+
                          "LEFT OUTER JOIN (SELECT SUM (stats.Watts) AS \"Wattshora\", stats.mon "+
