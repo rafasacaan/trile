@@ -99,7 +99,7 @@ def specific_day_measures(date)
   end
 
   def month_measures
-    measures = Circuit.find_by_sql(["SELECT SUM(Watts) AS \"watts\", to_char((created_at),'YYYY-MM-DD') as dt               "+
+    measures = Circuit.find_by_sql(["SELECT trunc(cast(SUM(Watts) AS numeric),2) AS \"watts\", to_char((created_at),'YYYY-MM-DD') as dt               "+
                          "FROM(                                                                "+
                          "SELECT                                                               "+
                          "measures.watts *                                                     "+   
