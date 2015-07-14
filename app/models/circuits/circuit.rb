@@ -69,7 +69,7 @@ def specific_day_measures(date)
                          "ORDER BY                           "+
                          "measures.created_at ASC ) AS stats "+
                          "WHERE                              "+
-                         "mod(rnum,3) = 0;                   ",
+                         "mod(rnum,6) = 0;                   ",
                           self.id,
                           Time.now.midnight,
                           Time.now])
