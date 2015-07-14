@@ -3,37 +3,34 @@
     <div class="col-md-2 col-sm-2 col-md-offset-2 box0">
       <div class="box1">
       <span class="fa-stack fa-lg">
-      <i class="fa fa-square-o fa-stack-2x"></i>
-      <i class="fa fa-bolt fa-stack-1x"></i>
+      <i class="fa fa-bolt fa-stack-2x"></i>
       </span>
       <h3><%= @circuits.count %></h3>
       </div>
-      <p>Tienes <%= @circuits.count %>  circuitos configurados actualmente</p>
+      <p>Circuitos</p>
     </div>
     <div class="col-md-2 col-sm-2 box0">
       <div class="box1">
        <span class="fa-stack fa-lg">
-      <i class="fa fa-square-o fa-stack-2x"></i>
-      <i class="fa fa-fire fa-stack-1x"></i>
+       <i class="fa fa-fire fa-stack-2x"></i>
       </span>
       <h3>3</h3>
       </div>
-      <p>Tienes 3 alarmas por atender.</p>
+      <p>Alarmas</p>
     </div>
     <div class="col-md-2 col-sm-2 box0">
       <div class="box1">
        <span class="fa-stack fa-lg">
-      <i class="fa fa-square-o fa-stack-2x"></i>
-      <i class="fa fa-newspaper-o fa-stack-1x"></i>
+       <i class="fa fa-newspaper-o fa-stack-2x"></i>
       </span>
       <h3>+2</h3>
       </div>
-      <p>Se han agregado dos reportes a tu carpeta.</p>
+      <p>Reportes</p>
     </div> 
      <div class="col-md-2 col-sm-2 box0">
       <div class="box1">
       <span class="fa-stack fa-lg">
-      <i class="fa fa-database fa-stack-1x"></i>
+      <i class="fa fa-rss fa-stack-2x"></i>
       <% if @status == "Problem" %>
         <i class="fa fa-ban fa-stack-2x text-danger"></i>
       <% end %>

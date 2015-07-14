@@ -32,9 +32,7 @@
 			<% end %>
 		  </td>
           <td class="numeric" data-title="Mediciones"><%= @circuit.measures.count %></td>
-          <td class="numeric"><%= link_to circuits_path, type: "button", class: "btn btn-success btn-xs" do %>
-    		    <i class="fa fa-backward"></i>
-    		    <% end %>      	
+          <td class="numeric">
           	<%= link_to edit_circuit_path(@circuit), type: "button", class: "btn btn-primary btn-xs" do %>
           	<i class="fa fa-pencil"></i>
     		    <% end %>
@@ -45,3 +43,8 @@
 </section>
 </div>
 <!--/showback -->
+<div class="row">
+  <div class="col-md-1 col-md-offset-11">
+    <%= link_to "< Circuitos", circuits_path, type: "button", class: "btn btn-success btn-xs" %>          
+  </div>
+</div>

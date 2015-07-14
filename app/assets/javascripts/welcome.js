@@ -51,7 +51,7 @@ $(function () {
       for (i = 0; i < data.length; i++){
         $.getJSON("/reports/last_five/" + data[i].id, function(data){
             $("#linechart-"+data[0]).sparkline(data[1], options);
-            $("#p-"+data[0]).html('<br/>Promedio Últimos 20 minutos<br><b>' + average(data[1]) +'</b>');
+            $("#p-"+data[0]).html('<br/>Promedio Últimos 20 minutos<br><b class="average">' + average(data[1]) +'</b>');
             });
         };    
     });

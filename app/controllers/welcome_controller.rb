@@ -8,7 +8,7 @@ class WelcomeController < ApplicationController
   before_action :general_status
   ########################################################################################################################
   def index
-    @energy = current_user.energy_sum_current_month
+    @energy = current_user.energy_sum_current_month(current_user.id)
     #This variable, selects de js file for the index view
     @js_file="welcome"
   end 
