@@ -39,8 +39,15 @@ var area_options = {
     xkey: 'dt',
     ykeys: ['watts'],
     labels: [],
-    barColors:['#F44336']
-  };
+    barColors:['#F44336'],
+    xLabelFormat: function(date) {
+    e = Date.parse(date);
+    d = new Date(e);
+    var hours = d.getHours();
+    var minutes = "0" + d.getMinutes();
+    var seconds = "0" + d.getSeconds();
+    return d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear()+' '+hours+':'+minutes.substr(-2); 
+  }};
 
 $.getJSON("/reports/today_measures/" + parseInt($("#testchart").data("circuit")), function(data) {
   $("#testchart").removeClass("loading");
