@@ -5,8 +5,15 @@ class ApplicationController < ActionController::Base
   layout :layout_by_resource
   before_filter :set_js_file
   before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :switch_tenant
   
   protected
+
+  def switch_tenant
+    if user_signed_in?
+      Apartment::Tenant.switch(current_user.schema_name)
+    end
+  end
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:name, :email, :password, :password_confirmation, :remember_me) }

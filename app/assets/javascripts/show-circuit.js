@@ -31,23 +31,37 @@ var area_options = {
     var minutes = "0" + d.getMinutes();
     var seconds = "0" + d.getSeconds();
     return d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear()+' '+hours+':'+minutes.substr(-2); 
-  }};
-  current_chart = null;
-  bar_options = {
+  },
+   xLabelFormat:function(date){
+     d = new Date(date);
+     return d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear();
+   },
+
+};
+  var current_chart = null;
+  
+  var month_options = {
     element: 'testchart',
     data: [],
     xkey: 'dt',
     ykeys: ['watts'],
     labels: [],
     barColors:['#F44336'],
-    xLabelFormat: function(date) {
-    e = Date.parse(date);
-    d = new Date(e);
-    var hours = d.getHours();
-    var minutes = "0" + d.getMinutes();
-    var seconds = "0" + d.getSeconds();
-    return d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear()+' '+hours+':'+minutes.substr(-2); 
-  }};
+    xLabelFormat: function(d){
+      date = new Date(Date.parse(d.label));
+      return date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear()  
+    },
+    xLabels:"day"
+  };
+
+  var year_options = {
+    element: 'testchart',
+    data: [],
+    xkey: 'dt',
+    ykeys: ['watts'],
+    labels: [],
+    barColors:['#F44336'],
+  };
 
 $.getJSON("/reports/today_measures/" + parseInt($("#testchart").data("circuit")), function(data) {
   $("#testchart").removeClass("loading");
@@ -57,18 +71,16 @@ $.getJSON("/reports/today_measures/" + parseInt($("#testchart").data("circuit"))
   current_chart = Morris.Area(area_options);
   current_chart.setData(data);
 });
+
 $("#datepicker").datepicker({dateFormat: 'dd/mm/yy',inline: true});
-
-
 
 $("a.nav-tab-action").click(function(e) {
   //Remove from DOM the elements created by morris before, so they don't crush on each click event
   $('svg').remove();
-  $(".morris-hover.morris-default-style").remove();
-  //Then, delete the current graph and labels
-  //current_chart.setData(data);
+  $(".morris-hover.morris-default-style").remove();  
   //After, adds the spinner for loading
   $("#testchart").addClass("loading");
+  
   chart = $(this).data("chart");
   //Depending of the chart value, a url variable is assigned
   if (chart == "day") {
@@ -86,13 +98,19 @@ $("a.nav-tab-action").click(function(e) {
     //Removes the spinning class
     $("#testchart").removeClass("loading");
     //If the chart is month or year then,
-    if (chart == "month" || chart == "year") {
+    if (chart == "month") {
       $.getJSON("/reports/circuit_type/" + parseInt($("#testchart").data("circuit")), function(data) {
-        bar_options.labels = [];
-        bar_options.labels.push(data);
+        month_options.labels = [];
+        month_options.labels.push(data);
       });
-      console.log(data)
-      current_chart = Morris.Bar(bar_options);
+      current_chart = Morris.Bar(month_options);
+      current_chart.setData(data);
+    } else if (chart == "year"){
+      $.getJSON("/reports/circuit_type/" + parseInt($("#testchart").data("circuit")), function(data) {
+        year_options.labels = [];
+        year_options.labels.push(data);
+      });
+      current_chart = Morris.Bar(year_options);
       current_chart.setData(data);
     } else {
       $.getJSON("/reports/circuit_type/" + parseInt($("#testchart").data("circuit")), function(data) {
@@ -109,25 +127,26 @@ $("a.nav-tab-action").click(function(e) {
 
 //This is triggered when a change is made on the datepicker calendar
 $("#datepicker").change(function(e) {
+  //Remove from DOM the elements created by morris before, so they don't crush on each click event
+  $('svg').remove();
+  $(".morris-hover.morris-default-style").remove();
   //Get the date
   date = $( "#datepicker" ).datepicker( "getDate" );
-  //Set data to empty array
-  data = []
-  //Clear the current data with empty array
-  current_chart.setData(data);
-  //Add css class with the spinning wheel
   $("#testchart").addClass("loading");
   //Make de AJAX call to the server
   $.getJSON("/reports/specific_date_measures/" + parseInt($("#testchart").data("circuit")) + "/" + date, function(data) {
-  //Set the new data
-    current_chart.setData(data);
-  //Remove the spinnig wheel  
+    //Remove the spinnig wheel  
     $("#testchart").removeClass("loading");
+    //AJAX call for labels
+   $.getJSON("/reports/circuit_type/" + parseInt($("#testchart").data("circuit")), function(data) {
+      area_options.labels = [];
+      area_options.labels.push(data);
+    });
+    //Set the new data
+    current_chart = Morris.Area(area_options);
+    current_chart.setData(data);
   });
-  //AJAX call for labels
-  $.getJSON("/reports/circuit_type/" + parseInt($("#testchart").data("circuit")), function(data) {
-    area_options.labels.push(data);
+ //Remove active class from tabs  
   $("a.nav-tab-action").parent().parent().find(".active").removeClass("active");
-  });
-});
-
+ });
+  

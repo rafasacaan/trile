@@ -1,6 +1,4 @@
 class Circuit < ActiveRecord::Base
-  #each circuit belongs only to a specific user account
-  belongs_to :user
   #each circuit has many measures and the existence of measures is dependent on the existence of the circuit
   has_many :measures, dependent: :destroy
   scope :demands, -> { where(type: 'demand') } 
@@ -9,14 +7,14 @@ class Circuit < ActiveRecord::Base
   before_save :default_values
   after_initialize :set_status
   
-  attr_accessor :status
+  attr_accessor :status, :current_user
 
  def self.types
       %w(Demand Generation)
  end
  
  def last_measure
-    self.measures.last 
+    measures.last 
  end
 
  def set_status
@@ -38,7 +36,7 @@ def specific_day_measures(date)
                          "measures.created_at,               "+
                          "row_number() OVER () as rnum       "+
                          "FROM                               "+ 
-                         "public.measures                    "+
+                         "#{Apartment::Tenant.current}.measures       "+
                          "WHERE                              "+ 
                          "measures.circuit_id = ? AND        "+
                          "measures.created_at >= ? AND       "+
@@ -61,7 +59,7 @@ def specific_day_measures(date)
                          "measures.created_at,               "+
                          "row_number() OVER () as rnum       "+
                          "FROM                               "+ 
-                         "public.measures                    "+
+                         "#{Apartment::Tenant.current}.measures       "+
                          "WHERE                              "+ 
                          "measures.circuit_id = ? AND        "+
                          "measures.created_at >= ? AND       "+
@@ -84,7 +82,7 @@ def specific_day_measures(date)
                          "measures.created_at,               "+
                          "row_number() OVER () as rnum       "+
                          "FROM                               "+ 
-                         "public.measures                    "+
+                         "#{Apartment::Tenant.current}.measures       "+
                          "WHERE                              "+ 
                          "measures.circuit_id = ? AND        "+
                          "measures.created_at >= ?           "+
@@ -100,16 +98,16 @@ def specific_day_measures(date)
 
   def month_measures
     measures = Circuit.find_by_sql(["SELECT trunc(cast(SUM(Watts) AS numeric),2) AS \"watts\", to_char((created_at),'YYYY-MM-DD') as dt               "+
-                         "FROM(                                                                "+
-                         "SELECT                                                               "+
-                         "measures.watts *                                                     "+   
-                         "EXTRACT(epoch FROM (measures.created_at - lag(measures.created_at)   "+ 
+                         "FROM(                                                                                                                       "+
+                         "SELECT                                                                                                                      "+
+                         "measures.watts *                                                                                                            "+   
+                         "EXTRACT(epoch FROM (#{Apartment::Tenant.current}.measures.created_at - lag(#{Apartment::Tenant.current}.measures.created_at)                  "+ 
                          "over (order by measures.created_at)))/3600 AS Watts,                 "+
                          "measures.created_at,                                                 "+
                          "row_number() OVER () as rnum                                         "+
                          "FROM                                                                 "+ 
                          "public.circuits,                                                     "+
-                         "public.measures                                                      "+
+                         "#{Apartment::Tenant.current}.measures                                         "+
                          "WHERE                                                                "+ 
                          "circuits.id = ? AND                                                  "+
                          "measures.circuit_id = ? AND                                          "+
@@ -135,28 +133,27 @@ def specific_day_measures(date)
         end
       end
     end
-    return data
 end
  
   def year_measures
-    Circuit.find_by_sql(["SELECT dt, trunc(cast(\"Wattshora\" AS numeric),2) AS \"watts\"  "+
-                         "FROM ( SELECT to_char(dt,'TMmon') as dt "+
-                         "FROM generate_series('2015-01-01 00:00'::timestamp, '2015-12-31 00:00'::timestamp, '1 month'::interval) dt) AS t1 "+
-                         "LEFT OUTER JOIN (SELECT SUM (stats.Watts) AS \"Wattshora\", stats.mon "+
-                         "FROM ( SELECT "+                             
-                         "measures.watts * EXTRACT(epoch FROM (measures.created_at - lag(measures.created_at) over (order by measures.created_at)))/3600 AS Watts, "+                   
-                         "to_char(measures.created_at,'TMmon') AS mon, "+               
-                         "row_number() OVER () as rnum "+       
-                         "FROM "+
-                         "public.circuits, "+                               
-                         "public.measures "+                   
-                         "WHERE "+
-                         "circuits.id = ? AND "+                               
-                         "measures.circuit_id = ? AND "+        
-                         "measures.created_at >= ?) AS stats "+
-                         "WHERE  "+
-                         "mod(rnum,30) = 0 "+
-                         "GROUP BY 2) AS t2 "+
+    Circuit.find_by_sql(["SELECT dt, trunc(cast(\"Wattshora\" AS numeric),2) AS \"watts\"                                                                                                                                      "+
+                         "FROM ( SELECT to_char(dt,'TMmon') as dt                                                                                                                                                              "+
+                         "FROM generate_series('2015-01-01 00:00'::timestamp, '2015-12-31 00:00'::timestamp, '1 month'::interval) dt) AS t1                                                                                    "+
+                         "LEFT OUTER JOIN (SELECT SUM (stats.Watts) AS \"Wattshora\", stats.mon                                                                                                                                "+
+                         "FROM ( SELECT                                                                                                                                                                                        "+                             
+                         "#{Apartment::Tenant.current}.measures.watts * EXTRACT(epoch FROM (#{Apartment::Tenant.current}.measures.created_at - lag(#{Apartment::Tenant.current}.measures.created_at) over (order by measures.created_at)))/3600 AS Watts, "+                   
+                         "to_char(measures.created_at,'TMmon') AS mon,                                                                                                                                                         "+               
+                         "row_number() OVER () as rnum                                                                                                                                                                         "+       
+                         "FROM                                                                                                                                                                                                 "+
+                         "public.circuits,                                                                                                                                                                                     "+                               
+                         "#{Apartment::Tenant.current}.measures                                                                                                                                                                         "+                   
+                         "WHERE                                                                                                                                                                                                "+
+                         "circuits.id = ? AND                                                                                                                                                                                  "+                               
+                         "measures.circuit_id = ? AND                                                                                                                                                                          "+        
+                         "measures.created_at >= ?) AS stats                                                                                                                                                                   "+
+                         "WHERE                                                                                                                                                                                                "+
+                         "mod(rnum,30) = 0                                                                                                                                                                                     "+
+                         "GROUP BY 2) AS t2                                                                                                                                                                                    "+
                          "ON (t1.dt = t2.mon);",
                           self.id,
                           self.id,
@@ -171,7 +168,7 @@ end
                          "measures.created_at,               "+
                          "row_number() OVER () as rnum       "+
                          "FROM                               "+ 
-                         "public.measures,                   "+
+                         "#{Apartment::Tenant.current}.measures,      "+
                          "public.circuits                    "+
                          "WHERE                              "+ 
                          "circuits.id = measures.circuit_id  "+

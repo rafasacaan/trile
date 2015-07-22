@@ -3,6 +3,7 @@ class CircuitsController < ApplicationController
   before_action :set_circuit, only: [:show, :edit, :update, :destroy]
   before_action :set_circuits, only: [:index, :data_tool]
   before_action :set_js
+  before_action :current_user
   before_action :set_type
   before_action :access_only_to_own_circuits, only: [:show]
   rescue_from ActiveRecord::RecordNotFound, with: :invalid_circuit
@@ -96,7 +97,7 @@ class CircuitsController < ApplicationController
 
     def set_circuits
     #Retrieves the circuits for current user
-    @circuits = type_class.where(user_id: current_user.id)
+    @circuits = type_class.all
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

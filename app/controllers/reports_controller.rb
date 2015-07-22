@@ -2,6 +2,7 @@ class ReportsController < ApplicationController
 before_action :set_circuit, except:[:index_measures, :labels, :welcome_index] 
 before_action :set_circuits, only:[:index_measures, :labels, :welcome_index]
 
+
 	def today_measures
 		render json: @circuit.today_measures
 	end
@@ -46,6 +47,8 @@ before_action :set_circuits, only:[:index_measures, :labels, :welcome_index]
 		end
 		render json: a.to_json
 	end
+
+	private
 
 	def set_circuit
 		@circuit = Circuit.find(params[:id])

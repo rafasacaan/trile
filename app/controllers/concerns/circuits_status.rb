@@ -3,7 +3,7 @@ module CircuitsStatus
 	private 
 	
 	def set_circuits
-		circuits = current_user.circuits
+		circuits = Circuit.all
 	rescue ActiveRecord::RecordNotFound
 		circuits = Circuit.new
 	end

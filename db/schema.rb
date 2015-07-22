@@ -11,21 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150612152327) do
+ActiveRecord::Schema.define(version: 20150720183845) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "circuits", force: :cascade do |t|
-    t.integer  "user_id"
     t.text     "description"
     t.string   "type"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.integer  "alarm_time"
   end
-
-  add_index "circuits", ["user_id"], name: "index_circuits_on_user_id", using: :btree
 
   create_table "measures", force: :cascade do |t|
     t.integer  "circuit_id"
@@ -51,11 +48,11 @@ ActiveRecord::Schema.define(version: 20150612152327) do
     t.inet     "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "schema_name"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
-  add_foreign_key "circuits", "users"
   add_foreign_key "measures", "circuits"
 end
