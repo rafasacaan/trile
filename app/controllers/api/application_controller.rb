@@ -1,7 +1,5 @@
 module API
-    class ApplicationController < ApplicationController
-
-		private
+    class ApplicationController < ActionController::Base
 
     end
 end

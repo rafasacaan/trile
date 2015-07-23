@@ -39,24 +39,23 @@ def energy_sum_current_month(id = self.id)
 
 private
 
-  def set_auth_token
-      return if auth_token.present?
-      self.auth_token = generate_auth_token
-  end
+    def set_auth_token
+        return if auth_token.present?
+        self.auth_token = generate_auth_token
+    end
 
     def generate_auth_token
       loop do
-        token = SecureRandom.hex
+          token = SecureRandom.hex
         break token unless self.class.exists?(auth_token: token)
       end
     end
 
     def after_save
-      if schema_name.empty?
+      if schema_name.nil?
       update_attribute :schema_name, "prv_#{id}" 
       Apartment::Tenant.create(schema_name)
     end
-
-  end
+   end
 
 end

@@ -19,7 +19,7 @@ class CircuitsControllerTest < ActionController::TestCase
 
   test "should create circuit" do
     assert_difference('Circuit.count') do
-      post :create, circuit: { description: @circuit.description, type: @circuit.type, user_id: @circuit.user_id }
+      post :create, circuit: { description: @circuit.description, type: @circuit.type}
     end
 
     assert_redirected_to circuit_path(assigns(:circuit))
@@ -36,7 +36,7 @@ class CircuitsControllerTest < ActionController::TestCase
   end
 
   test "should update circuit" do
-    patch :update, id: @circuit, circuit: { description: @circuit.description, type: @circuit.type, user_id: @circuit.user_id }
+    patch :update, id: @circuit, circuit: { description: @circuit.description, type: @circuit.type }
     assert_redirected_to circuit_path(assigns(:circuit))
   end
 

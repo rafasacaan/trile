@@ -4,12 +4,16 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: 
+one:
+ id: 1
  name: Rocco
  email: rocco@motherfucker.com
- auth_token: 2b4df314f32b4a659eb0f8ea1e7f5506	 
+ auth_token: 2b4df314f32b4a659eb0f8ea1e7f5506
+ schema_name: prv_1 	 
 
-two: 
+two:
+ id: 2
  name: Jenna
  email: jenna@fine.com
  auth_token: 2b4df314f32b4a659eb0f8ea1e7f5508
+ schema_name: prv_2

@@ -1,6 +1,6 @@
 module API
 	class MeasuresController < ApplicationController
-  	protect_from_forgery with: :null_session
+  		protect_from_forgery with: :null_session
 		before_action :authenticate
 
 		def index
@@ -17,22 +17,23 @@ module API
 			end
 		end
 
-		protected
+	protected
 
-		def authenticate
-			authenticate_token || render_unauthorized
+	def authenticate
+		authenticate_token || render_unauthorized
     end
 
-    def authenticate_token
-      authenticate_with_http_token do |token, options|
-      	user = User.find_by(auth_token: token)
-		switch_tenant(user.schema_name) unless user.empty?
-		user
-    	end
-    end
+	def authenticate_token
+	  authenticate_with_http_token do |token, options|
+	  	@user = User.find_by(auth_token: token)
+	  		if !@user.nil?
+	  			change_tenant(@user.schema_name)
+	  		end
+	  	end
+	end
 
-	def switch_tenant(tenant)
-		Apartment::Tenant.switch(tenant)
+	def change_tenant(tenant)
+		Apartment::Tenant.switch!(tenant)
 	end
 
     def render_unauthorized(realm=nil)

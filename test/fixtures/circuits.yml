@@ -1,12 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  user: two
   description: MyText
   type: Demand
-
+  alarm_time: 5
 
 two:
-  user: one
   description: MyText
   type: Generation
+  alarm_time: 5

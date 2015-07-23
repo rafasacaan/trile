@@ -26,10 +26,9 @@ class CircuitsController < ApplicationController
     #Setea el archivo con los js que se cargaran en la vista
     @js_file = "show-circuit"
   end
-  # GET /circuits/newcircuit.measures.last.created_at
+  # GET /circuits/new
   def new
     @circuit = type_class.new
-    @circuit.user_id = current_user.name
   end
   # GET /circuits/1/edit
   def edit
@@ -40,8 +39,7 @@ class CircuitsController < ApplicationController
   def create
     @circuit = Circuit.new(circuit_params)
     @circuit.type = params[:type]
-    @circuit.user_id = current_user.id
-
+    
     respond_to do |format|
       if @circuit.save
         format.html { redirect_to @circuit, notice: 'Circuit was successfully created.' }

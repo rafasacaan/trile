@@ -2,7 +2,7 @@ require 'test_helper'
 class ListingMesuresTest < ActionDispatch::IntegrationTest
 	setup do 
 		host! 'api.example.com'
-		@user = User.create!(name: "fake", email: "fake@trile.cl", password: '12345678', password_confirmation: '12345678')
+		@user = User.create!(name: "fake", email: "fake@trile.cl", password: '12345678', password_confirmation: '12345678', schema_name: "prv_1")
 		@circuit = Circuit.create!(description: 'Circuito de test', type: "Demand")
 		@auth_header = "Token token=#{@user.auth_token}"
 		@token = ActionController::HttpAuthentication::Token.encode_credentials(@user.auth_token)
