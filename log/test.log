@@ -33588,3 +33588,354 @@ Attempt to access invalid circuit 980190962
 Redirected to http://test.host/circuits
 Completed 302 Found in 7ms (ActiveRecord: 2.1ms)
   [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.9ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (4.3ms)[0m  ALTER TABLE "users" DISABLE TRIGGER ALL;ALTER TABLE "circuits" DISABLE TRIGGER ALL;ALTER TABLE "measures" DISABLE TRIGGER ALL;ALTER TABLE "schema_migrations" DISABLE TRIGGER ALL
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mFixture Delete (1.1ms)[0m  DELETE FROM "circuits"
+  [1m[36mFixture Insert (0.9ms)[0m  [1mINSERT INTO "circuits" ("description", "type", "alarm_time", "created_at", "updated_at", "id") VALUES ('MyText', 'Demand', 5, '2015-07-23 19:01:05', '2015-07-23 19:01:05', 980190962)[0m
+  [1m[35mFixture Insert (0.4ms)[0m  INSERT INTO "circuits" ("description", "type", "alarm_time", "created_at", "updated_at", "id") VALUES ('MyText', 'Generation', 5, '2015-07-23 19:01:05', '2015-07-23 19:01:05', 298486374)
+  [1m[36mFixture Delete (0.5ms)[0m  [1mDELETE FROM "public"."users"[0m
+  [1m[35mFixture Insert (0.4ms)[0m  INSERT INTO "public"."users" ("id", "name", "email", "auth_token", "schema_name", "created_at", "updated_at") VALUES (1, 'Rocco', 'rocco@motherfucker.com', '2b4df314f32b4a659eb0f8ea1e7f5506', 'prv_1', '2015-07-23 19:01:05', '2015-07-23 19:01:05')
+  [1m[36mFixture Insert (0.3ms)[0m  [1mINSERT INTO "public"."users" ("id", "name", "email", "auth_token", "schema_name", "created_at", "updated_at") VALUES (2, 'Jenna', 'jenna@fine.com', '2b4df314f32b4a659eb0f8ea1e7f5508', 'prv_2', '2015-07-23 19:01:05', '2015-07-23 19:01:05')[0m
+  [1m[35m (12.9ms)[0m  COMMIT
+  [1m[36m (9.5ms)[0m  [1mALTER TABLE "users" ENABLE TRIGGER ALL;ALTER TABLE "circuits" ENABLE TRIGGER ALL;ALTER TABLE "measures" ENABLE TRIGGER ALL;ALTER TABLE "schema_migrations" ENABLE TRIGGER ALL[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+--------------------------------------------------
+CircuitsControllerTest: test_should_create_circuit
+--------------------------------------------------
+  [1m[36mCircuit Load (0.3ms)[0m  [1mSELECT  "circuits".* FROM "circuits" WHERE "circuits"."id" = $1 LIMIT 1[0m  [["id", 980190962]]
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "measures" WHERE "measures"."circuit_id" = $1  [["circuit_id", 980190962]]
+  [1m[36mUser Load (0.3ms)[0m  [1mSELECT  "public"."users".* FROM "public"."users" WHERE "public"."users"."id" = $1 LIMIT 1[0m  [["id", 1]]
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "circuits"
+Processing by CircuitsController#create as HTML
+  Parameters: {"circuit"=>{"description"=>"MyText", "type"=>"Demand"}}
+  [1m[36mUser Load (0.3ms)[0m  [1mSELECT  "public"."users".* FROM "public"."users" WHERE "public"."users"."id" = $1  ORDER BY "public"."users"."id" ASC LIMIT 1[0m  [["id", 1]]
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "circuits" ("description", "alarm_time", "type", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["description", "MyText"], ["alarm_time", 5], ["type", "Demand"], ["created_at", "2015-07-23 19:01:05.369228"], ["updated_at", "2015-07-23 19:01:05.369228"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+Redirected to http://test.host/demands/45
+Completed 302 Found in 14ms (ActiveRecord: 1.7ms)
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM "circuits"[0m
+  [1m[35m (0.1ms)[0m  ROLLBACK
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+---------------------------------------------
+CircuitsControllerTest: test_should_get_index
+---------------------------------------------
+  [1m[35mCircuit Load (0.4ms)[0m  SELECT  "circuits".* FROM "circuits" WHERE "circuits"."id" = $1 LIMIT 1  [["id", 980190962]]
+  [1m[36m (0.4ms)[0m  [1mSELECT COUNT(*) FROM "measures" WHERE "measures"."circuit_id" = $1[0m  [["circuit_id", 980190962]]
+  [1m[35mUser Load (0.5ms)[0m  SELECT  "public"."users".* FROM "public"."users" WHERE "public"."users"."id" = $1 LIMIT 1  [["id", 1]]
+Processing by CircuitsController#index as HTML
+  [1m[36mUser Load (0.5ms)[0m  [1mSELECT  "public"."users".* FROM "public"."users" WHERE "public"."users"."id" = $1  ORDER BY "public"."users"."id" ASC LIMIT 1[0m  [["id", 1]]
+  [1m[35mCircuit Load (0.6ms)[0m  SELECT "circuits".* FROM "circuits"
+  Rendered circuits/index.html.erb within layouts/application (3.9ms)
+  Rendered layouts/_header.html.erb (1.3ms)
+  Rendered layouts/_sidebar.html.erb (1.4ms)
+  Rendered layouts/_alerts.html.erb (0.4ms)
+  Rendered layouts/_footer.html.erb (0.3ms)
+Completed 200 OK in 22ms (Views: 17.7ms | ActiveRecord: 1.8ms)
+  [1m[36m (0.3ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+--------------------------------------------
+CircuitsControllerTest: test_should_get_edit
+--------------------------------------------
+  [1m[36mCircuit Load (0.5ms)[0m  [1mSELECT  "circuits".* FROM "circuits" WHERE "circuits"."id" = $1 LIMIT 1[0m  [["id", 980190962]]
+  [1m[35m (0.4ms)[0m  SELECT COUNT(*) FROM "measures" WHERE "measures"."circuit_id" = $1  [["circuit_id", 980190962]]
+  [1m[36mUser Load (0.5ms)[0m  [1mSELECT  "public"."users".* FROM "public"."users" WHERE "public"."users"."id" = $1 LIMIT 1[0m  [["id", 1]]
+Processing by CircuitsController#edit as HTML
+  Parameters: {"id"=>"980190962"}
+  [1m[35mUser Load (0.7ms)[0m  SELECT  "public"."users".* FROM "public"."users" WHERE "public"."users"."id" = $1  ORDER BY "public"."users"."id" ASC LIMIT 1  [["id", 1]]
+  [1m[36mCircuit Load (0.5ms)[0m  [1mSELECT  "circuits".* FROM "circuits" WHERE "circuits"."id" = $1 LIMIT 1[0m  [["id", 980190962]]
+Attempt to access invalid circuit 980190962
+Redirected to http://test.host/circuits
+Completed 302 Found in 4ms (ActiveRecord: 1.8ms)
+  [1m[35m (0.2ms)[0m  ROLLBACK
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+--------------------------------------------------
+CircuitsControllerTest: test_should_update_circuit
+--------------------------------------------------
+  [1m[35mCircuit Load (0.5ms)[0m  SELECT  "circuits".* FROM "circuits" WHERE "circuits"."id" = $1 LIMIT 1  [["id", 980190962]]
+  [1m[36m (0.4ms)[0m  [1mSELECT COUNT(*) FROM "measures" WHERE "measures"."circuit_id" = $1[0m  [["circuit_id", 980190962]]
+  [1m[35mUser Load (0.5ms)[0m  SELECT  "public"."users".* FROM "public"."users" WHERE "public"."users"."id" = $1 LIMIT 1  [["id", 1]]
+Processing by CircuitsController#update as HTML
+  Parameters: {"circuit"=>{"description"=>"MyText", "type"=>"Demand"}, "id"=>"980190962"}
+  [1m[36mUser Load (0.6ms)[0m  [1mSELECT  "public"."users".* FROM "public"."users" WHERE "public"."users"."id" = $1  ORDER BY "public"."users"."id" ASC LIMIT 1[0m  [["id", 1]]
+  [1m[35mCircuit Load (0.5ms)[0m  SELECT  "circuits".* FROM "circuits" WHERE "circuits"."id" = $1 LIMIT 1  [["id", 980190962]]
+Attempt to access invalid circuit 980190962
+Redirected to http://test.host/circuits
+Completed 302 Found in 4ms (ActiveRecord: 1.8ms)
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+---------------------------------------------------
+CircuitsControllerTest: test_should_destroy_circuit
+---------------------------------------------------
+  [1m[36mCircuit Load (0.6ms)[0m  [1mSELECT  "circuits".* FROM "circuits" WHERE "circuits"."id" = $1 LIMIT 1[0m  [["id", 980190962]]
+  [1m[35m (0.4ms)[0m  SELECT COUNT(*) FROM "measures" WHERE "measures"."circuit_id" = $1  [["circuit_id", 980190962]]
+  [1m[36mUser Load (0.5ms)[0m  [1mSELECT  "public"."users".* FROM "public"."users" WHERE "public"."users"."id" = $1 LIMIT 1[0m  [["id", 1]]
+  [1m[35m (0.5ms)[0m  SELECT COUNT(*) FROM "circuits"
+Processing by CircuitsController#destroy as HTML
+  Parameters: {"id"=>"980190962"}
+  [1m[36mUser Load (0.7ms)[0m  [1mSELECT  "public"."users".* FROM "public"."users" WHERE "public"."users"."id" = $1  ORDER BY "public"."users"."id" ASC LIMIT 1[0m  [["id", 1]]
+  [1m[35mCircuit Load (0.5ms)[0m  SELECT  "circuits".* FROM "circuits" WHERE "circuits"."id" = $1 LIMIT 1  [["id", 980190962]]
+Attempt to access invalid circuit 980190962
+Redirected to http://test.host/circuits
+Completed 302 Found in 5ms (ActiveRecord: 2.0ms)
+  [1m[36m (0.5ms)[0m  [1mSELECT COUNT(*) FROM "circuits"[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+-------------------------------------------
+CircuitsControllerTest: test_should_get_new
+-------------------------------------------
+  [1m[35mCircuit Load (0.6ms)[0m  SELECT  "circuits".* FROM "circuits" WHERE "circuits"."id" = $1 LIMIT 1  [["id", 980190962]]
+  [1m[36m (0.5ms)[0m  [1mSELECT COUNT(*) FROM "measures" WHERE "measures"."circuit_id" = $1[0m  [["circuit_id", 980190962]]
+  [1m[35mUser Load (0.6ms)[0m  SELECT  "public"."users".* FROM "public"."users" WHERE "public"."users"."id" = $1 LIMIT 1  [["id", 1]]
+Processing by CircuitsController#new as HTML
+  [1m[36mUser Load (0.6ms)[0m  [1mSELECT  "public"."users".* FROM "public"."users" WHERE "public"."users"."id" = $1  ORDER BY "public"."users"."id" ASC LIMIT 1[0m  [["id", 1]]
+  Rendered circuits/_form.html.erb (7.8ms)
+  Rendered circuits/new.html.erb within layouts/application (9.6ms)
+  Rendered layouts/_header.html.erb (0.8ms)
+  Rendered layouts/_sidebar.html.erb (0.5ms)
+  Rendered layouts/_alerts.html.erb (0.1ms)
+  Rendered layouts/_footer.html.erb (0.1ms)
+Completed 200 OK in 129ms (Views: 125.7ms | ActiveRecord: 1.3ms)
+  [1m[35m (0.1ms)[0m  ROLLBACK
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+------------------------------------------------
+CircuitsControllerTest: test_should_show_circuit
+------------------------------------------------
+  [1m[35mCircuit Load (0.2ms)[0m  SELECT  "circuits".* FROM "circuits" WHERE "circuits"."id" = $1 LIMIT 1  [["id", 980190962]]
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM "measures" WHERE "measures"."circuit_id" = $1[0m  [["circuit_id", 980190962]]
+  [1m[35mUser Load (0.2ms)[0m  SELECT  "public"."users".* FROM "public"."users" WHERE "public"."users"."id" = $1 LIMIT 1  [["id", 1]]
+Processing by CircuitsController#show as HTML
+  Parameters: {"id"=>"980190962"}
+  [1m[36mUser Load (0.4ms)[0m  [1mSELECT  "public"."users".* FROM "public"."users" WHERE "public"."users"."id" = $1  ORDER BY "public"."users"."id" ASC LIMIT 1[0m  [["id", 1]]
+  [1m[35mCircuit Load (0.5ms)[0m  SELECT  "circuits".* FROM "circuits" WHERE "circuits"."id" = $1 LIMIT 1  [["id", 980190962]]
+Attempt to access invalid circuit 980190962
+Redirected to http://test.host/circuits
+Completed 302 Found in 4ms (ActiveRecord: 1.6ms)
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+--------------------------------------------
+WelcomeControllerTest: test_should_get_index
+--------------------------------------------
+  [1m[36mUser Load (0.4ms)[0m  [1mSELECT  "public"."users".* FROM "public"."users" WHERE "public"."users"."id" = $1 LIMIT 1[0m  [["id", 1]]
+Processing by WelcomeController#index as HTML
+  [1m[35mUser Load (0.4ms)[0m  SELECT  "public"."users".* FROM "public"."users" WHERE "public"."users"."id" = $1  ORDER BY "public"."users"."id" ASC LIMIT 1  [["id", 1]]
+  [1m[36mCircuit Load (0.2ms)[0m  [1mSELECT "circuits".* FROM "circuits"[0m
+  [1m[35mCircuit Load (0.4ms)[0m  SELECT "circuits".* FROM "circuits"
+  [1m[36mUser Load (3.9ms)[0m  [1mSELECT SUM(Watts) AS "Wattshora", to_char(created_at,'Mon') as mon, extract(year from created_at) as year,"type"   FROM(                                                                                                                   SELECT                                                                                                                  circuits.type as "type",                                                                                              measures.created_at,                                                                                                    measures.watts *                                                                                                        EXTRACT(epoch FROM (measures.created_at - lag(measures.created_at)                                                      over (order by measures.created_at)))/3600 AS Watts                                                                     FROM                                                                                                                    public.users,                                                                                                           prv_1.circuits,                                                                                           prv_1.measures                                                                                            WHERE                                                                                                                   users.id = 1 AND                                                                                                        measures.created_at >= '2015-07-01 03:00:00.000000') AS foo                                                                                        GROUP BY 2,3,4;[0m
+  [1m[35m (0.7ms)[0m  SELECT COUNT(*) FROM "circuits"
+  Rendered welcome/_general_status.html.erb (3.7ms)
+  [1m[36m (0.6ms)[0m  [1mSELECT COUNT(*) FROM "circuits"[0m
+  Rendered welcome/_last_measures.html.erb (3.4ms)
+  Rendered welcome/_month_status.html.erb (1.0ms)
+  Rendered welcome/_bar_graph.html.erb (0.4ms)
+  Rendered welcome/index.html.erb within layouts/application (14.6ms)
+  Rendered layouts/_header.html.erb (0.5ms)
+  Rendered layouts/_sidebar.html.erb (0.5ms)
+  Rendered layouts/_alerts.html.erb (0.1ms)
+  Rendered layouts/_footer.html.erb (0.0ms)
+Completed 200 OK in 27ms (Views: 17.3ms | ActiveRecord: 6.9ms)
+  [1m[35m (0.3ms)[0m  ROLLBACK
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+-------------------------------------------------------------------------
+ListingMesuresTest: test_return_list_of_all_measures_form_current_circuit
+-------------------------------------------------------------------------
+  [1m[35m (0.3ms)[0m  SAVEPOINT active_record_1
+  [1m[36mUser Exists (0.8ms)[0m  [1mSELECT  1 AS one FROM "public"."users" WHERE "public"."users"."email" = 'fake@trile.cl' LIMIT 1[0m
+  [1m[35mUser Exists (1.0ms)[0m  SELECT  1 AS one FROM "public"."users" WHERE LOWER("public"."users"."email") = LOWER('fake@trile.cl') LIMIT 1
+  [1m[36mUser Exists (0.3ms)[0m  [1mSELECT  1 AS one FROM "public"."users" WHERE "public"."users"."auth_token" = $1 LIMIT 1[0m  [["auth_token", "16726d9b57760a8909094fed91bc6f39"]]
+  [1m[35mSQL (0.6ms)[0m  INSERT INTO "public"."users" ("name", "email", "encrypted_password", "schema_name", "created_at", "updated_at", "auth_token") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"  [["name", "fake"], ["email", "fake@trile.cl"], ["encrypted_password", "$2a$04$DDpU0CElIDQM5lUNsUkE6e5eFJOkCegDHx9oIN5l7UHH/YLRXX1RS"], ["schema_name", "prv_1"], ["created_at", "2015-07-23 19:01:05.634179"], ["updated_at", "2015-07-23 19:01:05.634179"], ["auth_token", "16726d9b57760a8909094fed91bc6f39"]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "circuits" ("type", "description", "alarm_time", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["type", "Demand"], ["description", "Circuito de test"], ["alarm_time", 5], ["created_at", "2015-07-23 19:01:05.643601"], ["updated_at", "2015-07-23 19:01:05.643601"]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+Started GET "/circuits/980190963/measures" for 127.0.0.1 at 2015-07-23 16:01:05 -0300
+Processing by API::MeasuresController#index as JSON
+  Parameters: {"subdomain"=>"api", "circuit_id"=>"980190963"}
+  [1m[36mUser Load (0.5ms)[0m  [1mSELECT  "public"."users".* FROM "public"."users" WHERE "public"."users"."auth_token" = $1 LIMIT 1[0m  [["auth_token", "16726d9b57760a8909094fed91bc6f39"]]
+  [1m[35mMeasure Load (0.4ms)[0m  SELECT "measures".* FROM "measures" WHERE "measures"."circuit_id" = $1  [["circuit_id", 980190963]]
+Completed 200 OK in 16ms (Views: 1.0ms | ActiveRecord: 1.5ms)
+  [1m[36mMeasure Load (0.5ms)[0m  [1mSELECT "measures".* FROM "measures"[0m
+  [1m[35mCircuit Load (0.4ms)[0m  SELECT "circuits".* FROM "circuits"
+  [1m[36mUser Load (0.5ms)[0m  [1mSELECT "public"."users".* FROM "public"."users"[0m
+  [1m[35m (0.2ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.4ms)[0m  [1mDELETE FROM "public"."users" WHERE "public"."users"."id" = $1[0m  [["id", 1]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  DELETE FROM "public"."users" WHERE "public"."users"."id" = $1  [["id", 2]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.5ms)[0m  [1mDELETE FROM "public"."users" WHERE "public"."users"."id" = $1[0m  [["id", 3]]
+  [1m[35m (0.3ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.3ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+---------------------------------------------
+ListingMesuresTest: test_valid_authentication
+---------------------------------------------
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mUser Exists (0.6ms)[0m  SELECT  1 AS one FROM "public"."users" WHERE "public"."users"."email" = 'fake@trile.cl' LIMIT 1
+  [1m[36mUser Exists (0.6ms)[0m  [1mSELECT  1 AS one FROM "public"."users" WHERE LOWER("public"."users"."email") = LOWER('fake@trile.cl') LIMIT 1[0m
+  [1m[35mUser Exists (0.5ms)[0m  SELECT  1 AS one FROM "public"."users" WHERE "public"."users"."auth_token" = $1 LIMIT 1  [["auth_token", "f318694fea1defa1e780a2c8587aac25"]]
+  [1m[36mSQL (0.9ms)[0m  [1mINSERT INTO "public"."users" ("name", "email", "encrypted_password", "schema_name", "created_at", "updated_at", "auth_token") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["name", "fake"], ["email", "fake@trile.cl"], ["encrypted_password", "$2a$04$62EqTFY5.6zvP/iM7oqDBOQeu3R3h/TLgnkWvWi8dWqVLHo1k02Hu"], ["schema_name", "prv_1"], ["created_at", "2015-07-23 19:01:05.704661"], ["updated_at", "2015-07-23 19:01:05.704661"], ["auth_token", "f318694fea1defa1e780a2c8587aac25"]]
+  [1m[35m (0.4ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "circuits" ("type", "description", "alarm_time", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["type", "Demand"], ["description", "Circuito de test"], ["alarm_time", 5], ["created_at", "2015-07-23 19:01:05.712325"], ["updated_at", "2015-07-23 19:01:05.712325"]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/circuits/980190964/measures" for 127.0.0.1 at 2015-07-23 16:01:05 -0300
+Processing by API::MeasuresController#index as HTML
+  Parameters: {"subdomain"=>"api", "circuit_id"=>"980190964"}
+  [1m[35mUser Load (0.6ms)[0m  SELECT  "public"."users".* FROM "public"."users" WHERE "public"."users"."auth_token" = $1 LIMIT 1  [["auth_token", "f318694fea1defa1e780a2c8587aac25"]]
+  [1m[36mMeasure Load (0.3ms)[0m  [1mSELECT "measures".* FROM "measures" WHERE "measures"."circuit_id" = $1[0m  [["circuit_id", 980190964]]
+Completed 200 OK in 5ms (Views: 0.9ms | ActiveRecord: 1.7ms)
+  [1m[35mMeasure Load (0.5ms)[0m  SELECT "measures".* FROM "measures"
+  [1m[36mCircuit Load (0.4ms)[0m  [1mSELECT "circuits".* FROM "circuits"[0m
+  [1m[35mUser Load (0.4ms)[0m  SELECT "public"."users".* FROM "public"."users"
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  DELETE FROM "public"."users" WHERE "public"."users"."id" = $1  [["id", 1]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mDELETE FROM "public"."users" WHERE "public"."users"."id" = $1[0m  [["id", 2]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  DELETE FROM "public"."users" WHERE "public"."users"."id" = $1  [["id", 4]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+-------------------------------------------------------------------------------------
+ListingMesuresTest: test_invalid_authentication_sets_WWWW-Authenticate_to_Application
+-------------------------------------------------------------------------------------
+  [1m[35m (0.2ms)[0m  SAVEPOINT active_record_1
+  [1m[36mUser Exists (0.7ms)[0m  [1mSELECT  1 AS one FROM "public"."users" WHERE "public"."users"."email" = 'fake@trile.cl' LIMIT 1[0m
+  [1m[35mUser Exists (0.7ms)[0m  SELECT  1 AS one FROM "public"."users" WHERE LOWER("public"."users"."email") = LOWER('fake@trile.cl') LIMIT 1
+  [1m[36mUser Exists (0.5ms)[0m  [1mSELECT  1 AS one FROM "public"."users" WHERE "public"."users"."auth_token" = $1 LIMIT 1[0m  [["auth_token", "7de625f7146b340f8a83842c7ad855c8"]]
+  [1m[35mSQL (0.7ms)[0m  INSERT INTO "public"."users" ("name", "email", "encrypted_password", "schema_name", "created_at", "updated_at", "auth_token") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"  [["name", "fake"], ["email", "fake@trile.cl"], ["encrypted_password", "$2a$04$LTjwWUgZ0ytIKo2hDUNy1OjmCPnSe6sAQvVs.oUk/avUBHTTfsFzG"], ["schema_name", "prv_1"], ["created_at", "2015-07-23 19:01:05.744752"], ["updated_at", "2015-07-23 19:01:05.744752"], ["auth_token", "7de625f7146b340f8a83842c7ad855c8"]]
+  [1m[36m (0.4ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.6ms)[0m  [1mINSERT INTO "circuits" ("type", "description", "alarm_time", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["type", "Demand"], ["description", "Circuito de test"], ["alarm_time", 5], ["created_at", "2015-07-23 19:01:05.749910"], ["updated_at", "2015-07-23 19:01:05.749910"]]
+  [1m[35m (0.3ms)[0m  RELEASE SAVEPOINT active_record_1
+Started GET "/circuits/980190965/measures" for 127.0.0.1 at 2015-07-23 16:01:05 -0300
+Processing by API::MeasuresController#index as HTML
+  Parameters: {"subdomain"=>"api", "circuit_id"=>"980190965"}
+  [1m[36mUser Load (0.4ms)[0m  [1mSELECT  "public"."users".* FROM "public"."users" WHERE "public"."users"."auth_token" = $1 LIMIT 1[0m  [["auth_token", "7de625f7146b340f8a83842c7ad855c8\"fake"]]
+Filter chain halted as :authenticate rendered or redirected
+Completed 401 Unauthorized in 2ms (Views: 0.1ms | ActiveRecord: 0.4ms)
+  [1m[35mMeasure Load (0.6ms)[0m  SELECT "measures".* FROM "measures"
+  [1m[36mCircuit Load (0.5ms)[0m  [1mSELECT "circuits".* FROM "circuits"[0m
+  [1m[35m (0.4ms)[0m  SELECT COUNT(*) FROM "measures" WHERE "measures"."circuit_id" = $1  [["circuit_id", 980190962]]
+  [1m[36m (0.5ms)[0m  [1mSELECT COUNT(*) FROM "measures" WHERE "measures"."circuit_id" = $1[0m  [["circuit_id", 298486374]]
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "measures" WHERE "measures"."circuit_id" = $1  [["circuit_id", 980190965]]
+  [1m[36m (0.3ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mMeasure Load (0.6ms)[0m  SELECT "measures".* FROM "measures" WHERE "measures"."circuit_id" = $1  [["circuit_id", 980190962]]
+  [1m[36mSQL (1.3ms)[0m  [1mDELETE FROM "circuits" WHERE "circuits"."type" IN ('Demand') AND "circuits"."id" = $1[0m  [["id", 980190962]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mMeasure Load (0.5ms)[0m  SELECT "measures".* FROM "measures" WHERE "measures"."circuit_id" = $1  [["circuit_id", 298486374]]
+  [1m[36mSQL (0.8ms)[0m  [1mDELETE FROM "circuits" WHERE "circuits"."type" IN ('Generation') AND "circuits"."id" = $1[0m  [["id", 298486374]]
+  [1m[35m (0.3ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mMeasure Load (0.3ms)[0m  SELECT "measures".* FROM "measures" WHERE "measures"."circuit_id" = $1  [["circuit_id", 980190965]]
+  [1m[36mSQL (0.8ms)[0m  [1mDELETE FROM "circuits" WHERE "circuits"."type" IN ('Demand') AND "circuits"."id" = $1[0m  [["id", 980190965]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36mUser Load (0.5ms)[0m  [1mSELECT "public"."users".* FROM "public"."users"[0m
+  [1m[35m (0.2ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.4ms)[0m  [1mDELETE FROM "public"."users" WHERE "public"."users"."id" = $1[0m  [["id", 1]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  DELETE FROM "public"."users" WHERE "public"."users"."id" = $1  [["id", 2]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mDELETE FROM "public"."users" WHERE "public"."users"."id" = $1[0m  [["id", 5]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.4ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+---------------------------------------------------------------
+ListingMesuresTest: test_valid_authentication_with_manual_token
+---------------------------------------------------------------
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mUser Exists (0.8ms)[0m  SELECT  1 AS one FROM "public"."users" WHERE "public"."users"."email" = 'fake@trile.cl' LIMIT 1
+  [1m[36mUser Exists (0.4ms)[0m  [1mSELECT  1 AS one FROM "public"."users" WHERE LOWER("public"."users"."email") = LOWER('fake@trile.cl') LIMIT 1[0m
+  [1m[35mUser Exists (0.3ms)[0m  SELECT  1 AS one FROM "public"."users" WHERE "public"."users"."auth_token" = $1 LIMIT 1  [["auth_token", "a98e7ba8288daff9b11cf0b5d877db88"]]
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "public"."users" ("name", "email", "encrypted_password", "schema_name", "created_at", "updated_at", "auth_token") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["name", "fake"], ["email", "fake@trile.cl"], ["encrypted_password", "$2a$04$D4CpWZC4P/ZIDNZPYDr3zuGpSSQCmAT1g4bGCmBrMHKu/dEC67nIy"], ["schema_name", "prv_1"], ["created_at", "2015-07-23 19:01:05.797989"], ["updated_at", "2015-07-23 19:01:05.797989"], ["auth_token", "a98e7ba8288daff9b11cf0b5d877db88"]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "circuits" ("type", "description", "alarm_time", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["type", "Demand"], ["description", "Circuito de test"], ["alarm_time", 5], ["created_at", "2015-07-23 19:01:05.804644"], ["updated_at", "2015-07-23 19:01:05.804644"]]
+  [1m[36m (0.3ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/circuits/980190966/measures" for 127.0.0.1 at 2015-07-23 16:01:05 -0300
+Processing by API::MeasuresController#index as JSON
+  Parameters: {"subdomain"=>"api", "circuit_id"=>"980190966"}
+  [1m[35mUser Load (0.6ms)[0m  SELECT  "public"."users".* FROM "public"."users" WHERE "public"."users"."auth_token" = $1 LIMIT 1  [["auth_token", "a98e7ba8288daff9b11cf0b5d877db88"]]
+  [1m[36mMeasure Load (0.6ms)[0m  [1mSELECT "measures".* FROM "measures" WHERE "measures"."circuit_id" = $1[0m  [["circuit_id", 980190966]]
+Completed 200 OK in 4ms (Views: 0.8ms | ActiveRecord: 1.9ms)
+  [1m[35mMeasure Load (0.6ms)[0m  SELECT "measures".* FROM "measures"
+  [1m[36mCircuit Load (0.4ms)[0m  [1mSELECT "circuits".* FROM "circuits"[0m
+  [1m[35mUser Load (0.5ms)[0m  SELECT "public"."users".* FROM "public"."users"
+  [1m[36m (0.3ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.5ms)[0m  DELETE FROM "public"."users" WHERE "public"."users"."id" = $1  [["id", 1]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mDELETE FROM "public"."users" WHERE "public"."users"."id" = $1[0m  [["id", 2]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  DELETE FROM "public"."users" WHERE "public"."users"."id" = $1  [["id", 6]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+-------------------------------------------
+CreatingMeasuresTest: test_creates_measures
+-------------------------------------------
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mUser Exists (0.6ms)[0m  [1mSELECT  1 AS one FROM "public"."users" WHERE "public"."users"."email" = 'faker@trile.cl' LIMIT 1[0m
+  [1m[35mUser Exists (0.5ms)[0m  SELECT  1 AS one FROM "public"."users" WHERE LOWER("public"."users"."email") = LOWER('faker@trile.cl') LIMIT 1
+  [1m[36mUser Exists (0.3ms)[0m  [1mSELECT  1 AS one FROM "public"."users" WHERE "public"."users"."auth_token" = $1 LIMIT 1[0m  [["auth_token", "f2be141eed7eeacedb3e121f2c22ec5a"]]
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "public"."users" ("name", "email", "encrypted_password", "created_at", "updated_at", "auth_token") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"  [["name", "faker"], ["email", "faker@trile.cl"], ["encrypted_password", "$2a$04$DEblClF9ksp83k7wNk5LPe1FPdyPxXaxu6yxvmDH798bI60qFohAG"], ["created_at", "2015-07-23 19:01:05.830583"], ["updated_at", "2015-07-23 19:01:05.830583"], ["auth_token", "f2be141eed7eeacedb3e121f2c22ec5a"]]
+  [1m[36mSQL (0.6ms)[0m  [1mUPDATE "public"."users" SET "name" = $1, "email" = $2, "encrypted_password" = $3, "created_at" = $4, "updated_at" = $5, "auth_token" = $6, "id" = $7, "schema_name" = $8 WHERE "public"."users"."id" = $9[0m  [["name", "faker"], ["email", "faker@trile.cl"], ["encrypted_password", "$2a$04$DEblClF9ksp83k7wNk5LPe1FPdyPxXaxu6yxvmDH798bI60qFohAG"], ["created_at", "2015-07-23 19:01:05.830583"], ["updated_at", "2015-07-23 19:01:05.830583"], ["auth_token", "f2be141eed7eeacedb3e121f2c22ec5a"], ["id", 7], ["schema_name", "prv_7"], ["id", 7]]
+  [1m[35m (1.1ms)[0m  CREATE SCHEMA "prv_7"
+  [1m[36mSQL (0.2ms)[0m  [1mCREATE EXTENSION IF NOT EXISTS "plpgsql"[0m
+  [1m[35m (98.8ms)[0m  CREATE TABLE "circuits" ("id" serial primary key, "description" text, "type" character varying, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL, "alarm_time" integer) 
+  [1m[36m (74.4ms)[0m  [1mCREATE TABLE "measures" ("id" serial primary key, "circuit_id" integer, "watts" integer, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL) [0m
+  [1m[35m (54.8ms)[0m  CREATE  INDEX  "index_measures_on_circuit_id" ON "measures" USING btree ("circuit_id")
+  [1m[36m (108.8ms)[0m  [1mCREATE TABLE "users" ("id" serial primary key, "name" character varying DEFAULT '' NOT NULL, "email" character varying NOT NULL, "encrypted_password" character varying DEFAULT '' NOT NULL, "auth_token" text, "reset_password_token" character varying, "reset_password_sent_at" timestamp, "remember_created_at" timestamp, "sign_in_count" integer DEFAULT 0 NOT NULL, "current_sign_in_at" timestamp, "last_sign_in_at" timestamp, "current_sign_in_ip" inet, "last_sign_in_ip" inet, "created_at" timestamp, "updated_at" timestamp, "schema_name" character varying) [0m
+  [1m[35m (40.0ms)[0m  CREATE UNIQUE INDEX  "index_users_on_email" ON "users" USING btree ("email")
+  [1m[36m (64.8ms)[0m  [1mCREATE UNIQUE INDEX  "index_users_on_reset_password_token" ON "users" USING btree ("reset_password_token")[0m
+  [1m[35m (3.3ms)[0m  ALTER TABLE "measures" ADD CONSTRAINT "fk_rails_0d9a1dd04c"
+FOREIGN KEY ("circuit_id")
+  REFERENCES "circuits" ("id")
+
+  [1m[36m (50.1ms)[0m  [1mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL) [0m
+  [1m[35m (43.4ms)[0m  CREATE UNIQUE INDEX  "unique_schema_migrations" ON "schema_migrations"  ("version")
+  [1m[36m (0.6ms)[0m  [1mSELECT version FROM "schema_migrations"[0m
+  [1m[35m (0.5ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150720183845')
+  [1m[36m (0.3ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150522130847')[0m
+  [1m[35m (0.3ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150513183751')
+  [1m[36m (0.3ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150720181315')[0m
+  [1m[35m (0.3ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150511152613')
+  [1m[36m (0.3ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150612150456')[0m
+  [1m[35m (0.3ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150612152327')
+  [1m[36m (0.3ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.7ms)[0m  [1mINSERT INTO "circuits" ("type", "description", "alarm_time", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["type", "Demand"], ["description", "Circuito de test"], ["alarm_time", 5], ["created_at", "2015-07-23 19:01:06.417678"], ["updated_at", "2015-07-23 19:01:06.417678"]]
+  [1m[35m (0.3ms)[0m  RELEASE SAVEPOINT active_record_1
+Started POST "/circuits/46/measures" for 127.0.0.1 at 2015-07-23 16:01:06 -0300
+Processing by API::MeasuresController#create as JSON
+  Parameters: {"measure"=>{"watts"=>65, "circuit_id"=>46}, "subdomain"=>"api", "circuit_id"=>"46"}
+  [1m[36mUser Load (0.9ms)[0m  [1mSELECT  "public"."users".* FROM "public"."users" WHERE "public"."users"."auth_token" = $1 LIMIT 1[0m  [["auth_token", "f2be141eed7eeacedb3e121f2c22ec5a"]]
+  [1m[35m (0.3ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (2.4ms)[0m  [1mINSERT INTO "measures" ("circuit_id", "watts", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["circuit_id", 46], ["watts", 65], ["created_at", "2015-07-23 19:01:06.433514"], ["updated_at", "2015-07-23 19:01:06.433514"]]
+PG::ForeignKeyViolation: ERROR:  insert or update on table "measures" violates foreign key constraint "fk_rails_0d9a1dd04c"
+DETAIL:  Key (circuit_id)=(46) is not present in table "circuits".
+: INSERT INTO "measures" ("circuit_id", "watts", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"
+  [1m[35m (0.3ms)[0m  ROLLBACK TO SAVEPOINT active_record_1
+Completed 500 Internal Server Error in 14ms (ActiveRecord: 4.9ms)
+  [1m[36mMeasure Load (0.6ms)[0m  [1mSELECT "measures".* FROM "measures"[0m
+  [1m[35mCircuit Load (0.5ms)[0m  SELECT "circuits".* FROM "circuits"
+  [1m[36mUser Load (0.5ms)[0m  [1mSELECT "public"."users".* FROM "public"."users"[0m
+  [1m[35m (0.2ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.4ms)[0m  [1mDELETE FROM "public"."users" WHERE "public"."users"."id" = $1[0m  [["id", 1]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.5ms)[0m  DELETE FROM "public"."users" WHERE "public"."users"."id" = $1  [["id", 2]]
+  [1m[36m (0.3ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.4ms)[0m  [1mDELETE FROM "public"."users" WHERE "public"."users"."id" = $1[0m  [["id", 7]]
+  [1m[35m (0.3ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (3.9ms)[0m  [1mROLLBACK[0m
