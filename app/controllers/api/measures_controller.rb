@@ -10,6 +10,7 @@ module API
 
 		def create
 			measure = Measure.new(measure_params)
+			parent_circuit = Circuit.find(params[:circuit_id])
 			if measure.save
 				render json: measure, status: 201, location: api_circuit_measure_path(measure.circuit_id, measure)
 			else
@@ -43,8 +44,9 @@ module API
       render json: 'Bad credentials', status: 401
     end
 
-		def measure_params
-			params.require(:measure).permit(:circuit_id, :watts)
-		end
+	def measure_params
+		params.require(:measure).permit(:circuit_id, :watts)
+	end
+
 	end
 end

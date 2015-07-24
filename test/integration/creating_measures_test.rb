@@ -1,9 +1,11 @@
 require 'test_helper'
 
 class CreatingMeasuresTest < ActionDispatch::IntegrationTest
+
 setup do 
 	host! 'api.example.com'
 	@user = User.create!(name: "faker", email: "faker@trile.cl", password: '12345678', password_confirmation: '12345678')
+	Apartment::Tenant.switch!(@user.schema_name)
 	@circuit = Circuit.create!(description: 'Circuito de test', type: "Demand")
 	@auth_header = "Token token=#{@user.auth_token}"
 	@token = ActionController::HttpAuthentication::Token.encode_credentials(@user.auth_token)

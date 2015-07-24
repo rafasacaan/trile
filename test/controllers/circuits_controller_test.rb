@@ -2,9 +2,17 @@ require 'test_helper'
 
 class CircuitsControllerTest < ActionController::TestCase
   setup do
-    @circuit = circuits(:one)
-    sign_in users(:one)
+    @user = User.create!(name: "faker", email: "faker@trile.cl", password: '12345678', password_confirmation: '12345678')
+    Apartment::Tenant.switch!(@user.schema_name)
+    @circuit = Circuit.create!(description: 'Circuito de test', type: "Demand")
+    sign_in @user 
+ end
+
+  teardown do 
+    Circuit.destroy_all 
+    User.destroy_all
   end
+
 
   test "should get index" do
     get :index

@@ -32,7 +32,7 @@ class CircuitsController < ApplicationController
   end
   # GET /circuits/1/edit
   def edit
-    @circuit.user_id = current_user.name
+    
   end
   # POST /circuits
   # POST /circuits.json
