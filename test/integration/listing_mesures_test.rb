@@ -3,9 +3,13 @@ class ListingMesuresTest < ActionDispatch::IntegrationTest
 	setup do 
 		host! 'api.example.com'
 		@user = User.create!(name: "fake", email: "fake@trile.cl", password: '12345678', password_confirmation: '12345678', schema_name: "prv_1")
+		Apartment::Tenant.switch!(@user.schema_name)
 		@circuit = Circuit.create!(description: 'Circuito de test', type: "Demand")
 		@auth_header = "Token token=#{@user.auth_token}"
 		@token = ActionController::HttpAuthentication::Token.encode_credentials(@user.auth_token)
+		host! 'api.example.com'
+		@user = User.create!(name: "faker", email: "faker@trile.cl", password: '12345678', password_confirmation: '12345678')
+
 	end
 	
 	teardown do 
@@ -27,7 +31,7 @@ class ListingMesuresTest < ActionDispatch::IntegrationTest
   	end
 
   	test 'invalid authentication sets WWWW-Authenticate to Application' do
-	get "/circuits/#{@circuit.id}/measures", {}, { 'Authorization' => @token + 'fake' }
+	get "/circuits/#{@circuit.id}/measures", {}, { 'Accept' => Mime::JSON, 'Authorization' => @token + 'fake' }
     assert_equal 401, response.status
     assert_equal 'Token realm="Application"', response.headers['WWW-Authenticate']
   	end

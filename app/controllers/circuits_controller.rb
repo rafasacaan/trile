@@ -76,19 +76,21 @@ class CircuitsController < ApplicationController
 
   private
 
-    def set_type 
-       @type = type 
-    end
-    
-    def type 
+    def type
+        #This sets the circuit type if it is in the params, otherwise it sets it to "Circuit" 
         Circuit.types.include?(params[:type]) ? params[:type] : "Circuit"
     end
 
+    def set_type 
+       #From the above metod, the type is attached to an instance variable.
+       @type = type 
+    end
+    
     def type_class 
+        #constantize tries to find a declared constant with the name specified in the string.
         type.constantize 
     end
-
-    # Use callbacks to share common setup or constraints between actions.
+   
     def set_circuit
       @circuit = type_class.find(params[:id])
     end

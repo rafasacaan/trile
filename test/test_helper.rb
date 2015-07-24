@@ -9,6 +9,9 @@ class ActiveSupport::TestCase
   def json(body)
   JSON.parse(body, symbolize_names: true)
   end
+
+  
+
 end
 
 class ActionController::TestCase

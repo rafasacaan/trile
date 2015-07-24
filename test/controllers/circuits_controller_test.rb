@@ -13,7 +13,6 @@ class CircuitsControllerTest < ActionController::TestCase
     User.destroy_all
   end
 
-
   test "should get index" do
     get :index
     assert_response :success
@@ -29,7 +28,6 @@ class CircuitsControllerTest < ActionController::TestCase
     assert_difference('Circuit.count') do
       post :create, circuit: { description: @circuit.description, type: @circuit.type}
     end
-
     assert_redirected_to circuit_path(assigns(:circuit))
   end
 
