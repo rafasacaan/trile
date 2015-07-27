@@ -48,10 +48,11 @@ var area_options = {
     labels: [],
     barColors:['#F44336'],
     xLabelFormat: function(d){
-      date = new Date(Date.parse(d.label));
-      return date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear()  
+      date = new Date(d.label*1000);
+      return date.getDate()+'/'+(date.getMonth()+1); 
     },
-    xLabels:"day"
+    dateFormat: function (x) { return new Date(x.label*1000); },
+    xLabelAngle: 60
   };
 
   var year_options = {
@@ -61,6 +62,7 @@ var area_options = {
     ykeys: ['watts'],
     labels: [],
     barColors:['#F44336'],
+    xLabelAngle: 60
   };
 
 $.getJSON("/reports/today_measures/" + parseInt($("#testchart").data("circuit")), function(data) {

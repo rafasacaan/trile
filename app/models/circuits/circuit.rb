@@ -119,21 +119,19 @@ def specific_day_measures(date)
                           self.id,
                           self.id,
                           Time.now.at_beginning_of_month])
- 	#self.measures.where("created_at >= ?", 1.month.ago.utc).select("created_at, watts").order(:created_at)
-  #array_of_days_in_current_month = (1..(Time.days_in_month Date.today.month, Date.today.year)).to_a
-
-    days_in_month = (Date.today.at_beginning_of_month..Date.today.at_end_of_month).map{ |date| date.strftime("%Y-%m-%d") }
+ 	
     data = []
-    days_in_month.each {|day| data << {"dt" => day, "watts" => 0}} 
-        
+    days_in_month = (Date.today.at_beginning_of_month..Date.today.at_end_of_month).map {|day| data << {"dt" => day.to_time.to_i, "watts" => 0}}
+     
     data.each do |d|
       measures.each do |m|
-        if d["dt"] == m.dt.to_s
+        if d["dt"] == m.dt.to_time.to_i
         d["watts"] = m.watts
         end
       end
     end
-end
+  
+  end
  
   def year_measures
     Circuit.find_by_sql(["SELECT dt, trunc(cast(\"Wattshora\" AS numeric),2) AS \"watts\"                                                                                                                                      "+
