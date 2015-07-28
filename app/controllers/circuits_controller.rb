@@ -77,6 +77,8 @@ class CircuitsController < ApplicationController
   private
 
     def type
+        puts "********************************************************************"
+        puts Apartment::Tenant.current
         #This sets the circuit type if it is in the params, otherwise it sets it to "Circuit" 
         Circuit.types.include?(params[:type]) ? params[:type] : "Circuit"
     end

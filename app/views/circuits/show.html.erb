@@ -31,7 +31,7 @@
           	<% if @circuit.measures.count == 0 %>
 				<%= "Sin Mediciones" %>
 			<% else %>
-				<%= time_ago_in_words(@circuit.measures.last.created_at) %>
+				<%= time_ago_in_words(@circuit.measures.order(:created_at).last.created_at) %>
 			<% end %>
 		  </td>
           <td class="numeric" data-title="Mediciones"><%= @circuit.measures.count %></td>

@@ -21,6 +21,7 @@ group :development do
   gem 'capistrano-rails'
   gem 'capistrano-rvm', github: 'capistrano/rvm'
   gem 'capistrano-ssh-doctor'
+  gem 'quiet_assets'
 end
 
 group :development, :test do

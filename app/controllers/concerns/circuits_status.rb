@@ -1,5 +1,14 @@
 module CircuitsStatus
 	extend ActiveSupport::Concern
+
+	included do
+    before_action :set_tenant
+  	end
+
+  	def set_tenant
+    Apartment::Tenant.switch!(current_user.schema_name)
+  	end
+
 	private 
 	
 	def set_circuits
@@ -14,7 +23,7 @@ module CircuitsStatus
 			if c.measures.count == 0
 				c.status = "No measures"
 			else
-				if (Time.now-c.measures.last.created_at) > c.alarm_time*60
+				if (Time.now-c.measures.order(:created_at).last.created_at) > c.alarm_time*60
 					c.status = "Problem"
 				else
 				c.status = "Ok"	
