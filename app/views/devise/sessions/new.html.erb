@@ -1,13 +1,13 @@
-<div class="container">
+<div class="container-fluid">
   <div class="row mt">
     
-    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 desc">
+    <div class="col-xs-6">
       <div class="form-login" id="logoSignIn">
-       <%=image_tag("trilemedalla.png", size: "330x382")%>
+       <%=image_tag("trilemedalla.png", :class => "img-responsive", :id => "landing-img")%>
       </div>
     </div>
 
-    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 desc">
+    <div class="col-xs-6">
      <%= form_for(resource, as: resource_name, url: session_path(resource_name), :html => {:class => 'form-login'}) do |f| %>
      <h2 class="form-login-heading">Ingresa a Tu Trile</h2>            
       <div class="login-wrap">
