@@ -1,14 +1,6 @@
 module CircuitsStatus
 	extend ActiveSupport::Concern
 
-	included do
-    before_action :set_tenant
-  	end
-
-  	def set_tenant
-    Apartment::Tenant.switch!(current_user.schema_name)
-  	end
-
 	private 
 	
 	def set_circuits
