@@ -43136,3 +43136,797 @@ Completed 200 OK in 5ms (Views: 0.8ms | ActiveRecord: 2.0ms)
   [1m[36mSQL (0.1ms)[0m  [1mDELETE FROM "public"."users" WHERE "public"."users"."id" = $1[0m  [["id", 18]]
   [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
   [1m[36m (1.4ms)[0m  [1mROLLBACK[0m
+  [1m[36mActiveRecord::SchemaMigration Load (24.9ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (82.7ms)[0m  ALTER TABLE "schema_migrations" DISABLE TRIGGER ALL;ALTER TABLE "measures" DISABLE TRIGGER ALL;ALTER TABLE "circuits" DISABLE TRIGGER ALL;ALTER TABLE "users" DISABLE TRIGGER ALL
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+  [1m[35mFixture Delete (37.9ms)[0m  DELETE FROM "circuits"
+  [1m[36mFixture Insert (10.5ms)[0m  [1mINSERT INTO "circuits" ("description", "type", "alarm_time", "created_at", "updated_at", "id") VALUES ('MyText', 'Demand', 5, '2015-07-28 15:39:57', '2015-07-28 15:39:57', 980190962)[0m
+  [1m[35mFixture Insert (0.5ms)[0m  INSERT INTO "circuits" ("description", "type", "alarm_time", "created_at", "updated_at", "id") VALUES ('MyText', 'Generation', 5, '2015-07-28 15:39:57', '2015-07-28 15:39:57', 298486374)
+  [1m[36mFixture Delete (36.6ms)[0m  [1mDELETE FROM "public"."users"[0m
+  [1m[35mFixture Insert (9.4ms)[0m  INSERT INTO "public"."users" ("id", "name", "email", "auth_token", "schema_name", "created_at", "updated_at") VALUES (1, 'Rocco', 'rocco@motherfucker.com', '2b4df314f32b4a659eb0f8ea1e7f5506', 'prv_1', '2015-07-28 15:39:57', '2015-07-28 15:39:57')
+  [1m[36mFixture Insert (0.5ms)[0m  [1mINSERT INTO "public"."users" ("id", "name", "email", "auth_token", "schema_name", "created_at", "updated_at") VALUES (2, 'Jenna', 'jenna@fine.com', '2b4df314f32b4a659eb0f8ea1e7f5508', 'prv_2', '2015-07-28 15:39:57', '2015-07-28 15:39:57')[0m
+  [1m[35m (17.9ms)[0m  COMMIT
+  [1m[36m (9.1ms)[0m  [1mALTER TABLE "schema_migrations" ENABLE TRIGGER ALL;ALTER TABLE "measures" ENABLE TRIGGER ALL;ALTER TABLE "circuits" ENABLE TRIGGER ALL;ALTER TABLE "users" ENABLE TRIGGER ALL[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+-------------------------------------------
+CreatingMeasuresTest: test_creates_measures
+-------------------------------------------
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mUser Exists (1.0ms)[0m  SELECT  1 AS one FROM "public"."users" WHERE "public"."users"."email" = 'faker@trile.cl' LIMIT 1
+  [1m[36mUser Exists (1.1ms)[0m  [1mSELECT  1 AS one FROM "public"."users" WHERE LOWER("public"."users"."email") = LOWER('faker@trile.cl') LIMIT 1[0m
+  [1m[35mUser Exists (0.6ms)[0m  SELECT  1 AS one FROM "public"."users" WHERE "public"."users"."auth_token" = $1 LIMIT 1  [["auth_token", "7051da1a48be2464483b72ac9c21ed23"]]
+  [1m[36mSQL (0.7ms)[0m  [1mINSERT INTO "public"."users" ("name", "email", "encrypted_password", "created_at", "updated_at", "auth_token") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["name", "faker"], ["email", "faker@trile.cl"], ["encrypted_password", "$2a$04$FGYc0rLmygIoiG8aef4dcO/dZ2B1a7q6GW3aHthRyhWV.oyCBrIDa"], ["created_at", "2015-07-28 15:39:57.442195"], ["updated_at", "2015-07-28 15:39:57.442195"], ["auth_token", "7051da1a48be2464483b72ac9c21ed23"]]
+  [1m[35mSQL (0.9ms)[0m  UPDATE "public"."users" SET "name" = $1, "email" = $2, "encrypted_password" = $3, "created_at" = $4, "updated_at" = $5, "auth_token" = $6, "id" = $7, "schema_name" = $8 WHERE "public"."users"."id" = $9  [["name", "faker"], ["email", "faker@trile.cl"], ["encrypted_password", "$2a$04$FGYc0rLmygIoiG8aef4dcO/dZ2B1a7q6GW3aHthRyhWV.oyCBrIDa"], ["created_at", "2015-07-28 15:39:57.442195"], ["updated_at", "2015-07-28 15:39:57.442195"], ["auth_token", "7051da1a48be2464483b72ac9c21ed23"], ["id", 3], ["schema_name", "prv_3"], ["id", 3]]
+  [1m[36m (86.6ms)[0m  [1mCREATE SCHEMA "prv_3"[0m
+  [1m[35mSQL (14.7ms)[0m  CREATE EXTENSION IF NOT EXISTS "plpgsql"
+  [1m[36m (389.9ms)[0m  [1mCREATE TABLE "circuits" ("id" serial primary key, "description" text, "type" character varying, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL, "alarm_time" integer) [0m
+  [1m[35m (42.8ms)[0m  CREATE TABLE "measures" ("id" serial primary key, "circuit_id" integer, "watts" integer, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL) 
+  [1m[36m (39.1ms)[0m  [1mCREATE  INDEX  "index_measures_on_circuit_id" ON "measures" USING btree ("circuit_id")[0m
+  [1m[35m (95.3ms)[0m  CREATE TABLE "users" ("id" serial primary key, "name" character varying DEFAULT '' NOT NULL, "email" character varying NOT NULL, "encrypted_password" character varying DEFAULT '' NOT NULL, "auth_token" text, "reset_password_token" character varying, "reset_password_sent_at" timestamp, "remember_created_at" timestamp, "sign_in_count" integer DEFAULT 0 NOT NULL, "current_sign_in_at" timestamp, "last_sign_in_at" timestamp, "current_sign_in_ip" inet, "last_sign_in_ip" inet, "created_at" timestamp, "updated_at" timestamp, "schema_name" character varying) 
+  [1m[36m (50.2ms)[0m  [1mCREATE UNIQUE INDEX  "index_users_on_email" ON "users" USING btree ("email")[0m
+  [1m[35m (40.0ms)[0m  CREATE UNIQUE INDEX  "index_users_on_reset_password_token" ON "users" USING btree ("reset_password_token")
+  [1m[36m (82.4ms)[0m  [1mALTER TABLE "measures" ADD CONSTRAINT "fk_rails_0d9a1dd04c"
+FOREIGN KEY ("circuit_id")
+  REFERENCES "circuits" ("id")
+[0m
+  [1m[35m (37.8ms)[0m  CREATE TABLE "schema_migrations" ("version" character varying NOT NULL) 
+  [1m[36m (42.3ms)[0m  [1mCREATE UNIQUE INDEX  "unique_schema_migrations" ON "schema_migrations"  ("version")[0m
+  [1m[35m (0.5ms)[0m  SELECT version FROM "schema_migrations"
+  [1m[36m (0.5ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150720183845')[0m
+  [1m[35m (0.4ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150522130847')
+  [1m[36m (0.4ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150513183751')[0m
+  [1m[35m (0.4ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150720181315')
+  [1m[36m (0.4ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150511152613')[0m
+  [1m[35m (0.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150612150456')
+  [1m[36m (0.3ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150612152327')[0m
+  [1m[35m (0.4ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.3ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.8ms)[0m  INSERT INTO "circuits" ("type", "description", "alarm_time", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["type", "Demand"], ["description", "Circuito de test"], ["alarm_time", 5], ["created_at", "2015-07-28 15:39:58.481024"], ["updated_at", "2015-07-28 15:39:58.481024"]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+Started POST "/circuits/1/measures" for 127.0.0.1 at 2015-07-28 12:39:58 -0300
+  [1m[35mMeasure Load (0.6ms)[0m  SELECT "measures".* FROM "measures"
+  [1m[36mCircuit Load (0.5ms)[0m  [1mSELECT "circuits".* FROM "circuits"[0m
+  [1m[35m (0.5ms)[0m  SELECT COUNT(*) FROM "measures" WHERE "measures"."circuit_id" = $1  [["circuit_id", 1]]
+  [1m[36m (0.3ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mMeasure Load (0.5ms)[0m  SELECT "measures".* FROM "measures" WHERE "measures"."circuit_id" = $1  [["circuit_id", 1]]
+  [1m[36mSQL (1.2ms)[0m  [1mDELETE FROM "circuits" WHERE "circuits"."type" IN ('Demand') AND "circuits"."id" = $1[0m  [["id", 1]]
+  [1m[35m (0.3ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36mUser Load (0.6ms)[0m  [1mSELECT "public"."users".* FROM "public"."users"[0m
+  [1m[35m (0.2ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.4ms)[0m  [1mDELETE FROM "public"."users" WHERE "public"."users"."id" = $1[0m  [["id", 1]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.4ms)[0m  DELETE FROM "public"."users" WHERE "public"."users"."id" = $1  [["id", 2]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.4ms)[0m  [1mDELETE FROM "public"."users" WHERE "public"."users"."id" = $1[0m  [["id", 3]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (3.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.3ms)[0m  BEGIN
+---------------------------------------------
+ListingMesuresTest: test_valid_authentication
+---------------------------------------------
+  [1m[36m (0.3ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mUser Exists (0.7ms)[0m  SELECT  1 AS one FROM "public"."users" WHERE "public"."users"."email" = 'fake@trile.cl' LIMIT 1
+  [1m[36mUser Exists (0.7ms)[0m  [1mSELECT  1 AS one FROM "public"."users" WHERE LOWER("public"."users"."email") = LOWER('fake@trile.cl') LIMIT 1[0m
+  [1m[35mUser Exists (0.2ms)[0m  SELECT  1 AS one FROM "public"."users" WHERE "public"."users"."auth_token" = $1 LIMIT 1  [["auth_token", "8998ab2ea5f031b71d159edd76f6ce78"]]
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "public"."users" ("name", "email", "encrypted_password", "schema_name", "created_at", "updated_at", "auth_token") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["name", "fake"], ["email", "fake@trile.cl"], ["encrypted_password", "$2a$04$I53dEEAbjHPSFJctoB9vLes49jekh1IQ28J8orv5yF/4cP./XEF/i"], ["schema_name", "prv_1"], ["created_at", "2015-07-28 15:39:58.565324"], ["updated_at", "2015-07-28 15:39:58.565324"], ["auth_token", "8998ab2ea5f031b71d159edd76f6ce78"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (105.5ms)[0m  INSERT INTO "circuits" ("type", "description", "alarm_time", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["type", "Demand"], ["description", "Circuito de test"], ["alarm_time", 5], ["created_at", "2015-07-28 15:39:58.570669"], ["updated_at", "2015-07-28 15:39:58.570669"]]
+  [1m[36m (0.3ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.4ms)[0m  SAVEPOINT active_record_1
+  [1m[36mUser Exists (0.6ms)[0m  [1mSELECT  1 AS one FROM "public"."users" WHERE "public"."users"."email" = 'faker@trile.cl' LIMIT 1[0m
+  [1m[35mUser Exists (0.8ms)[0m  SELECT  1 AS one FROM "public"."users" WHERE LOWER("public"."users"."email") = LOWER('faker@trile.cl') LIMIT 1
+  [1m[36mUser Exists (0.5ms)[0m  [1mSELECT  1 AS one FROM "public"."users" WHERE "public"."users"."auth_token" = $1 LIMIT 1[0m  [["auth_token", "f286ed6468d1126bd8c7ea4ab67e5b17"]]
+  [1m[35mSQL (0.7ms)[0m  INSERT INTO "public"."users" ("name", "email", "encrypted_password", "created_at", "updated_at", "auth_token") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"  [["name", "faker"], ["email", "faker@trile.cl"], ["encrypted_password", "$2a$04$zE/IEniy6psacTiBuRbO4ODjlCxnN6/RAZNXWdF1MfDuLFfApWB7u"], ["created_at", "2015-07-28 15:39:58.690327"], ["updated_at", "2015-07-28 15:39:58.690327"], ["auth_token", "f286ed6468d1126bd8c7ea4ab67e5b17"]]
+  [1m[36mSQL (0.6ms)[0m  [1mUPDATE "public"."users" SET "name" = $1, "email" = $2, "encrypted_password" = $3, "created_at" = $4, "updated_at" = $5, "auth_token" = $6, "id" = $7, "schema_name" = $8 WHERE "public"."users"."id" = $9[0m  [["name", "faker"], ["email", "faker@trile.cl"], ["encrypted_password", "$2a$04$zE/IEniy6psacTiBuRbO4ODjlCxnN6/RAZNXWdF1MfDuLFfApWB7u"], ["created_at", "2015-07-28 15:39:58.690327"], ["updated_at", "2015-07-28 15:39:58.690327"], ["auth_token", "f286ed6468d1126bd8c7ea4ab67e5b17"], ["id", 5], ["schema_name", "prv_5"], ["id", 5]]
+  [1m[35m (0.4ms)[0m  CREATE SCHEMA "prv_5"
+  [1m[36mSQL (0.3ms)[0m  [1mCREATE EXTENSION IF NOT EXISTS "plpgsql"[0m
+  [1m[35m (90.5ms)[0m  CREATE TABLE "circuits" ("id" serial primary key, "description" text, "type" character varying, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL, "alarm_time" integer) 
+  [1m[36m (71.3ms)[0m  [1mCREATE TABLE "measures" ("id" serial primary key, "circuit_id" integer, "watts" integer, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL) [0m
+  [1m[35m (46.1ms)[0m  CREATE  INDEX  "index_measures_on_circuit_id" ON "measures" USING btree ("circuit_id")
+  [1m[36m (95.0ms)[0m  [1mCREATE TABLE "users" ("id" serial primary key, "name" character varying DEFAULT '' NOT NULL, "email" character varying NOT NULL, "encrypted_password" character varying DEFAULT '' NOT NULL, "auth_token" text, "reset_password_token" character varying, "reset_password_sent_at" timestamp, "remember_created_at" timestamp, "sign_in_count" integer DEFAULT 0 NOT NULL, "current_sign_in_at" timestamp, "last_sign_in_at" timestamp, "current_sign_in_ip" inet, "last_sign_in_ip" inet, "created_at" timestamp, "updated_at" timestamp, "schema_name" character varying) [0m
+  [1m[35m (52.1ms)[0m  CREATE UNIQUE INDEX  "index_users_on_email" ON "users" USING btree ("email")
+  [1m[36m (52.5ms)[0m  [1mCREATE UNIQUE INDEX  "index_users_on_reset_password_token" ON "users" USING btree ("reset_password_token")[0m
+  [1m[35m (1.6ms)[0m  ALTER TABLE "measures" ADD CONSTRAINT "fk_rails_0d9a1dd04c"
+FOREIGN KEY ("circuit_id")
+  REFERENCES "circuits" ("id")
+
+  [1m[36m (53.3ms)[0m  [1mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL) [0m
+  [1m[35m (73.0ms)[0m  CREATE UNIQUE INDEX  "unique_schema_migrations" ON "schema_migrations"  ("version")
+  [1m[36m (0.9ms)[0m  [1mSELECT version FROM "schema_migrations"[0m
+  [1m[35m (0.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150720183845')
+  [1m[36m (0.4ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150522130847')[0m
+  [1m[35m (0.5ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150513183751')
+  [1m[36m (0.4ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150720181315')[0m
+  [1m[35m (0.4ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150511152613')
+  [1m[36m (0.4ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150612150456')[0m
+  [1m[35m (0.4ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150612152327')
+  [1m[36m (0.3ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/circuits/28/measures" for 127.0.0.1 at 2015-07-28 12:39:59 -0300
+  [1m[35mMeasure Load (1.4ms)[0m  SELECT "measures".* FROM "measures"
+  [1m[36mCircuit Load (0.4ms)[0m  [1mSELECT "circuits".* FROM "circuits"[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "measures" WHERE "measures"."circuit_id" = $1  [["circuit_id", 28]]
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mMeasure Load (0.2ms)[0m  SELECT "measures".* FROM "measures" WHERE "measures"."circuit_id" = $1  [["circuit_id", 28]]
+  [1m[36mSQL (0.6ms)[0m  [1mDELETE FROM "circuits" WHERE "circuits"."type" IN ('Demand') AND "circuits"."id" = $1[0m  [["id", 28]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36mUser Load (0.3ms)[0m  [1mSELECT "public"."users".* FROM "public"."users"[0m
+  [1m[35m (0.2ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mDELETE FROM "public"."users" WHERE "public"."users"."id" = $1[0m  [["id", 1]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  DELETE FROM "public"."users" WHERE "public"."users"."id" = $1  [["id", 2]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mDELETE FROM "public"."users" WHERE "public"."users"."id" = $1[0m  [["id", 4]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  DELETE FROM "public"."users" WHERE "public"."users"."id" = $1  [["id", 5]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.8ms)[0m  ROLLBACK
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+---------------------------------------------------------------
+ListingMesuresTest: test_valid_authentication_with_manual_token
+---------------------------------------------------------------
+  [1m[35m (0.2ms)[0m  SAVEPOINT active_record_1
+  [1m[36mUser Exists (0.5ms)[0m  [1mSELECT  1 AS one FROM "public"."users" WHERE "public"."users"."email" = 'fake@trile.cl' LIMIT 1[0m
+  [1m[35mUser Exists (0.3ms)[0m  SELECT  1 AS one FROM "public"."users" WHERE LOWER("public"."users"."email") = LOWER('fake@trile.cl') LIMIT 1
+  [1m[36mUser Exists (0.6ms)[0m  [1mSELECT  1 AS one FROM "public"."users" WHERE "public"."users"."auth_token" = $1 LIMIT 1[0m  [["auth_token", "fe9fff38802aba570d1cbb8aa1fb63bc"]]
+  [1m[35mSQL (0.7ms)[0m  INSERT INTO "public"."users" ("name", "email", "encrypted_password", "schema_name", "created_at", "updated_at", "auth_token") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"  [["name", "fake"], ["email", "fake@trile.cl"], ["encrypted_password", "$2a$04$a1P9uzRWfdrAEVoHbhGep.RINnm4u7rEee/qWQRsC5Y83QHTa4mvO"], ["schema_name", "prv_1"], ["created_at", "2015-07-28 15:39:59.313013"], ["updated_at", "2015-07-28 15:39:59.313013"], ["auth_token", "fe9fff38802aba570d1cbb8aa1fb63bc"]]
+  [1m[36m (0.3ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.6ms)[0m  [1mINSERT INTO "circuits" ("type", "description", "alarm_time", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["type", "Demand"], ["description", "Circuito de test"], ["alarm_time", 5], ["created_at", "2015-07-28 15:39:59.324847"], ["updated_at", "2015-07-28 15:39:59.324847"]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.3ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mUser Exists (0.7ms)[0m  SELECT  1 AS one FROM "public"."users" WHERE "public"."users"."email" = 'faker@trile.cl' LIMIT 1
+  [1m[36mUser Exists (0.5ms)[0m  [1mSELECT  1 AS one FROM "public"."users" WHERE LOWER("public"."users"."email") = LOWER('faker@trile.cl') LIMIT 1[0m
+  [1m[35mUser Exists (0.5ms)[0m  SELECT  1 AS one FROM "public"."users" WHERE "public"."users"."auth_token" = $1 LIMIT 1  [["auth_token", "455f8646b3ca0f2b71be34a30e5c23c7"]]
+  [1m[36mSQL (0.7ms)[0m  [1mINSERT INTO "public"."users" ("name", "email", "encrypted_password", "created_at", "updated_at", "auth_token") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["name", "faker"], ["email", "faker@trile.cl"], ["encrypted_password", "$2a$04$vvvunHNmFZsH2ehkX4fNoOSho9AZSnvVM2X02E923aYjZ1ORcty4C"], ["created_at", "2015-07-28 15:39:59.335105"], ["updated_at", "2015-07-28 15:39:59.335105"], ["auth_token", "455f8646b3ca0f2b71be34a30e5c23c7"]]
+  [1m[35mSQL (0.7ms)[0m  UPDATE "public"."users" SET "name" = $1, "email" = $2, "encrypted_password" = $3, "created_at" = $4, "updated_at" = $5, "auth_token" = $6, "id" = $7, "schema_name" = $8 WHERE "public"."users"."id" = $9  [["name", "faker"], ["email", "faker@trile.cl"], ["encrypted_password", "$2a$04$vvvunHNmFZsH2ehkX4fNoOSho9AZSnvVM2X02E923aYjZ1ORcty4C"], ["created_at", "2015-07-28 15:39:59.335105"], ["updated_at", "2015-07-28 15:39:59.335105"], ["auth_token", "455f8646b3ca0f2b71be34a30e5c23c7"], ["id", 7], ["schema_name", "prv_7"], ["id", 7]]
+  [1m[36m (0.5ms)[0m  [1mCREATE SCHEMA "prv_7"[0m
+  [1m[35mSQL (0.4ms)[0m  CREATE EXTENSION IF NOT EXISTS "plpgsql"
+  [1m[36m (92.9ms)[0m  [1mCREATE TABLE "circuits" ("id" serial primary key, "description" text, "type" character varying, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL, "alarm_time" integer) [0m
+  [1m[35m (76.9ms)[0m  CREATE TABLE "measures" ("id" serial primary key, "circuit_id" integer, "watts" integer, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL) 
+  [1m[36m (62.5ms)[0m  [1mCREATE  INDEX  "index_measures_on_circuit_id" ON "measures" USING btree ("circuit_id")[0m
+  [1m[35m (88.3ms)[0m  CREATE TABLE "users" ("id" serial primary key, "name" character varying DEFAULT '' NOT NULL, "email" character varying NOT NULL, "encrypted_password" character varying DEFAULT '' NOT NULL, "auth_token" text, "reset_password_token" character varying, "reset_password_sent_at" timestamp, "remember_created_at" timestamp, "sign_in_count" integer DEFAULT 0 NOT NULL, "current_sign_in_at" timestamp, "last_sign_in_at" timestamp, "current_sign_in_ip" inet, "last_sign_in_ip" inet, "created_at" timestamp, "updated_at" timestamp, "schema_name" character varying) 
+  [1m[36m (40.2ms)[0m  [1mCREATE UNIQUE INDEX  "index_users_on_email" ON "users" USING btree ("email")[0m
+  [1m[35m (85.9ms)[0m  CREATE UNIQUE INDEX  "index_users_on_reset_password_token" ON "users" USING btree ("reset_password_token")
+  [1m[36m (2.9ms)[0m  [1mALTER TABLE "measures" ADD CONSTRAINT "fk_rails_0d9a1dd04c"
+FOREIGN KEY ("circuit_id")
+  REFERENCES "circuits" ("id")
+[0m
+  [1m[35m (96.8ms)[0m  CREATE TABLE "schema_migrations" ("version" character varying NOT NULL) 
+  [1m[36m (197.1ms)[0m  [1mCREATE UNIQUE INDEX  "unique_schema_migrations" ON "schema_migrations"  ("version")[0m
+  [1m[35m (0.5ms)[0m  SELECT version FROM "schema_migrations"
+  [1m[36m (0.4ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150720183845')[0m
+  [1m[35m (0.3ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150522130847')
+  [1m[36m (0.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150513183751')[0m
+  [1m[35m (0.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150720181315')
+  [1m[36m (0.3ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150511152613')[0m
+  [1m[35m (0.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150612150456')
+  [1m[36m (0.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150612152327')[0m
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+Started GET "/circuits/29/measures" for 127.0.0.1 at 2015-07-28 12:40:00 -0300
+  [1m[36mMeasure Load (0.5ms)[0m  [1mSELECT "measures".* FROM "measures"[0m
+  [1m[35mCircuit Load (0.4ms)[0m  SELECT "circuits".* FROM "circuits"
+  [1m[36m (0.5ms)[0m  [1mSELECT COUNT(*) FROM "measures" WHERE "measures"."circuit_id" = $1[0m  [["circuit_id", 29]]
+  [1m[35m (0.2ms)[0m  SAVEPOINT active_record_1
+  [1m[36mMeasure Load (0.4ms)[0m  [1mSELECT "measures".* FROM "measures" WHERE "measures"."circuit_id" = $1[0m  [["circuit_id", 29]]
+  [1m[35mSQL (0.9ms)[0m  DELETE FROM "circuits" WHERE "circuits"."type" IN ('Demand') AND "circuits"."id" = $1  [["id", 29]]
+  [1m[36m (0.3ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35mUser Load (0.4ms)[0m  SELECT "public"."users".* FROM "public"."users"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  DELETE FROM "public"."users" WHERE "public"."users"."id" = $1  [["id", 1]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mDELETE FROM "public"."users" WHERE "public"."users"."id" = $1[0m  [["id", 2]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  DELETE FROM "public"."users" WHERE "public"."users"."id" = $1  [["id", 6]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.1ms)[0m  [1mDELETE FROM "public"."users" WHERE "public"."users"."id" = $1[0m  [["id", 7]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (2.8ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+-------------------------------------------------------------------------------------
+ListingMesuresTest: test_invalid_authentication_sets_WWWW-Authenticate_to_Application
+-------------------------------------------------------------------------------------
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mUser Exists (0.6ms)[0m  SELECT  1 AS one FROM "public"."users" WHERE "public"."users"."email" = 'fake@trile.cl' LIMIT 1
+  [1m[36mUser Exists (0.6ms)[0m  [1mSELECT  1 AS one FROM "public"."users" WHERE LOWER("public"."users"."email") = LOWER('fake@trile.cl') LIMIT 1[0m
+  [1m[35mUser Exists (0.4ms)[0m  SELECT  1 AS one FROM "public"."users" WHERE "public"."users"."auth_token" = $1 LIMIT 1  [["auth_token", "00f58282cff25dc7b7da726eecbfbae8"]]
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "public"."users" ("name", "email", "encrypted_password", "schema_name", "created_at", "updated_at", "auth_token") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["name", "fake"], ["email", "fake@trile.cl"], ["encrypted_password", "$2a$04$p3L4sH/328ihi2VHu4lYCOdY5iiF.xho3FxFyFHzaiLLRRAwAObWS"], ["schema_name", "prv_1"], ["created_at", "2015-07-28 15:40:00.160440"], ["updated_at", "2015-07-28 15:40:00.160440"], ["auth_token", "00f58282cff25dc7b7da726eecbfbae8"]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.6ms)[0m  INSERT INTO "circuits" ("type", "description", "alarm_time", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["type", "Demand"], ["description", "Circuito de test"], ["alarm_time", 5], ["created_at", "2015-07-28 15:40:00.167407"], ["updated_at", "2015-07-28 15:40:00.167407"]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mUser Exists (0.7ms)[0m  [1mSELECT  1 AS one FROM "public"."users" WHERE "public"."users"."email" = 'faker@trile.cl' LIMIT 1[0m
+  [1m[35mUser Exists (0.6ms)[0m  SELECT  1 AS one FROM "public"."users" WHERE LOWER("public"."users"."email") = LOWER('faker@trile.cl') LIMIT 1
+  [1m[36mUser Exists (0.4ms)[0m  [1mSELECT  1 AS one FROM "public"."users" WHERE "public"."users"."auth_token" = $1 LIMIT 1[0m  [["auth_token", "10d12e6d3fc379d349a6f71140534581"]]
+  [1m[35mSQL (0.7ms)[0m  INSERT INTO "public"."users" ("name", "email", "encrypted_password", "created_at", "updated_at", "auth_token") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"  [["name", "faker"], ["email", "faker@trile.cl"], ["encrypted_password", "$2a$04$uCL7wtfZIt9O8Xi0U3Q0aewwcippDp5C1dwO4v2CNomEbdmBSf.2W"], ["created_at", "2015-07-28 15:40:00.174685"], ["updated_at", "2015-07-28 15:40:00.174685"], ["auth_token", "10d12e6d3fc379d349a6f71140534581"]]
+  [1m[36mSQL (0.6ms)[0m  [1mUPDATE "public"."users" SET "name" = $1, "email" = $2, "encrypted_password" = $3, "created_at" = $4, "updated_at" = $5, "auth_token" = $6, "id" = $7, "schema_name" = $8 WHERE "public"."users"."id" = $9[0m  [["name", "faker"], ["email", "faker@trile.cl"], ["encrypted_password", "$2a$04$uCL7wtfZIt9O8Xi0U3Q0aewwcippDp5C1dwO4v2CNomEbdmBSf.2W"], ["created_at", "2015-07-28 15:40:00.174685"], ["updated_at", "2015-07-28 15:40:00.174685"], ["auth_token", "10d12e6d3fc379d349a6f71140534581"], ["id", 9], ["schema_name", "prv_9"], ["id", 9]]
+  [1m[35m (0.3ms)[0m  CREATE SCHEMA "prv_9"
+  [1m[36mSQL (0.3ms)[0m  [1mCREATE EXTENSION IF NOT EXISTS "plpgsql"[0m
+  [1m[35m (100.5ms)[0m  CREATE TABLE "circuits" ("id" serial primary key, "description" text, "type" character varying, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL, "alarm_time" integer) 
+  [1m[36m (41.9ms)[0m  [1mCREATE TABLE "measures" ("id" serial primary key, "circuit_id" integer, "watts" integer, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL) [0m
+  [1m[35m (51.5ms)[0m  CREATE  INDEX  "index_measures_on_circuit_id" ON "measures" USING btree ("circuit_id")
+  [1m[36m (119.9ms)[0m  [1mCREATE TABLE "users" ("id" serial primary key, "name" character varying DEFAULT '' NOT NULL, "email" character varying NOT NULL, "encrypted_password" character varying DEFAULT '' NOT NULL, "auth_token" text, "reset_password_token" character varying, "reset_password_sent_at" timestamp, "remember_created_at" timestamp, "sign_in_count" integer DEFAULT 0 NOT NULL, "current_sign_in_at" timestamp, "last_sign_in_at" timestamp, "current_sign_in_ip" inet, "last_sign_in_ip" inet, "created_at" timestamp, "updated_at" timestamp, "schema_name" character varying) [0m
+  [1m[35m (41.8ms)[0m  CREATE UNIQUE INDEX  "index_users_on_email" ON "users" USING btree ("email")
+  [1m[36m (39.8ms)[0m  [1mCREATE UNIQUE INDEX  "index_users_on_reset_password_token" ON "users" USING btree ("reset_password_token")[0m
+  [1m[35m (2.9ms)[0m  ALTER TABLE "measures" ADD CONSTRAINT "fk_rails_0d9a1dd04c"
+FOREIGN KEY ("circuit_id")
+  REFERENCES "circuits" ("id")
+
+  [1m[36m (53.5ms)[0m  [1mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL) [0m
+  [1m[35m (38.2ms)[0m  CREATE UNIQUE INDEX  "unique_schema_migrations" ON "schema_migrations"  ("version")
+  [1m[36m (0.8ms)[0m  [1mSELECT version FROM "schema_migrations"[0m
+  [1m[35m (0.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150720183845')
+  [1m[36m (0.3ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150522130847')[0m
+  [1m[35m (0.3ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150513183751')
+  [1m[36m (0.3ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150720181315')[0m
+  [1m[35m (0.3ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150511152613')
+  [1m[36m (0.3ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150612150456')[0m
+  [1m[35m (0.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150612152327')
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+Started GET "/circuits/30/measures" for 127.0.0.1 at 2015-07-28 12:40:00 -0300
+  [1m[35mMeasure Load (0.5ms)[0m  SELECT "measures".* FROM "measures"
+  [1m[36mCircuit Load (0.4ms)[0m  [1mSELECT "circuits".* FROM "circuits"[0m
+  [1m[35m (0.5ms)[0m  SELECT COUNT(*) FROM "measures" WHERE "measures"."circuit_id" = $1  [["circuit_id", 30]]
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mMeasure Load (0.4ms)[0m  SELECT "measures".* FROM "measures" WHERE "measures"."circuit_id" = $1  [["circuit_id", 30]]
+  [1m[36mSQL (1.2ms)[0m  [1mDELETE FROM "circuits" WHERE "circuits"."type" IN ('Demand') AND "circuits"."id" = $1[0m  [["id", 30]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36mUser Load (0.5ms)[0m  [1mSELECT "public"."users".* FROM "public"."users"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.4ms)[0m  [1mDELETE FROM "public"."users" WHERE "public"."users"."id" = $1[0m  [["id", 8]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  DELETE FROM "public"."users" WHERE "public"."users"."id" = $1  [["id", 9]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mDELETE FROM "public"."users" WHERE "public"."users"."id" = $1[0m  [["id", 1]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  DELETE FROM "public"."users" WHERE "public"."users"."id" = $1  [["id", 2]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (3.0ms)[0m  ROLLBACK
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+-------------------------------------------------------------------------
+ListingMesuresTest: test_return_list_of_all_measures_form_current_circuit
+-------------------------------------------------------------------------
+  [1m[35m (0.3ms)[0m  SAVEPOINT active_record_1
+  [1m[36mUser Exists (0.7ms)[0m  [1mSELECT  1 AS one FROM "public"."users" WHERE "public"."users"."email" = 'fake@trile.cl' LIMIT 1[0m
+  [1m[35mUser Exists (0.4ms)[0m  SELECT  1 AS one FROM "public"."users" WHERE LOWER("public"."users"."email") = LOWER('fake@trile.cl') LIMIT 1
+  [1m[36mUser Exists (0.4ms)[0m  [1mSELECT  1 AS one FROM "public"."users" WHERE "public"."users"."auth_token" = $1 LIMIT 1[0m  [["auth_token", "79d03659841a8560ad690f458a8dab0c"]]
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "public"."users" ("name", "email", "encrypted_password", "schema_name", "created_at", "updated_at", "auth_token") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"  [["name", "fake"], ["email", "fake@trile.cl"], ["encrypted_password", "$2a$04$Sq7sphtxGF2F7zDDDloAbOtLwe.5F.N4RG6gkJaq9RwAGJeCi.OX."], ["schema_name", "prv_1"], ["created_at", "2015-07-28 15:40:00.743373"], ["updated_at", "2015-07-28 15:40:00.743373"], ["auth_token", "79d03659841a8560ad690f458a8dab0c"]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "circuits" ("type", "description", "alarm_time", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["type", "Demand"], ["description", "Circuito de test"], ["alarm_time", 5], ["created_at", "2015-07-28 15:40:00.753316"], ["updated_at", "2015-07-28 15:40:00.753316"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mUser Exists (0.3ms)[0m  SELECT  1 AS one FROM "public"."users" WHERE "public"."users"."email" = 'faker@trile.cl' LIMIT 1
+  [1m[36mUser Exists (0.2ms)[0m  [1mSELECT  1 AS one FROM "public"."users" WHERE LOWER("public"."users"."email") = LOWER('faker@trile.cl') LIMIT 1[0m
+  [1m[35mUser Exists (0.3ms)[0m  SELECT  1 AS one FROM "public"."users" WHERE "public"."users"."auth_token" = $1 LIMIT 1  [["auth_token", "bbbde297fac2ab330402ab0538735d82"]]
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "public"."users" ("name", "email", "encrypted_password", "created_at", "updated_at", "auth_token") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["name", "faker"], ["email", "faker@trile.cl"], ["encrypted_password", "$2a$04$T/fo.gMq3WFNA/N78vXzquEiLoERzPK7JZbGkToyFWplJFtFl/Irq"], ["created_at", "2015-07-28 15:40:00.759415"], ["updated_at", "2015-07-28 15:40:00.759415"], ["auth_token", "bbbde297fac2ab330402ab0538735d82"]]
+  [1m[35mSQL (0.3ms)[0m  UPDATE "public"."users" SET "name" = $1, "email" = $2, "encrypted_password" = $3, "created_at" = $4, "updated_at" = $5, "auth_token" = $6, "id" = $7, "schema_name" = $8 WHERE "public"."users"."id" = $9  [["name", "faker"], ["email", "faker@trile.cl"], ["encrypted_password", "$2a$04$T/fo.gMq3WFNA/N78vXzquEiLoERzPK7JZbGkToyFWplJFtFl/Irq"], ["created_at", "2015-07-28 15:40:00.759415"], ["updated_at", "2015-07-28 15:40:00.759415"], ["auth_token", "bbbde297fac2ab330402ab0538735d82"], ["id", 11], ["schema_name", "prv_11"], ["id", 11]]
+  [1m[36m (0.2ms)[0m  [1mCREATE SCHEMA "prv_11"[0m
+  [1m[35mSQL (0.1ms)[0m  CREATE EXTENSION IF NOT EXISTS "plpgsql"
+  [1m[36m (94.6ms)[0m  [1mCREATE TABLE "circuits" ("id" serial primary key, "description" text, "type" character varying, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL, "alarm_time" integer) [0m
+  [1m[35m (89.9ms)[0m  CREATE TABLE "measures" ("id" serial primary key, "circuit_id" integer, "watts" integer, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL) 
+  [1m[36m (37.7ms)[0m  [1mCREATE  INDEX  "index_measures_on_circuit_id" ON "measures" USING btree ("circuit_id")[0m
+  [1m[35m (95.2ms)[0m  CREATE TABLE "users" ("id" serial primary key, "name" character varying DEFAULT '' NOT NULL, "email" character varying NOT NULL, "encrypted_password" character varying DEFAULT '' NOT NULL, "auth_token" text, "reset_password_token" character varying, "reset_password_sent_at" timestamp, "remember_created_at" timestamp, "sign_in_count" integer DEFAULT 0 NOT NULL, "current_sign_in_at" timestamp, "last_sign_in_at" timestamp, "current_sign_in_ip" inet, "last_sign_in_ip" inet, "created_at" timestamp, "updated_at" timestamp, "schema_name" character varying) 
+  [1m[36m (61.8ms)[0m  [1mCREATE UNIQUE INDEX  "index_users_on_email" ON "users" USING btree ("email")[0m
+  [1m[35m (39.6ms)[0m  CREATE UNIQUE INDEX  "index_users_on_reset_password_token" ON "users" USING btree ("reset_password_token")
+  [1m[36m (2.8ms)[0m  [1mALTER TABLE "measures" ADD CONSTRAINT "fk_rails_0d9a1dd04c"
+FOREIGN KEY ("circuit_id")
+  REFERENCES "circuits" ("id")
+[0m
+  [1m[35m (49.5ms)[0m  CREATE TABLE "schema_migrations" ("version" character varying NOT NULL) 
+  [1m[36m (51.8ms)[0m  [1mCREATE UNIQUE INDEX  "unique_schema_migrations" ON "schema_migrations"  ("version")[0m
+  [1m[35m (0.9ms)[0m  SELECT version FROM "schema_migrations"
+  [1m[36m (0.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150720183845')[0m
+  [1m[35m (0.5ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150522130847')
+  [1m[36m (0.3ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150513183751')[0m
+  [1m[35m (0.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150720181315')
+  [1m[36m (0.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150511152613')[0m
+  [1m[35m (0.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150612150456')
+  [1m[36m (0.3ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150612152327')[0m
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+Started GET "/circuits/31/measures" for 127.0.0.1 at 2015-07-28 12:40:01 -0300
+  [1m[36mMeasure Load (0.3ms)[0m  [1mSELECT "measures".* FROM "measures"[0m
+  [1m[35mCircuit Load (0.3ms)[0m  SELECT "circuits".* FROM "circuits"
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "measures" WHERE "measures"."circuit_id" = $1[0m  [["circuit_id", 31]]
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mMeasure Load (0.2ms)[0m  [1mSELECT "measures".* FROM "measures" WHERE "measures"."circuit_id" = $1[0m  [["circuit_id", 31]]
+  [1m[35mSQL (0.4ms)[0m  DELETE FROM "circuits" WHERE "circuits"."type" IN ('Demand') AND "circuits"."id" = $1  [["id", 31]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35mUser Load (0.2ms)[0m  SELECT "public"."users".* FROM "public"."users"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  DELETE FROM "public"."users" WHERE "public"."users"."id" = $1  [["id", 10]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.1ms)[0m  [1mDELETE FROM "public"."users" WHERE "public"."users"."id" = $1[0m  [["id", 11]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.1ms)[0m  DELETE FROM "public"."users" WHERE "public"."users"."id" = $1  [["id", 1]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.1ms)[0m  [1mDELETE FROM "public"."users" WHERE "public"."users"."id" = $1[0m  [["id", 2]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (1.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+--------------------------------------------
+WelcomeControllerTest: test_should_get_index
+--------------------------------------------
+  [1m[36mUser Load (0.2ms)[0m  [1mSELECT  "public"."users".* FROM "public"."users" WHERE "public"."users"."id" = $1 LIMIT 1[0m  [["id", 1]]
+Processing by WelcomeController#index as HTML
+  [1m[35mUser Load (0.7ms)[0m  SELECT  "public"."users".* FROM "public"."users" WHERE "public"."users"."id" = $1  ORDER BY "public"."users"."id" ASC LIMIT 1  [["id", 1]]
+  [1m[36mCircuit Load (0.5ms)[0m  [1mSELECT "circuits".* FROM "circuits"[0m
+  [1m[35mCircuit Load (0.4ms)[0m  SELECT "circuits".* FROM "circuits"
+  [1m[36mUser Load (4.2ms)[0m  [1mSELECT SUM(Watts) AS "Wattshora", to_char(created_at,'Mon') as mon, extract(year from created_at) as year,"type"   FROM(                                                                                                                   SELECT                                                                                                                  circuits.type as "type",                                                                                              measures.created_at,                                                                                                    measures.watts *                                                                                                        EXTRACT(epoch FROM (measures.created_at - lag(measures.created_at)                                                      over (order by measures.created_at)))/3600 AS Watts                                                                     FROM                                                                                                                    public.users,                                                                                                           prv_1.circuits,                                                                                           prv_1.measures                                                                                            WHERE                                                                                                                   users.id = 1 AND                                                                                                        measures.created_at >= '2015-07-01 03:00:00.000000') AS foo                                                                                        GROUP BY 2,3,4;[0m
+  [1m[35m (0.7ms)[0m  SELECT COUNT(*) FROM "circuits"
+  Rendered welcome/_general_status.html.erb (1.8ms)
+  [1m[36m (0.6ms)[0m  [1mSELECT COUNT(*) FROM "circuits"[0m
+  Rendered welcome/_last_measures.html.erb (1.5ms)
+  Rendered welcome/_month_status.html.erb (0.5ms)
+  Rendered welcome/index.html.erb within layouts/application (9.3ms)
+  Rendered layouts/_header.html.erb (1.0ms)
+  Rendered layouts/_sidebar.html.erb (1.2ms)
+  Rendered layouts/_alerts.html.erb (0.3ms)
+  Rendered layouts/_footer.html.erb (0.3ms)
+Completed 200 OK in 39ms (Views: 23.1ms | ActiveRecord: 8.1ms)
+  [1m[35m (0.4ms)[0m  ROLLBACK
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+---------------------------------------------------
+CircuitsControllerTest: test_should_destroy_circuit
+---------------------------------------------------
+  [1m[35m (0.3ms)[0m  SAVEPOINT active_record_1
+  [1m[36mUser Exists (0.7ms)[0m  [1mSELECT  1 AS one FROM "public"."users" WHERE "public"."users"."email" = 'faker@trile.cl' LIMIT 1[0m
+  [1m[35mUser Exists (0.7ms)[0m  SELECT  1 AS one FROM "public"."users" WHERE LOWER("public"."users"."email") = LOWER('faker@trile.cl') LIMIT 1
+  [1m[36mUser Exists (0.3ms)[0m  [1mSELECT  1 AS one FROM "public"."users" WHERE "public"."users"."auth_token" = $1 LIMIT 1[0m  [["auth_token", "c7dfd5d42d30a366ab10c45ccb34f28d"]]
+  [1m[35mSQL (0.7ms)[0m  INSERT INTO "public"."users" ("name", "email", "encrypted_password", "created_at", "updated_at", "auth_token") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"  [["name", "faker"], ["email", "faker@trile.cl"], ["encrypted_password", "$2a$04$fyHg/ACwwaDy6KLKgchceeWtQjW1uLT3ZzKvRveZtl1FYil1aB57e"], ["created_at", "2015-07-28 15:40:01.436718"], ["updated_at", "2015-07-28 15:40:01.436718"], ["auth_token", "c7dfd5d42d30a366ab10c45ccb34f28d"]]
+  [1m[36mSQL (0.8ms)[0m  [1mUPDATE "public"."users" SET "name" = $1, "email" = $2, "encrypted_password" = $3, "created_at" = $4, "updated_at" = $5, "auth_token" = $6, "id" = $7, "schema_name" = $8 WHERE "public"."users"."id" = $9[0m  [["name", "faker"], ["email", "faker@trile.cl"], ["encrypted_password", "$2a$04$fyHg/ACwwaDy6KLKgchceeWtQjW1uLT3ZzKvRveZtl1FYil1aB57e"], ["created_at", "2015-07-28 15:40:01.436718"], ["updated_at", "2015-07-28 15:40:01.436718"], ["auth_token", "c7dfd5d42d30a366ab10c45ccb34f28d"], ["id", 12], ["schema_name", "prv_12"], ["id", 12]]
+  [1m[35m (0.5ms)[0m  CREATE SCHEMA "prv_12"
+  [1m[36mSQL (0.2ms)[0m  [1mCREATE EXTENSION IF NOT EXISTS "plpgsql"[0m
+  [1m[35m (90.9ms)[0m  CREATE TABLE "circuits" ("id" serial primary key, "description" text, "type" character varying, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL, "alarm_time" integer) 
+  [1m[36m (110.0ms)[0m  [1mCREATE TABLE "measures" ("id" serial primary key, "circuit_id" integer, "watts" integer, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL) [0m
+  [1m[35m (51.7ms)[0m  CREATE  INDEX  "index_measures_on_circuit_id" ON "measures" USING btree ("circuit_id")
+  [1m[36m (154.2ms)[0m  [1mCREATE TABLE "users" ("id" serial primary key, "name" character varying DEFAULT '' NOT NULL, "email" character varying NOT NULL, "encrypted_password" character varying DEFAULT '' NOT NULL, "auth_token" text, "reset_password_token" character varying, "reset_password_sent_at" timestamp, "remember_created_at" timestamp, "sign_in_count" integer DEFAULT 0 NOT NULL, "current_sign_in_at" timestamp, "last_sign_in_at" timestamp, "current_sign_in_ip" inet, "last_sign_in_ip" inet, "created_at" timestamp, "updated_at" timestamp, "schema_name" character varying) [0m
+  [1m[35m (52.0ms)[0m  CREATE UNIQUE INDEX  "index_users_on_email" ON "users" USING btree ("email")
+  [1m[36m (51.2ms)[0m  [1mCREATE UNIQUE INDEX  "index_users_on_reset_password_token" ON "users" USING btree ("reset_password_token")[0m
+  [1m[35m (2.9ms)[0m  ALTER TABLE "measures" ADD CONSTRAINT "fk_rails_0d9a1dd04c"
+FOREIGN KEY ("circuit_id")
+  REFERENCES "circuits" ("id")
+
+  [1m[36m (40.1ms)[0m  [1mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL) [0m
+  [1m[35m (51.0ms)[0m  CREATE UNIQUE INDEX  "unique_schema_migrations" ON "schema_migrations"  ("version")
+  [1m[36m (0.9ms)[0m  [1mSELECT version FROM "schema_migrations"[0m
+  [1m[35m (0.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150720183845')
+  [1m[36m (0.4ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150522130847')[0m
+  [1m[35m (0.4ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150513183751')
+  [1m[36m (0.5ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150720181315')[0m
+  [1m[35m (0.4ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150511152613')
+  [1m[36m (0.4ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150612150456')[0m
+  [1m[35m (0.4ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150612152327')
+  [1m[36m (0.3ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.8ms)[0m  [1mINSERT INTO "circuits" ("type", "description", "alarm_time", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["type", "Demand"], ["description", "Circuito de test"], ["alarm_time", 5], ["created_at", "2015-07-28 15:40:02.098255"], ["updated_at", "2015-07-28 15:40:02.098255"]]
+  [1m[35m (0.3ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.6ms)[0m  [1mSELECT COUNT(*) FROM "circuits"[0m
+Processing by CircuitsController#destroy as HTML
+  Parameters: {"id"=>"1"}
+  [1m[35mUser Load (0.6ms)[0m  SELECT  "public"."users".* FROM "public"."users" WHERE "public"."users"."id" = $1  ORDER BY "public"."users"."id" ASC LIMIT 1  [["id", 12]]
+  [1m[36mCircuit Load (0.4ms)[0m  [1mSELECT  "circuits".* FROM "circuits" WHERE "circuits"."id" = $1 LIMIT 1[0m  [["id", 1]]
+  [1m[35m (0.4ms)[0m  SELECT COUNT(*) FROM "measures" WHERE "measures"."circuit_id" = $1  [["circuit_id", 1]]
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mMeasure Load (0.3ms)[0m  SELECT "measures".* FROM "measures" WHERE "measures"."circuit_id" = $1  [["circuit_id", 1]]
+  [1m[36mSQL (1.0ms)[0m  [1mDELETE FROM "circuits" WHERE "circuits"."type" IN ('Demand') AND "circuits"."id" = $1[0m  [["id", 1]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+Redirected to http://test.host/circuits
+Completed 302 Found in 12ms (ActiveRecord: 3.9ms)
+  [1m[36m (0.4ms)[0m  [1mSELECT COUNT(*) FROM "circuits"[0m
+  [1m[35mCircuit Load (0.3ms)[0m  SELECT "circuits".* FROM "circuits"
+  [1m[36mUser Load (0.4ms)[0m  [1mSELECT "public"."users".* FROM "public"."users"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mDELETE FROM "public"."users" WHERE "public"."users"."id" = $1[0m  [["id", 12]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.4ms)[0m  DELETE FROM "public"."users" WHERE "public"."users"."id" = $1  [["id", 1]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.6ms)[0m  [1mDELETE FROM "public"."users" WHERE "public"."users"."id" = $1[0m  [["id", 2]]
+  [1m[35m (0.3ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (3.6ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+---------------------------------------------
+CircuitsControllerTest: test_should_get_index
+---------------------------------------------
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mUser Exists (0.7ms)[0m  SELECT  1 AS one FROM "public"."users" WHERE "public"."users"."email" = 'faker@trile.cl' LIMIT 1
+  [1m[36mUser Exists (0.6ms)[0m  [1mSELECT  1 AS one FROM "public"."users" WHERE LOWER("public"."users"."email") = LOWER('faker@trile.cl') LIMIT 1[0m
+  [1m[35mUser Exists (0.4ms)[0m  SELECT  1 AS one FROM "public"."users" WHERE "public"."users"."auth_token" = $1 LIMIT 1  [["auth_token", "dd1e73db32a5185bd7dc0dcb5a4dfa53"]]
+  [1m[36mSQL (0.7ms)[0m  [1mINSERT INTO "public"."users" ("name", "email", "encrypted_password", "created_at", "updated_at", "auth_token") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["name", "faker"], ["email", "faker@trile.cl"], ["encrypted_password", "$2a$04$jWIPX0.50PiOMsRg7dWRLOwQlVxg79V8NENNpIg9ca1ynYxJtonhq"], ["created_at", "2015-07-28 15:40:02.136915"], ["updated_at", "2015-07-28 15:40:02.136915"], ["auth_token", "dd1e73db32a5185bd7dc0dcb5a4dfa53"]]
+  [1m[35mSQL (0.6ms)[0m  UPDATE "public"."users" SET "name" = $1, "email" = $2, "encrypted_password" = $3, "created_at" = $4, "updated_at" = $5, "auth_token" = $6, "id" = $7, "schema_name" = $8 WHERE "public"."users"."id" = $9  [["name", "faker"], ["email", "faker@trile.cl"], ["encrypted_password", "$2a$04$jWIPX0.50PiOMsRg7dWRLOwQlVxg79V8NENNpIg9ca1ynYxJtonhq"], ["created_at", "2015-07-28 15:40:02.136915"], ["updated_at", "2015-07-28 15:40:02.136915"], ["auth_token", "dd1e73db32a5185bd7dc0dcb5a4dfa53"], ["id", 13], ["schema_name", "prv_13"], ["id", 13]]
+  [1m[36m (0.4ms)[0m  [1mCREATE SCHEMA "prv_13"[0m
+  [1m[35mSQL (0.2ms)[0m  CREATE EXTENSION IF NOT EXISTS "plpgsql"
+  [1m[36m (86.9ms)[0m  [1mCREATE TABLE "circuits" ("id" serial primary key, "description" text, "type" character varying, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL, "alarm_time" integer) [0m
+  [1m[35m (41.9ms)[0m  CREATE TABLE "measures" ("id" serial primary key, "circuit_id" integer, "watts" integer, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL) 
+  [1m[36m (50.5ms)[0m  [1mCREATE  INDEX  "index_measures_on_circuit_id" ON "measures" USING btree ("circuit_id")[0m
+  [1m[35m (106.2ms)[0m  CREATE TABLE "users" ("id" serial primary key, "name" character varying DEFAULT '' NOT NULL, "email" character varying NOT NULL, "encrypted_password" character varying DEFAULT '' NOT NULL, "auth_token" text, "reset_password_token" character varying, "reset_password_sent_at" timestamp, "remember_created_at" timestamp, "sign_in_count" integer DEFAULT 0 NOT NULL, "current_sign_in_at" timestamp, "last_sign_in_at" timestamp, "current_sign_in_ip" inet, "last_sign_in_ip" inet, "created_at" timestamp, "updated_at" timestamp, "schema_name" character varying) 
+  [1m[36m (50.7ms)[0m  [1mCREATE UNIQUE INDEX  "index_users_on_email" ON "users" USING btree ("email")[0m
+  [1m[35m (50.7ms)[0m  CREATE UNIQUE INDEX  "index_users_on_reset_password_token" ON "users" USING btree ("reset_password_token")
+  [1m[36m (2.3ms)[0m  [1mALTER TABLE "measures" ADD CONSTRAINT "fk_rails_0d9a1dd04c"
+FOREIGN KEY ("circuit_id")
+  REFERENCES "circuits" ("id")
+[0m
+  [1m[35m (61.6ms)[0m  CREATE TABLE "schema_migrations" ("version" character varying NOT NULL) 
+  [1m[36m (42.2ms)[0m  [1mCREATE UNIQUE INDEX  "unique_schema_migrations" ON "schema_migrations"  ("version")[0m
+  [1m[35m (0.9ms)[0m  SELECT version FROM "schema_migrations"
+  [1m[36m (0.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150720183845')[0m
+  [1m[35m (0.5ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150522130847')
+  [1m[36m (0.5ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150513183751')[0m
+  [1m[35m (0.4ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150720181315')
+  [1m[36m (0.4ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150511152613')[0m
+  [1m[35m (0.4ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150612150456')
+  [1m[36m (0.4ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150612152327')[0m
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.7ms)[0m  INSERT INTO "circuits" ("type", "description", "alarm_time", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["type", "Demand"], ["description", "Circuito de test"], ["alarm_time", 5], ["created_at", "2015-07-28 15:40:02.692481"], ["updated_at", "2015-07-28 15:40:02.692481"]]
+  [1m[36m (0.3ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+Processing by CircuitsController#index as HTML
+  [1m[35mUser Load (0.6ms)[0m  SELECT  "public"."users".* FROM "public"."users" WHERE "public"."users"."id" = $1  ORDER BY "public"."users"."id" ASC LIMIT 1  [["id", 13]]
+  [1m[36mCircuit Load (0.3ms)[0m  [1mSELECT "circuits".* FROM "circuits"[0m
+  [1m[35m (0.4ms)[0m  SELECT COUNT(*) FROM "measures" WHERE "measures"."circuit_id" = $1  [["circuit_id", 1]]
+  Rendered circuits/index.html.erb within layouts/application (6.2ms)
+  Rendered layouts/_header.html.erb (0.4ms)
+  Rendered layouts/_sidebar.html.erb (0.5ms)
+  Rendered layouts/_alerts.html.erb (0.1ms)
+  Rendered layouts/_footer.html.erb (0.1ms)
+Completed 200 OK in 32ms (Views: 27.8ms | ActiveRecord: 2.2ms)
+  [1m[36mCircuit Load (0.3ms)[0m  [1mSELECT "circuits".* FROM "circuits"[0m
+  [1m[35m (0.4ms)[0m  SELECT COUNT(*) FROM "measures" WHERE "measures"."circuit_id" = $1  [["circuit_id", 1]]
+  [1m[36m (0.3ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mMeasure Load (0.5ms)[0m  SELECT "measures".* FROM "measures" WHERE "measures"."circuit_id" = $1  [["circuit_id", 1]]
+  [1m[36mSQL (0.7ms)[0m  [1mDELETE FROM "circuits" WHERE "circuits"."type" IN ('Demand') AND "circuits"."id" = $1[0m  [["id", 1]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36mUser Load (0.4ms)[0m  [1mSELECT "public"."users".* FROM "public"."users"[0m
+  [1m[35m (0.2ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mDELETE FROM "public"."users" WHERE "public"."users"."id" = $1[0m  [["id", 13]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  DELETE FROM "public"."users" WHERE "public"."users"."id" = $1  [["id", 1]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mDELETE FROM "public"."users" WHERE "public"."users"."id" = $1[0m  [["id", 2]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (3.1ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.3ms)[0m  BEGIN
+------------------------------------------------
+CircuitsControllerTest: test_should_show_circuit
+------------------------------------------------
+  [1m[36m (0.3ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mUser Exists (0.7ms)[0m  SELECT  1 AS one FROM "public"."users" WHERE "public"."users"."email" = 'faker@trile.cl' LIMIT 1
+  [1m[36mUser Exists (1.1ms)[0m  [1mSELECT  1 AS one FROM "public"."users" WHERE LOWER("public"."users"."email") = LOWER('faker@trile.cl') LIMIT 1[0m
+  [1m[35mUser Exists (0.6ms)[0m  SELECT  1 AS one FROM "public"."users" WHERE "public"."users"."auth_token" = $1 LIMIT 1  [["auth_token", "872f1f18806043720bbf95d1ecbee537"]]
+  [1m[36mSQL (0.7ms)[0m  [1mINSERT INTO "public"."users" ("name", "email", "encrypted_password", "created_at", "updated_at", "auth_token") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["name", "faker"], ["email", "faker@trile.cl"], ["encrypted_password", "$2a$04$jhOL/dXv6Ngp05yZQmoq2ebLh0VsUqWZkWsuGHvxUjbv5hBkiQedC"], ["created_at", "2015-07-28 15:40:02.774902"], ["updated_at", "2015-07-28 15:40:02.774902"], ["auth_token", "872f1f18806043720bbf95d1ecbee537"]]
+  [1m[35mSQL (0.7ms)[0m  UPDATE "public"."users" SET "name" = $1, "email" = $2, "encrypted_password" = $3, "created_at" = $4, "updated_at" = $5, "auth_token" = $6, "id" = $7, "schema_name" = $8 WHERE "public"."users"."id" = $9  [["name", "faker"], ["email", "faker@trile.cl"], ["encrypted_password", "$2a$04$jhOL/dXv6Ngp05yZQmoq2ebLh0VsUqWZkWsuGHvxUjbv5hBkiQedC"], ["created_at", "2015-07-28 15:40:02.774902"], ["updated_at", "2015-07-28 15:40:02.774902"], ["auth_token", "872f1f18806043720bbf95d1ecbee537"], ["id", 14], ["schema_name", "prv_14"], ["id", 14]]
+  [1m[36m (0.5ms)[0m  [1mCREATE SCHEMA "prv_14"[0m
+  [1m[35mSQL (0.3ms)[0m  CREATE EXTENSION IF NOT EXISTS "plpgsql"
+  [1m[36m (96.2ms)[0m  [1mCREATE TABLE "circuits" ("id" serial primary key, "description" text, "type" character varying, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL, "alarm_time" integer) [0m
+  [1m[35m (52.7ms)[0m  CREATE TABLE "measures" ("id" serial primary key, "circuit_id" integer, "watts" integer, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL) 
+  [1m[36m (71.6ms)[0m  [1mCREATE  INDEX  "index_measures_on_circuit_id" ON "measures" USING btree ("circuit_id")[0m
+  [1m[35m (95.5ms)[0m  CREATE TABLE "users" ("id" serial primary key, "name" character varying DEFAULT '' NOT NULL, "email" character varying NOT NULL, "encrypted_password" character varying DEFAULT '' NOT NULL, "auth_token" text, "reset_password_token" character varying, "reset_password_sent_at" timestamp, "remember_created_at" timestamp, "sign_in_count" integer DEFAULT 0 NOT NULL, "current_sign_in_at" timestamp, "last_sign_in_at" timestamp, "current_sign_in_ip" inet, "last_sign_in_ip" inet, "created_at" timestamp, "updated_at" timestamp, "schema_name" character varying) 
+  [1m[36m (51.4ms)[0m  [1mCREATE UNIQUE INDEX  "index_users_on_email" ON "users" USING btree ("email")[0m
+  [1m[35m (39.3ms)[0m  CREATE UNIQUE INDEX  "index_users_on_reset_password_token" ON "users" USING btree ("reset_password_token")
+  [1m[36m (2.8ms)[0m  [1mALTER TABLE "measures" ADD CONSTRAINT "fk_rails_0d9a1dd04c"
+FOREIGN KEY ("circuit_id")
+  REFERENCES "circuits" ("id")
+[0m
+  [1m[35m (61.1ms)[0m  CREATE TABLE "schema_migrations" ("version" character varying NOT NULL) 
+  [1m[36m (39.7ms)[0m  [1mCREATE UNIQUE INDEX  "unique_schema_migrations" ON "schema_migrations"  ("version")[0m
+  [1m[35m (0.8ms)[0m  SELECT version FROM "schema_migrations"
+  [1m[36m (0.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150720183845')[0m
+  [1m[35m (0.4ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150522130847')
+  [1m[36m (0.3ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150513183751')[0m
+  [1m[35m (0.3ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150720181315')
+  [1m[36m (0.3ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150511152613')[0m
+  [1m[35m (0.3ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150612150456')
+  [1m[36m (0.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150612152327')[0m
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.9ms)[0m  INSERT INTO "circuits" ("type", "description", "alarm_time", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["type", "Demand"], ["description", "Circuito de test"], ["alarm_time", 5], ["created_at", "2015-07-28 15:40:03.349289"], ["updated_at", "2015-07-28 15:40:03.349289"]]
+  [1m[36m (0.3ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+Processing by CircuitsController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[35mUser Load (0.7ms)[0m  SELECT  "public"."users".* FROM "public"."users" WHERE "public"."users"."id" = $1  ORDER BY "public"."users"."id" ASC LIMIT 1  [["id", 14]]
+  [1m[36mCircuit Load (0.6ms)[0m  [1mSELECT  "circuits".* FROM "circuits" WHERE "circuits"."id" = $1 LIMIT 1[0m  [["id", 1]]
+  [1m[35m (0.5ms)[0m  SELECT COUNT(*) FROM "measures" WHERE "measures"."circuit_id" = $1  [["circuit_id", 1]]
+  [1m[36mCircuit Load (0.5ms)[0m  [1mSELECT  "circuits".* FROM "circuits" WHERE "circuits"."id" = $1 LIMIT 1[0m  [["id", 1]]
+  [1m[35m (0.4ms)[0m  SELECT COUNT(*) FROM "measures" WHERE "measures"."circuit_id" = $1  [["circuit_id", 1]]
+  Rendered circuits/_graphs.html.erb (1.6ms)
+  [1m[36m (0.7ms)[0m  [1mSELECT COUNT(*) FROM "measures" WHERE "measures"."circuit_id" = $1[0m  [["circuit_id", 1]]
+  [1m[35m (0.5ms)[0m  SELECT COUNT(*) FROM "measures" WHERE "measures"."circuit_id" = $1  [["circuit_id", 1]]
+  Rendered circuits/show.html.erb within layouts/application (20.3ms)
+  Rendered layouts/_header.html.erb (0.4ms)
+  Rendered layouts/_sidebar.html.erb (0.5ms)
+  Rendered layouts/_alerts.html.erb (0.1ms)
+  Rendered layouts/_footer.html.erb (0.0ms)
+Completed 200 OK in 47ms (Views: 31.0ms | ActiveRecord: 4.9ms)
+  [1m[36mCircuit Load (0.7ms)[0m  [1mSELECT "circuits".* FROM "circuits"[0m
+  [1m[35m (0.6ms)[0m  SELECT COUNT(*) FROM "measures" WHERE "measures"."circuit_id" = $1  [["circuit_id", 1]]
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mMeasure Load (0.3ms)[0m  SELECT "measures".* FROM "measures" WHERE "measures"."circuit_id" = $1  [["circuit_id", 1]]
+  [1m[36mSQL (1.0ms)[0m  [1mDELETE FROM "circuits" WHERE "circuits"."type" IN ('Demand') AND "circuits"."id" = $1[0m  [["id", 1]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36mUser Load (0.6ms)[0m  [1mSELECT "public"."users".* FROM "public"."users"[0m
+  [1m[35m (0.3ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.5ms)[0m  [1mDELETE FROM "public"."users" WHERE "public"."users"."id" = $1[0m  [["id", 14]]
+  [1m[35m (0.3ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.3ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.6ms)[0m  DELETE FROM "public"."users" WHERE "public"."users"."id" = $1  [["id", 1]]
+  [1m[36m (0.3ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mDELETE FROM "public"."users" WHERE "public"."users"."id" = $1[0m  [["id", 2]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (3.3ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+--------------------------------------------------
+CircuitsControllerTest: test_should_create_circuit
+--------------------------------------------------
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mUser Exists (0.6ms)[0m  SELECT  1 AS one FROM "public"."users" WHERE "public"."users"."email" = 'faker@trile.cl' LIMIT 1
+  [1m[36mUser Exists (0.3ms)[0m  [1mSELECT  1 AS one FROM "public"."users" WHERE LOWER("public"."users"."email") = LOWER('faker@trile.cl') LIMIT 1[0m
+  [1m[35mUser Exists (0.4ms)[0m  SELECT  1 AS one FROM "public"."users" WHERE "public"."users"."auth_token" = $1 LIMIT 1  [["auth_token", "bf3ccb4a69e1284aa5841480123420a5"]]
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "public"."users" ("name", "email", "encrypted_password", "created_at", "updated_at", "auth_token") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["name", "faker"], ["email", "faker@trile.cl"], ["encrypted_password", "$2a$04$U..a01HW/8zCjrJ7YL.9muUg6yoPHqHyykXSkLZc038fqaBvuPBo."], ["created_at", "2015-07-28 15:40:03.431092"], ["updated_at", "2015-07-28 15:40:03.431092"], ["auth_token", "bf3ccb4a69e1284aa5841480123420a5"]]
+  [1m[35mSQL (0.5ms)[0m  UPDATE "public"."users" SET "name" = $1, "email" = $2, "encrypted_password" = $3, "created_at" = $4, "updated_at" = $5, "auth_token" = $6, "id" = $7, "schema_name" = $8 WHERE "public"."users"."id" = $9  [["name", "faker"], ["email", "faker@trile.cl"], ["encrypted_password", "$2a$04$U..a01HW/8zCjrJ7YL.9muUg6yoPHqHyykXSkLZc038fqaBvuPBo."], ["created_at", "2015-07-28 15:40:03.431092"], ["updated_at", "2015-07-28 15:40:03.431092"], ["auth_token", "bf3ccb4a69e1284aa5841480123420a5"], ["id", 15], ["schema_name", "prv_15"], ["id", 15]]
+  [1m[36m (0.4ms)[0m  [1mCREATE SCHEMA "prv_15"[0m
+  [1m[35mSQL (0.3ms)[0m  CREATE EXTENSION IF NOT EXISTS "plpgsql"
+  [1m[36m (93.5ms)[0m  [1mCREATE TABLE "circuits" ("id" serial primary key, "description" text, "type" character varying, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL, "alarm_time" integer) [0m
+  [1m[35m (41.4ms)[0m  CREATE TABLE "measures" ("id" serial primary key, "circuit_id" integer, "watts" integer, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL) 
+  [1m[36m (42.5ms)[0m  [1mCREATE  INDEX  "index_measures_on_circuit_id" ON "measures" USING btree ("circuit_id")[0m
+  [1m[35m (140.6ms)[0m  CREATE TABLE "users" ("id" serial primary key, "name" character varying DEFAULT '' NOT NULL, "email" character varying NOT NULL, "encrypted_password" character varying DEFAULT '' NOT NULL, "auth_token" text, "reset_password_token" character varying, "reset_password_sent_at" timestamp, "remember_created_at" timestamp, "sign_in_count" integer DEFAULT 0 NOT NULL, "current_sign_in_at" timestamp, "last_sign_in_at" timestamp, "current_sign_in_ip" inet, "last_sign_in_ip" inet, "created_at" timestamp, "updated_at" timestamp, "schema_name" character varying) 
+  [1m[36m (50.6ms)[0m  [1mCREATE UNIQUE INDEX  "index_users_on_email" ON "users" USING btree ("email")[0m
+  [1m[35m (74.9ms)[0m  CREATE UNIQUE INDEX  "index_users_on_reset_password_token" ON "users" USING btree ("reset_password_token")
+  [1m[36m (3.1ms)[0m  [1mALTER TABLE "measures" ADD CONSTRAINT "fk_rails_0d9a1dd04c"
+FOREIGN KEY ("circuit_id")
+  REFERENCES "circuits" ("id")
+[0m
+  [1m[35m (47.5ms)[0m  CREATE TABLE "schema_migrations" ("version" character varying NOT NULL) 
+  [1m[36m (39.8ms)[0m  [1mCREATE UNIQUE INDEX  "unique_schema_migrations" ON "schema_migrations"  ("version")[0m
+  [1m[35m (0.8ms)[0m  SELECT version FROM "schema_migrations"
+  [1m[36m (0.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150720183845')[0m
+  [1m[35m (0.3ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150522130847')
+  [1m[36m (0.4ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150513183751')[0m
+  [1m[35m (0.3ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150720181315')
+  [1m[36m (0.3ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150511152613')[0m
+  [1m[35m (0.3ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150612150456')
+  [1m[36m (0.3ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150612152327')[0m
+  [1m[35m (0.3ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.6ms)[0m  INSERT INTO "circuits" ("type", "description", "alarm_time", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["type", "Demand"], ["description", "Circuito de test"], ["alarm_time", 5], ["created_at", "2015-07-28 15:40:04.026228"], ["updated_at", "2015-07-28 15:40:04.026228"]]
+  [1m[36m (0.3ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.5ms)[0m  SELECT COUNT(*) FROM "circuits"
+Processing by CircuitsController#create as HTML
+  Parameters: {"circuit"=>{"description"=>"Circuito de test", "type"=>"Demand"}}
+  [1m[36mUser Load (0.8ms)[0m  [1mSELECT  "public"."users".* FROM "public"."users" WHERE "public"."users"."id" = $1  ORDER BY "public"."users"."id" ASC LIMIT 1[0m  [["id", 15]]
+  [1m[35m (0.3ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.6ms)[0m  [1mINSERT INTO "circuits" ("description", "alarm_time", "type", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["description", "Circuito de test"], ["alarm_time", 5], ["type", "Demand"], ["created_at", "2015-07-28 15:40:04.043424"], ["updated_at", "2015-07-28 15:40:04.043424"]]
+  [1m[35m (0.3ms)[0m  RELEASE SAVEPOINT active_record_1
+Redirected to http://test.host/demands/2
+Completed 302 Found in 11ms (ActiveRecord: 3.0ms)
+  [1m[36m (0.6ms)[0m  [1mSELECT COUNT(*) FROM "circuits"[0m
+  [1m[35mCircuit Load (0.5ms)[0m  SELECT "circuits".* FROM "circuits"
+  [1m[36m (0.5ms)[0m  [1mSELECT COUNT(*) FROM "measures" WHERE "measures"."circuit_id" = $1[0m  [["circuit_id", 1]]
+  [1m[35m (0.5ms)[0m  SELECT COUNT(*) FROM "measures" WHERE "measures"."circuit_id" = $1  [["circuit_id", 2]]
+  [1m[36m (0.3ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mMeasure Load (0.4ms)[0m  SELECT "measures".* FROM "measures" WHERE "measures"."circuit_id" = $1  [["circuit_id", 1]]
+  [1m[36mSQL (1.0ms)[0m  [1mDELETE FROM "circuits" WHERE "circuits"."type" IN ('Demand') AND "circuits"."id" = $1[0m  [["id", 1]]
+  [1m[35m (0.3ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mMeasure Load (0.4ms)[0m  SELECT "measures".* FROM "measures" WHERE "measures"."circuit_id" = $1  [["circuit_id", 2]]
+  [1m[36mSQL (0.8ms)[0m  [1mDELETE FROM "circuits" WHERE "circuits"."type" IN ('Demand') AND "circuits"."id" = $1[0m  [["id", 2]]
+  [1m[35m (0.3ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36mUser Load (0.6ms)[0m  [1mSELECT "public"."users".* FROM "public"."users"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.4ms)[0m  [1mDELETE FROM "public"."users" WHERE "public"."users"."id" = $1[0m  [["id", 1]]
+  [1m[35m (0.3ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.4ms)[0m  DELETE FROM "public"."users" WHERE "public"."users"."id" = $1  [["id", 2]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.4ms)[0m  [1mDELETE FROM "public"."users" WHERE "public"."users"."id" = $1[0m  [["id", 15]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (3.4ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.3ms)[0m  BEGIN
+--------------------------------------------
+CircuitsControllerTest: test_should_get_edit
+--------------------------------------------
+  [1m[36m (0.3ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mUser Exists (0.8ms)[0m  SELECT  1 AS one FROM "public"."users" WHERE "public"."users"."email" = 'faker@trile.cl' LIMIT 1
+  [1m[36mUser Exists (0.7ms)[0m  [1mSELECT  1 AS one FROM "public"."users" WHERE LOWER("public"."users"."email") = LOWER('faker@trile.cl') LIMIT 1[0m
+  [1m[35mUser Exists (0.3ms)[0m  SELECT  1 AS one FROM "public"."users" WHERE "public"."users"."auth_token" = $1 LIMIT 1  [["auth_token", "b8c0b07f970920bda2f20c7257a2bb19"]]
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "public"."users" ("name", "email", "encrypted_password", "created_at", "updated_at", "auth_token") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["name", "faker"], ["email", "faker@trile.cl"], ["encrypted_password", "$2a$04$50AqXL/GagSMGbCb8waXlOlhNHEtwa7F5PbDz/qxUTQs3aVqnF6Xa"], ["created_at", "2015-07-28 15:40:04.081894"], ["updated_at", "2015-07-28 15:40:04.081894"], ["auth_token", "b8c0b07f970920bda2f20c7257a2bb19"]]
+  [1m[35mSQL (0.4ms)[0m  UPDATE "public"."users" SET "name" = $1, "email" = $2, "encrypted_password" = $3, "created_at" = $4, "updated_at" = $5, "auth_token" = $6, "id" = $7, "schema_name" = $8 WHERE "public"."users"."id" = $9  [["name", "faker"], ["email", "faker@trile.cl"], ["encrypted_password", "$2a$04$50AqXL/GagSMGbCb8waXlOlhNHEtwa7F5PbDz/qxUTQs3aVqnF6Xa"], ["created_at", "2015-07-28 15:40:04.081894"], ["updated_at", "2015-07-28 15:40:04.081894"], ["auth_token", "b8c0b07f970920bda2f20c7257a2bb19"], ["id", 16], ["schema_name", "prv_16"], ["id", 16]]
+  [1m[36m (0.3ms)[0m  [1mCREATE SCHEMA "prv_16"[0m
+  [1m[35mSQL (0.1ms)[0m  CREATE EXTENSION IF NOT EXISTS "plpgsql"
+  [1m[36m (85.1ms)[0m  [1mCREATE TABLE "circuits" ("id" serial primary key, "description" text, "type" character varying, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL, "alarm_time" integer) [0m
+  [1m[35m (41.5ms)[0m  CREATE TABLE "measures" ("id" serial primary key, "circuit_id" integer, "watts" integer, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL) 
+  [1m[36m (41.2ms)[0m  [1mCREATE  INDEX  "index_measures_on_circuit_id" ON "measures" USING btree ("circuit_id")[0m
+  [1m[35m (106.5ms)[0m  CREATE TABLE "users" ("id" serial primary key, "name" character varying DEFAULT '' NOT NULL, "email" character varying NOT NULL, "encrypted_password" character varying DEFAULT '' NOT NULL, "auth_token" text, "reset_password_token" character varying, "reset_password_sent_at" timestamp, "remember_created_at" timestamp, "sign_in_count" integer DEFAULT 0 NOT NULL, "current_sign_in_at" timestamp, "last_sign_in_at" timestamp, "current_sign_in_ip" inet, "last_sign_in_ip" inet, "created_at" timestamp, "updated_at" timestamp, "schema_name" character varying) 
+  [1m[36m (39.1ms)[0m  [1mCREATE UNIQUE INDEX  "index_users_on_email" ON "users" USING btree ("email")[0m
+  [1m[35m (40.3ms)[0m  CREATE UNIQUE INDEX  "index_users_on_reset_password_token" ON "users" USING btree ("reset_password_token")
+  [1m[36m (2.8ms)[0m  [1mALTER TABLE "measures" ADD CONSTRAINT "fk_rails_0d9a1dd04c"
+FOREIGN KEY ("circuit_id")
+  REFERENCES "circuits" ("id")
+[0m
+  [1m[35m (49.8ms)[0m  CREATE TABLE "schema_migrations" ("version" character varying NOT NULL) 
+  [1m[36m (59.8ms)[0m  [1mCREATE UNIQUE INDEX  "unique_schema_migrations" ON "schema_migrations"  ("version")[0m
+  [1m[35m (0.8ms)[0m  SELECT version FROM "schema_migrations"
+  [1m[36m (0.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150720183845')[0m
+  [1m[35m (0.3ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150522130847')
+  [1m[36m (0.3ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150513183751')[0m
+  [1m[35m (0.4ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150720181315')
+  [1m[36m (0.3ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150511152613')[0m
+  [1m[35m (0.3ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150612150456')
+  [1m[36m (0.3ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150612152327')[0m
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.8ms)[0m  INSERT INTO "circuits" ("type", "description", "alarm_time", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["type", "Demand"], ["description", "Circuito de test"], ["alarm_time", 5], ["created_at", "2015-07-28 15:40:04.601780"], ["updated_at", "2015-07-28 15:40:04.601780"]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+Processing by CircuitsController#edit as HTML
+  Parameters: {"id"=>"1"}
+  [1m[35mUser Load (0.6ms)[0m  SELECT  "public"."users".* FROM "public"."users" WHERE "public"."users"."id" = $1  ORDER BY "public"."users"."id" ASC LIMIT 1  [["id", 16]]
+  [1m[36mCircuit Load (0.5ms)[0m  [1mSELECT  "circuits".* FROM "circuits" WHERE "circuits"."id" = $1 LIMIT 1[0m  [["id", 1]]
+  [1m[35m (0.5ms)[0m  SELECT COUNT(*) FROM "measures" WHERE "measures"."circuit_id" = $1  [["circuit_id", 1]]
+  Rendered circuits/_form.html.erb (19.2ms)
+  Rendered circuits/edit.html.erb within layouts/application (29.3ms)
+  Rendered layouts/_header.html.erb (1.5ms)
+  Rendered layouts/_sidebar.html.erb (1.4ms)
+  Rendered layouts/_alerts.html.erb (0.2ms)
+  Rendered layouts/_footer.html.erb (0.1ms)
+Completed 200 OK in 194ms (Views: 183.7ms | ActiveRecord: 2.5ms)
+  [1m[36mCircuit Load (0.7ms)[0m  [1mSELECT "circuits".* FROM "circuits"[0m
+  [1m[35m (0.6ms)[0m  SELECT COUNT(*) FROM "measures" WHERE "measures"."circuit_id" = $1  [["circuit_id", 1]]
+  [1m[36m (0.3ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mMeasure Load (0.4ms)[0m  SELECT "measures".* FROM "measures" WHERE "measures"."circuit_id" = $1  [["circuit_id", 1]]
+  [1m[36mSQL (1.0ms)[0m  [1mDELETE FROM "circuits" WHERE "circuits"."type" IN ('Demand') AND "circuits"."id" = $1[0m  [["id", 1]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36mUser Load (0.5ms)[0m  [1mSELECT "public"."users".* FROM "public"."users"[0m
+  [1m[35m (0.2ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.4ms)[0m  [1mDELETE FROM "public"."users" WHERE "public"."users"."id" = $1[0m  [["id", 1]]
+  [1m[35m (0.3ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.4ms)[0m  DELETE FROM "public"."users" WHERE "public"."users"."id" = $1  [["id", 2]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.4ms)[0m  [1mDELETE FROM "public"."users" WHERE "public"."users"."id" = $1[0m  [["id", 16]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (2.8ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+--------------------------------------------------
+CircuitsControllerTest: test_should_update_circuit
+--------------------------------------------------
+  [1m[36m (0.3ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mUser Exists (0.7ms)[0m  SELECT  1 AS one FROM "public"."users" WHERE "public"."users"."email" = 'faker@trile.cl' LIMIT 1
+  [1m[36mUser Exists (0.5ms)[0m  [1mSELECT  1 AS one FROM "public"."users" WHERE LOWER("public"."users"."email") = LOWER('faker@trile.cl') LIMIT 1[0m
+  [1m[35mUser Exists (0.5ms)[0m  SELECT  1 AS one FROM "public"."users" WHERE "public"."users"."auth_token" = $1 LIMIT 1  [["auth_token", "fa458abca355b613d6eadc79ce7097db"]]
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "public"."users" ("name", "email", "encrypted_password", "created_at", "updated_at", "auth_token") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["name", "faker"], ["email", "faker@trile.cl"], ["encrypted_password", "$2a$04$gvuvyOTrhLg0tEWkJsIkneBBLMc5FPN/Li..uCgOrvkZWUdExT78."], ["created_at", "2015-07-28 15:40:04.824676"], ["updated_at", "2015-07-28 15:40:04.824676"], ["auth_token", "fa458abca355b613d6eadc79ce7097db"]]
+  [1m[35mSQL (0.6ms)[0m  UPDATE "public"."users" SET "name" = $1, "email" = $2, "encrypted_password" = $3, "created_at" = $4, "updated_at" = $5, "auth_token" = $6, "id" = $7, "schema_name" = $8 WHERE "public"."users"."id" = $9  [["name", "faker"], ["email", "faker@trile.cl"], ["encrypted_password", "$2a$04$gvuvyOTrhLg0tEWkJsIkneBBLMc5FPN/Li..uCgOrvkZWUdExT78."], ["created_at", "2015-07-28 15:40:04.824676"], ["updated_at", "2015-07-28 15:40:04.824676"], ["auth_token", "fa458abca355b613d6eadc79ce7097db"], ["id", 17], ["schema_name", "prv_17"], ["id", 17]]
+  [1m[36m (0.5ms)[0m  [1mCREATE SCHEMA "prv_17"[0m
+  [1m[35mSQL (0.3ms)[0m  CREATE EXTENSION IF NOT EXISTS "plpgsql"
+  [1m[36m (97.0ms)[0m  [1mCREATE TABLE "circuits" ("id" serial primary key, "description" text, "type" character varying, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL, "alarm_time" integer) [0m
+  [1m[35m (43.2ms)[0m  CREATE TABLE "measures" ("id" serial primary key, "circuit_id" integer, "watts" integer, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL) 
+  [1m[36m (61.6ms)[0m  [1mCREATE  INDEX  "index_measures_on_circuit_id" ON "measures" USING btree ("circuit_id")[0m
+  [1m[35m (94.0ms)[0m  CREATE TABLE "users" ("id" serial primary key, "name" character varying DEFAULT '' NOT NULL, "email" character varying NOT NULL, "encrypted_password" character varying DEFAULT '' NOT NULL, "auth_token" text, "reset_password_token" character varying, "reset_password_sent_at" timestamp, "remember_created_at" timestamp, "sign_in_count" integer DEFAULT 0 NOT NULL, "current_sign_in_at" timestamp, "last_sign_in_at" timestamp, "current_sign_in_ip" inet, "last_sign_in_ip" inet, "created_at" timestamp, "updated_at" timestamp, "schema_name" character varying) 
+  [1m[36m (40.0ms)[0m  [1mCREATE UNIQUE INDEX  "index_users_on_email" ON "users" USING btree ("email")[0m
+  [1m[35m (54.3ms)[0m  CREATE UNIQUE INDEX  "index_users_on_reset_password_token" ON "users" USING btree ("reset_password_token")
+  [1m[36m (2.8ms)[0m  [1mALTER TABLE "measures" ADD CONSTRAINT "fk_rails_0d9a1dd04c"
+FOREIGN KEY ("circuit_id")
+  REFERENCES "circuits" ("id")
+[0m
+  [1m[35m (46.3ms)[0m  CREATE TABLE "schema_migrations" ("version" character varying NOT NULL) 
+  [1m[36m (39.7ms)[0m  [1mCREATE UNIQUE INDEX  "unique_schema_migrations" ON "schema_migrations"  ("version")[0m
+  [1m[35m (0.8ms)[0m  SELECT version FROM "schema_migrations"
+  [1m[36m (0.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150720183845')[0m
+  [1m[35m (0.4ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150522130847')
+  [1m[36m (0.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150513183751')[0m
+  [1m[35m (0.3ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150720181315')
+  [1m[36m (0.3ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150511152613')[0m
+  [1m[35m (0.4ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150612150456')
+  [1m[36m (0.3ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150612152327')[0m
+  [1m[35m (0.3ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.3ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.8ms)[0m  INSERT INTO "circuits" ("type", "description", "alarm_time", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["type", "Demand"], ["description", "Circuito de test"], ["alarm_time", 5], ["created_at", "2015-07-28 15:40:05.374295"], ["updated_at", "2015-07-28 15:40:05.374295"]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+Processing by CircuitsController#update as HTML
+  Parameters: {"circuit"=>{"description"=>"Circuito de test", "type"=>"Demand"}, "id"=>"1"}
+  [1m[35mUser Load (0.6ms)[0m  SELECT  "public"."users".* FROM "public"."users" WHERE "public"."users"."id" = $1  ORDER BY "public"."users"."id" ASC LIMIT 1  [["id", 17]]
+  [1m[36mCircuit Load (0.5ms)[0m  [1mSELECT  "circuits".* FROM "circuits" WHERE "circuits"."id" = $1 LIMIT 1[0m  [["id", 1]]
+  [1m[35m (0.4ms)[0m  SELECT COUNT(*) FROM "measures" WHERE "measures"."circuit_id" = $1  [["circuit_id", 1]]
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+Redirected to http://test.host/demands/1
+Completed 302 Found in 10ms (ActiveRecord: 2.6ms)
+  [1m[36mCircuit Load (0.6ms)[0m  [1mSELECT "circuits".* FROM "circuits"[0m
+  [1m[35m (0.5ms)[0m  SELECT COUNT(*) FROM "measures" WHERE "measures"."circuit_id" = $1  [["circuit_id", 1]]
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mMeasure Load (0.4ms)[0m  SELECT "measures".* FROM "measures" WHERE "measures"."circuit_id" = $1  [["circuit_id", 1]]
+  [1m[36mSQL (1.0ms)[0m  [1mDELETE FROM "circuits" WHERE "circuits"."type" IN ('Demand') AND "circuits"."id" = $1[0m  [["id", 1]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36mUser Load (0.5ms)[0m  [1mSELECT "public"."users".* FROM "public"."users"[0m
+  [1m[35m (0.2ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.4ms)[0m  [1mDELETE FROM "public"."users" WHERE "public"."users"."id" = $1[0m  [["id", 1]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  DELETE FROM "public"."users" WHERE "public"."users"."id" = $1  [["id", 2]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.4ms)[0m  [1mDELETE FROM "public"."users" WHERE "public"."users"."id" = $1[0m  [["id", 17]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (3.5ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.3ms)[0m  BEGIN
+-------------------------------------------
+CircuitsControllerTest: test_should_get_new
+-------------------------------------------
+  [1m[36m (0.4ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mUser Exists (0.7ms)[0m  SELECT  1 AS one FROM "public"."users" WHERE "public"."users"."email" = 'faker@trile.cl' LIMIT 1
+  [1m[36mUser Exists (0.8ms)[0m  [1mSELECT  1 AS one FROM "public"."users" WHERE LOWER("public"."users"."email") = LOWER('faker@trile.cl') LIMIT 1[0m
+  [1m[35mUser Exists (0.5ms)[0m  SELECT  1 AS one FROM "public"."users" WHERE "public"."users"."auth_token" = $1 LIMIT 1  [["auth_token", "72ac740808ac37be19262613ef272fc8"]]
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "public"."users" ("name", "email", "encrypted_password", "created_at", "updated_at", "auth_token") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["name", "faker"], ["email", "faker@trile.cl"], ["encrypted_password", "$2a$04$bi7WZg3cs9Wtk6CYkZGZk.tpP8tMia8m2o6tEFAhxvYOotdiRLFza"], ["created_at", "2015-07-28 15:40:05.423672"], ["updated_at", "2015-07-28 15:40:05.423672"], ["auth_token", "72ac740808ac37be19262613ef272fc8"]]
+  [1m[35mSQL (0.3ms)[0m  UPDATE "public"."users" SET "name" = $1, "email" = $2, "encrypted_password" = $3, "created_at" = $4, "updated_at" = $5, "auth_token" = $6, "id" = $7, "schema_name" = $8 WHERE "public"."users"."id" = $9  [["name", "faker"], ["email", "faker@trile.cl"], ["encrypted_password", "$2a$04$bi7WZg3cs9Wtk6CYkZGZk.tpP8tMia8m2o6tEFAhxvYOotdiRLFza"], ["created_at", "2015-07-28 15:40:05.423672"], ["updated_at", "2015-07-28 15:40:05.423672"], ["auth_token", "72ac740808ac37be19262613ef272fc8"], ["id", 18], ["schema_name", "prv_18"], ["id", 18]]
+  [1m[36m (0.2ms)[0m  [1mCREATE SCHEMA "prv_18"[0m
+  [1m[35mSQL (0.4ms)[0m  CREATE EXTENSION IF NOT EXISTS "plpgsql"
+  [1m[36m (93.3ms)[0m  [1mCREATE TABLE "circuits" ("id" serial primary key, "description" text, "type" character varying, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL, "alarm_time" integer) [0m
+  [1m[35m (32.8ms)[0m  CREATE TABLE "measures" ("id" serial primary key, "circuit_id" integer, "watts" integer, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL) 
+  [1m[36m (39.0ms)[0m  [1mCREATE  INDEX  "index_measures_on_circuit_id" ON "measures" USING btree ("circuit_id")[0m
+  [1m[35m (106.4ms)[0m  CREATE TABLE "users" ("id" serial primary key, "name" character varying DEFAULT '' NOT NULL, "email" character varying NOT NULL, "encrypted_password" character varying DEFAULT '' NOT NULL, "auth_token" text, "reset_password_token" character varying, "reset_password_sent_at" timestamp, "remember_created_at" timestamp, "sign_in_count" integer DEFAULT 0 NOT NULL, "current_sign_in_at" timestamp, "last_sign_in_at" timestamp, "current_sign_in_ip" inet, "last_sign_in_ip" inet, "created_at" timestamp, "updated_at" timestamp, "schema_name" character varying) 
+  [1m[36m (39.7ms)[0m  [1mCREATE UNIQUE INDEX  "index_users_on_email" ON "users" USING btree ("email")[0m
+  [1m[35m (39.7ms)[0m  CREATE UNIQUE INDEX  "index_users_on_reset_password_token" ON "users" USING btree ("reset_password_token")
+  [1m[36m (2.8ms)[0m  [1mALTER TABLE "measures" ADD CONSTRAINT "fk_rails_0d9a1dd04c"
+FOREIGN KEY ("circuit_id")
+  REFERENCES "circuits" ("id")
+[0m
+  [1m[35m (59.8ms)[0m  CREATE TABLE "schema_migrations" ("version" character varying NOT NULL) 
+  [1m[36m (40.6ms)[0m  [1mCREATE UNIQUE INDEX  "unique_schema_migrations" ON "schema_migrations"  ("version")[0m
+  [1m[35m (0.9ms)[0m  SELECT version FROM "schema_migrations"
+  [1m[36m (0.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150720183845')[0m
+  [1m[35m (0.5ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150522130847')
+  [1m[36m (0.5ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150513183751')[0m
+  [1m[35m (0.4ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150720181315')
+  [1m[36m (0.5ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150511152613')[0m
+  [1m[35m (0.5ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20150612150456')
+  [1m[36m (0.5ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20150612152327')[0m
+  [1m[35m (0.3ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.3ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.9ms)[0m  INSERT INTO "circuits" ("type", "description", "alarm_time", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["type", "Demand"], ["description", "Circuito de test"], ["alarm_time", 5], ["created_at", "2015-07-28 15:40:05.979213"], ["updated_at", "2015-07-28 15:40:05.979213"]]
+  [1m[36m (0.3ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+Processing by CircuitsController#new as HTML
+  [1m[35mUser Load (0.8ms)[0m  SELECT  "public"."users".* FROM "public"."users" WHERE "public"."users"."id" = $1  ORDER BY "public"."users"."id" ASC LIMIT 1  [["id", 18]]
+  Rendered circuits/_form.html.erb (1.4ms)
+  Rendered circuits/new.html.erb within layouts/application (2.7ms)
+  Rendered layouts/_header.html.erb (0.4ms)
+  Rendered layouts/_sidebar.html.erb (0.4ms)
+  Rendered layouts/_alerts.html.erb (0.1ms)
+  Rendered layouts/_footer.html.erb (0.0ms)
+Completed 200 OK in 28ms (Views: 23.4ms | ActiveRecord: 1.7ms)
+  [1m[36mCircuit Load (1.1ms)[0m  [1mSELECT "circuits".* FROM "circuits"[0m
+  [1m[35m (0.7ms)[0m  SELECT COUNT(*) FROM "measures" WHERE "measures"."circuit_id" = $1  [["circuit_id", 1]]
+  [1m[36m (0.4ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mMeasure Load (0.6ms)[0m  SELECT "measures".* FROM "measures" WHERE "measures"."circuit_id" = $1  [["circuit_id", 1]]
+  [1m[36mSQL (1.1ms)[0m  [1mDELETE FROM "circuits" WHERE "circuits"."type" IN ('Demand') AND "circuits"."id" = $1[0m  [["id", 1]]
+  [1m[35m (0.3ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36mUser Load (0.6ms)[0m  [1mSELECT "public"."users".* FROM "public"."users"[0m
+  [1m[35m (0.2ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.4ms)[0m  [1mDELETE FROM "public"."users" WHERE "public"."users"."id" = $1[0m  [["id", 1]]
+  [1m[35m (0.3ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.4ms)[0m  DELETE FROM "public"."users" WHERE "public"."users"."id" = $1  [["id", 2]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mDELETE FROM "public"."users" WHERE "public"."users"."id" = $1[0m  [["id", 18]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (2.9ms)[0m  [1mROLLBACK[0m
