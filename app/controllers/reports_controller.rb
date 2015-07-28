@@ -60,9 +60,8 @@ before_action :set_circuits, only:[:index_measures, :labels, :welcome_index]
 	def set_circuits
 		#A new circuit object is created empty as a placeholder for data
 		@circuit = Circuit.new
-		@circuit.user_id = current_user.id
-		#The circuits of the current user are retrived
-		@circuits = Circuit.where(user_id: current_user.id)
+		#The circuits of the current tenant are retrived
+		@circuits = Circuit.all
 		if @circuits.count === 0
 		render json: {}	
 		end
