@@ -6,6 +6,15 @@
 //= require raphael-min
 //= require morris-0.4.3.min
 //= require common-scripts
+//= require underscore.js
+
+
+var monthNames = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"];
+
+var checks = $( ":checkbox" );
+
+$("#datepicker").datepicker({dateFormat: 'dd/mm/yy',inline: true});
 
 graph = {
     element: 'testchart',
@@ -31,18 +40,16 @@ graph = {
 };
 var testchart = Morris.Line(graph);
 
-$(function() {
+$(function() {});
 
-  $.getJSON("/reports/labels", function(data) {
-    for(i=0; i < data.length; i++){
-      graph.ykeys.push(data[i]);
-      graph.labels.push(data[i]);          
-    }
-  });
+$("#circuit-table").change(function(e){
+  var checkeds = _.map(checks, function(check){ return check.checked; });
+  console.log(checkeds);
+});
 
-  $.getJSON("/reports/index_measures", function(data) {
-   $("#testchart").removeClass("loading");
-    testchart.setData(data);
-  });
-
+$("#datepicker").change(function(e) {
+  //Get the date
+  var date = $( "#datepicker" ).datepicker( "getDate" );
+  var month = date.getMonth(); 
+  $("#current_month").html(" Current month: " + monthNames[month]);
 });

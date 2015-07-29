@@ -103,7 +103,7 @@ def specific_day_measures(date)
                          "measures.watts *                                                                                                            "+   
                          "EXTRACT(epoch FROM (#{Apartment::Tenant.current}.measures.created_at - lag(#{Apartment::Tenant.current}.measures.created_at)                  "+ 
                          "over (order by measures.created_at)))/3600 AS Watts,                 "+
-                         "measures.created_at,                                                 "+
+                         "measures.created_at                                                  "+
                          "FROM                                                                 "+ 
                          "public.circuits,                                                     "+
                          "#{Apartment::Tenant.current}.measures                                "+
@@ -111,7 +111,6 @@ def specific_day_measures(date)
                          "circuits.id = ? AND                                                  "+
                          "measures.circuit_id = ? AND                                          "+
                          "measures.created_at >= ? ) AS stats                                  "+
-                         "WHERE                                                                "+
                          "GROUP BY 2                                                           "+
                          "ORDER BY dt ASC;                                                     ",
                           self.id,
@@ -172,12 +171,10 @@ def specific_day_measures(date)
                          "measures.created_at >= ?           "+
                          "AND                                "+
                          "measures.created_at <= ?           "+
-                         "AND                                "+
-                         "circuits.user_id = ?               "+
                          "ORDER BY                           "+
                          "measures.created_at ASC ) AS stats "+
                          "WHERE                              "+
-                         "mod(rnum,5) = 0;                   ",Time.now.midnight,Time.now,self.user_id])
+                         "mod(rnum,5) = 0;                   ",Time.now.midnight,Time.now])
         #Data formating
         a = []   
         data.each do |d|
