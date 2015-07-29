@@ -21,7 +21,7 @@ class Circuit < ActiveRecord::Base
   if self.measures.count == 0
           self.status = "No measures"
       else
-        if (Time.now-self.measures.last.created_at) > self.alarm_time*60
+        if (Time.now-self.measures.order(:created_at).last.created_at) > self.alarm_time*60
           self.status = "Problem"
         else
           self.status = "Ok" 

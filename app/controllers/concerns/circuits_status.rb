@@ -16,7 +16,7 @@ module CircuitsStatus
 				c.status = "No measures"
 			else
 				if (Time.now-c.measures.order(:created_at).last.created_at) > c.alarm_time*60
-					c.status = "Problem"
+				c.status = "Problem"
 				else
 				c.status = "Ok"	
 				end
