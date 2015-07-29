@@ -104,16 +104,14 @@ def specific_day_measures(date)
                          "EXTRACT(epoch FROM (#{Apartment::Tenant.current}.measures.created_at - lag(#{Apartment::Tenant.current}.measures.created_at)                  "+ 
                          "over (order by measures.created_at)))/3600 AS Watts,                 "+
                          "measures.created_at,                                                 "+
-                         "row_number() OVER () as rnum                                         "+
                          "FROM                                                                 "+ 
                          "public.circuits,                                                     "+
-                         "#{Apartment::Tenant.current}.measures                                         "+
+                         "#{Apartment::Tenant.current}.measures                                "+
                          "WHERE                                                                "+ 
                          "circuits.id = ? AND                                                  "+
                          "measures.circuit_id = ? AND                                          "+
                          "measures.created_at >= ? ) AS stats                                  "+
                          "WHERE                                                                "+
-                         "mod(rnum,30) = 0                                                     "+
                          "GROUP BY 2                                                           "+
                          "ORDER BY dt ASC;                                                     ",
                           self.id,
