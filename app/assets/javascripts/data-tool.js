@@ -40,11 +40,13 @@ graph = {
 };
 var testchart = Morris.Line(graph);
 
-$(function() {});
+$(function() {
+  
+});
 
 $("#circuit-table").change(function(e){
-  var checkeds = _.map(checks, function(check){ return check.checked; });
-  console.log(checkeds);
+  var checkeds_raw =  _.filter(checks, function(check){ return check.checked; });
+  var checkeds = _.map(checkeds_raw,function(checks){ return checks.id});
 });
 
 $("#datepicker").change(function(e) {
