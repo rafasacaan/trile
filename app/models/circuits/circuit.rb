@@ -163,8 +163,8 @@ def specific_day_measures(date)
                          "measures.created_at,               "+
                          "row_number() OVER () as rnum       "+
                          "FROM                               "+ 
-                         "#{Apartment::Tenant.current}.measures,      "+
-                         "public.circuits                    "+
+                         "#{Apartment::Tenant.current}.measures,"+
+                         "#{Apartment::Tenant.current}.circuits "+
                          "WHERE                              "+ 
                          "circuits.id = measures.circuit_id  "+
                          "AND                                "+
@@ -174,11 +174,11 @@ def specific_day_measures(date)
                          "ORDER BY                           "+
                          "measures.created_at ASC ) AS stats "+
                          "WHERE                              "+
-                         "mod(rnum,5) = 0;                   ",Time.now.midnight,Time.now])
+                         "mod(rnum,5) = 0;                   ",Time.now.midnight, Time.now])
         #Data formating
         a = []   
         data.each do |d|
-          hash = {d.description.parameterize.underscore.to_sym => d.watts, :created_at => d.created_at}
+          hash = {d.description.parameterize.underscore.titleize.to_sym => d.watts, :created_at => d.created_at}
           a.push(hash)
         end
         return a
