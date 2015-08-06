@@ -34,7 +34,10 @@ var area_options = {
   },
    xLabelFormat:function(date){
      d = new Date(date);
-     return d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear();
+    var hours = d.getHours();
+    var minutes = "0" + d.getMinutes();
+    var seconds = "0" + d.getSeconds();
+     return hours +':'+ minutes.substr(-2);
    },
 
 };
@@ -71,6 +74,7 @@ $.getJSON("/reports/today_measures/" + parseInt($("#testchart").data("circuit"))
     area_options.labels.push(data);
   });
   current_chart = Morris.Area(area_options);
+
   current_chart.setData(data);
 });
 

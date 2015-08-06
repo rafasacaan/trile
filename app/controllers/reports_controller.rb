@@ -1,6 +1,17 @@
 class ReportsController < ApplicationController
-before_action :set_circuit, except:[:index_measures, :labels, :welcome_index] 
-before_action :set_circuits, only:[:index_measures, :labels, :welcome_index]
+protect_from_forgery with: :null_session
+before_action :set_circuit, except:[:welcome_index,
+									:labels,
+									:data_tool_day,
+									:data_tool_week,
+									:data_tool_month,
+									:data_tool_year ] 
+before_action :set_circuits, only:[:welcome_index,
+								   :labels,
+								   :data_tool_day,
+								   :data_tool_week,
+								   :data_tool_month,
+								   :data_tool_year ]
 
 
 	def today_measures
@@ -20,12 +31,28 @@ before_action :set_circuits, only:[:index_measures, :labels, :welcome_index]
 	end
 
 	def specific_date_measures
-		date = DateTime.parse(params[:date])
+		date = DateTime.parse(params[:date]) 
 		render json: @circuit.specific_day_measures(date)
 	end
 
-	def index_measures
-		render json: @circuit.index_measures
+	def data_tool_day
+		date = DateTime.parse(params[:date]) || Date.now
+		render json: @circuit.data_tool_day(date)
+	end
+
+	def data_tool_week
+		date = DateTime.parse(params[:date]) || Date.now
+		render json: @circuit.data_tool_week(date)
+	end
+
+	def data_tool_month
+		date = DateTime.parse(params[:date]) || Date.now
+		render json: Circuit.data_tool_month(date)
+	end
+
+	def data_tool_year
+		date = DateTime.parse(params[:date]) || Date.now
+		render json: @circuit.data_tool_year(date)
 	end
 
 	def welcome_index

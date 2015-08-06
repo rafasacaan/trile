@@ -1,23 +1,31 @@
 <div id="monitor" class="panel panel-default tab-box">
-    <div class="panel-heading">
-    	<div class="row">
-    		<div class="col-xs-4 col-sm-4">
-                <div class="form-inline">
-                    <div class="form-group">
+   <div class="panel-heading">
+      <div class="row">
+          <div class="col-xs-4 col-sm-4">
+            <div class="form-inline">
+                <div class="form-group">
                     <i class="fa fa-signal"> Monitoring report</i>
-                    </div>
-                    <div class="form-group ml">
-                        <input type="text" id="datepicker" class="form-control" placeholder ="specific-date" aria-describedby="sizing-addon3">
-                    </div>
-                </div>  
-            </div>
-            </div> 
-    <div class="panel-title">
-    	<ul class="nav nav-tabs pull-right">
-	  		<li><a href="#" class="nav-tab-action" data-chart="day">Diario</a></li>
-	  		<li><a href="#" class="nav-tab-action" data-chart="week">Semanal</a></li>
-	  		<li><a href="#" class="nav-tab-action" data-chart="month">Mensual</a></li>
-	  		<li><a href="#" class="nav-tab-action" data-chart="year">Anual</a></li>
-	  	</ul>
+                </div>
+                <div class="form-group ml">
+                    <input type="text" id="datepicker" class="form-control" placeholder ="specific-date" aria-describedby="sizing-addon3">
+                </div>
+            </div>  
+        </div>
+
+        <div class="panel-title">
+          <div class="btn-group pull-right" data-toggle="buttons" id="radio">
+              <label class="btn btn-primary active">
+                <input type="radio" name="options" value = "day" id="option1" autocomplete="off" checked> Day
+              </label>
+            <label class="btn btn-primary">
+                <input type="radio" name="options" value = "week" id="option2" autocomplete="off"> Week
+            </label>
+              <label class="btn btn-primary">
+                <input type="radio" name="options" value = "month" id="option3" autocomplete="off"> Month
+              </label>
+            <label class="btn btn-primary">
+                <input type="radio" name="options" value = "year" id="option4" autocomplete="off"> Year
+            </label>
+        </div>
     </div>
-	</div>	
+</div>	

@@ -155,7 +155,7 @@ def specific_day_measures(date)
                           Time.now.at_beginning_of_year ])  
   end
 
-  def index_measures
+  def data_tool_week(date)
     data = Circuit.find_by_sql(["SELECT * FROM(              "+
                          "SELECT                             "+
                          "circuits.description,              "+
@@ -174,15 +174,74 @@ def specific_day_measures(date)
                          "ORDER BY                           "+
                          "measures.created_at ASC ) AS stats "+
                          "WHERE                              "+
-                         "mod(rnum,5) = 0;                   ",Time.now.midnight, Time.now])
-        #Data formating
-        a = []   
-        data.each do |d|
-          hash = {d.description.parameterize.underscore.titleize.to_sym => d.watts, :created_at => d.created_at}
-          a.push(hash)
-        end
-        return a
+                         "mod(rnum,5) = 0;                   ",
+                         date.beginning_of_week,date.end_of_week])
+        
+        format(data) 
+  end
+
+  def data_tool_day(date)
+    data = Circuit.find_by_sql(["SELECT * FROM(              "+
+                         "SELECT                             "+
+                         "circuits.description,              "+
+                         "measures.watts,                    "+
+                         "measures.created_at,               "+
+                         "row_number() OVER () as rnum       "+
+                         "FROM                               "+ 
+                         "#{Apartment::Tenant.current}.measures,"+
+                         "#{Apartment::Tenant.current}.circuits "+
+                         "WHERE                              "+ 
+                         "circuits.id = measures.circuit_id  "+
+                         "AND                                "+
+                         "measures.created_at >= ?           "+
+                         "AND                                "+
+                         "measures.created_at <= ?           "+
+                         "ORDER BY                           "+
+                         "measures.created_at ASC ) AS stats "+
+                         "WHERE                              "+
+                         "mod(rnum,5) = 0;                   ",
+                         date,date.end_of_day])
+        
+                        format(data) 
     end
+
+    def self.data_tool_month(date)
+    measures = Circuit.find_by_sql(["SELECT trunc(cast(SUM(Watts) AS numeric),2) AS \"watts\", to_char(created_at,'YYYY-MM-DD')::timestamp as dt, circuit "+
+                         "FROM(                                                                                                                        "+
+                         "SELECT                                                                                                                       "+
+                         "#{Apartment::Tenant.current}.circuits.description AS circuit,                                                                "+
+                         "#{Apartment::Tenant.current}.measures.watts *                                                                                "+   
+                         "EXTRACT(epoch FROM (#{Apartment::Tenant.current}.measures.created_at - lag(#{Apartment::Tenant.current}.measures.created_at) "+ 
+                         "over (order by #{Apartment::Tenant.current}.measures.created_at)))/3600 AS Watts,                                            "+
+                         "#{Apartment::Tenant.current}.measures.created_at                                                                             "+
+                         "FROM                                                                                                                         "+ 
+                         "#{Apartment::Tenant.current}.circuits,                                                                                       "+
+                         "#{Apartment::Tenant.current}.measures                                                                                        "+
+                         "WHERE                                                                                                                        "+ 
+                         "measures.created_at >= ? ) AS stats                                                                                          "+
+                         "GROUP BY 2,3                                                                                                                 "+
+                         "ORDER BY dt ASC;                                                                                                             ",
+                          date.at_beginning_of_month])
+  
+    circuits = Circuit.select('description')
+    data = []
+    days_in_month = (date.at_beginning_of_month..date.at_end_of_month)
+    
+    days_in_month.each do |day|
+      circuits.each do |c|
+        #revisar y reparar esta parte de los time zone. Todo tiene que quedar sincronizado. Rails, el server y la bdd
+        data << {"dt" => day.to_time.to_i - 3.hours, "watts" => 0, "circuit" => c.description}
+      end
+    end
+
+     data.each do |d|
+       measures.each do |m|
+         if d["dt"] == m.dt.to_time.to_i && d["circuit"] == m.circuit
+         d["watts"] = m.watts
+         end
+       end
+     end
+  end
   
     def last_five_measures
       #retrieve the last five measures as object
@@ -198,6 +257,16 @@ def specific_day_measures(date)
     end
     
  private
+
+  def format(data)
+  #Data formating
+        a = []   
+        data.each do |d|
+          hash = {d.description.parameterize.underscore.titleize.to_sym => d.watts, :created_at => d.created_at}
+          a.push(hash)
+        end
+        return a
+  end
 
 	def ensure_not_referenced_by_any_measure
 		if measures.empty?
