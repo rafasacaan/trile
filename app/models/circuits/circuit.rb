@@ -59,7 +59,7 @@ def specific_day_measures(date)
                          "measures.created_at,               "+
                          "row_number() OVER () as rnum       "+
                          "FROM                               "+ 
-                         "#{Apartment::Tenant.current}.measures       "+
+                         "#{Apartment::Tenant.current}.measures "+
                          "WHERE                              "+ 
                          "measures.circuit_id = ? AND        "+
                          "measures.created_at >= ? AND       "+
@@ -67,7 +67,7 @@ def specific_day_measures(date)
                          "ORDER BY                           "+
                          "measures.created_at ASC ) AS stats "+
                          "WHERE                              "+
-                         "mod(rnum,6) = 0;                   ",
+                         "mod(rnum,1) = 0;                   ",
                           self.id,
                           Time.now.midnight,
                           Time.now])
@@ -76,24 +76,25 @@ def specific_day_measures(date)
   end
 
   def week_measures
-    Circuit.find_by_sql(["SELECT * FROM(                     "+
-                         "SELECT                             "+
-                         "measures.watts,                    "+
-                         "measures.created_at,               "+
-                         "row_number() OVER () as rnum       "+
-                         "FROM                               "+ 
-                         "#{Apartment::Tenant.current}.measures       "+
-                         "WHERE                              "+ 
-                         "measures.circuit_id = ? AND        "+
-                         "measures.created_at >= ?           "+
-                         "ORDER BY                           "+
-                         "measures.created_at ASC ) AS stats "+
-                         "WHERE                              "+
-                         "mod(rnum,15) = 0;                   ",
+    Circuit.find_by_sql(["SELECT trunc(cast(SUM(Watts) AS numeric),2) AS \"watts\", hours      "+
+                         "FROM(                                                                "+
+                         "SELECT                                                               "+
+                         "measures.watts *                                                     "+
+                         "EXTRACT(epoch FROM (measures.created_at - lag(measures.created_at)   "+
+                         "over (order by measures.created_at)))/3600 AS Watts,                 "+
+                         "to_char(measures.created_at,'HH24') AS hours                         "+
+                         "FROM                                                                 "+ 
+                         "#{Apartment::Tenant.current}.measures                                "+
+                         "WHERE                                                                "+ 
+                         "measures.circuit_id = ? AND                                          "+
+                         "measures.created_at >= ?                                             "+
+                         "ORDER BY                                                             "+
+                         "hours ASC ) AS stats                                                 "+
+                         "GROUP BY 2                                                           ",
                           self.id,
-                          1.week.ago
+                          Time.now.midnight - 3.hours,
                           ])
-   #measures.where("created_at >= ?", 1.week.ago.utc).select("created_at, watts").order(:created_at)
+    #measures.where("created_at >= ?", 1.week.ago.utc).select("created_at, watts").order(:created_at)
   end
 
   def month_measures
@@ -101,7 +102,7 @@ def specific_day_measures(date)
                          "FROM(                                                                                                                       "+
                          "SELECT                                                                                                                      "+
                          "measures.watts *                                                                                                            "+   
-                         "EXTRACT(epoch FROM (#{Apartment::Tenant.current}.measures.created_at - lag(#{Apartment::Tenant.current}.measures.created_at)                  "+ 
+                         "EXTRACT(epoch FROM (#{Apartment::Tenant.current}.measures.created_at - lag(#{Apartment::Tenant.current}.measures.created_at)"+ 
                          "over (order by measures.created_at)))/3600 AS Watts,                 "+
                          "measures.created_at                                                  "+
                          "FROM                                                                 "+ 
