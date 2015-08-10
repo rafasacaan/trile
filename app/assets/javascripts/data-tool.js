@@ -8,9 +8,10 @@
 //= require common-scripts
 //= require underscore.js
 
+
 var monthNames = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"],
- colors = ["#00E676","#1E88E5","#FFB74D","#FF7043","#B2FF59","#40C4FF"];
+  colors = ["#00E676","#1E88E5","#FFB74D","#FF7043","#B2FF59","#40C4FF"];
 
 var checks = $( ":checkbox" );
 
@@ -85,20 +86,16 @@ var year_options = {
     xLabelAngle: 60
   };
 
-
 var current_chart = null;
 
-$(function() { 
- 
-  var result = set_url(); 
- 
-  setChart(result.url,null,result.radio_button);
- 
- });
+$(function() {
+  uri = set_url();  
+  setChart(uri,null);
+});
 
 function set_url(){
 
-  radio_button = $("input:radio[name=options]:checked").val();
+  var radio_button = $("input:radio[name=options]:checked").val();
   // Make sure to ask why result only works if is defined at the bottom
   url = "";
   if (radio_button == "day") {
@@ -111,53 +108,59 @@ function set_url(){
     url = "/reports/data_tool_year";
   }
 
-  result = { url, radio_button};
+  result = url;
 
   return result;
 };
 
-function setChart(url,date, radio_button){
+function setChart(url, date){
   var date = date || new Date();
-  date.setHours(0,0,0,0);
+  date.setHours(0,0,0,0);  
+  var radio_button = $("input:radio[name=options]:checked").val();
+  setLabels(radio_button);
 
-  $.getJSON(url + "/" + date, function(data) {
+  $("#testchart").addClass("loading");
+
+  $.getJSON(url  + "/" + date, function(data) {
+   
    $("#testchart").removeClass("loading");
-  
-    setLabels(radio_button);
-  
-   if (radio_button == "day"){
+    
+   if (radio_button == "day") {
     current_chart = Morris.Line(day_options);
-  } else if(radio_button == "week"){
-    current_chart = Morris.Line(week_options);
-  } else if(radio_button == "month"){
-    current_chart = Morris.Bar(month_options);
-  } else if (radio_button == "year"){
-    current_chart = Morris.Bar(year_options);
-  } 
-
-    console.log(current_chart);   
     current_chart.setData(data);
-  
+  } else if (radio_button == "week") {
+    current_chart = Morris.Line(week_options);
+    current_chart.setData(data);
+  } else if (radio_button == "month") {
+    console.log('month');
+    current_chart = Morris.Bar(month_options);
+    current_chart.setData(data);
+  } else if (radio_button == "year") {
+    current_chart = Morris.Bar(year_options);
+    current_chart.setData(data);
+  }
   });
-
-};
+}
 
 function setLabels(radio_button){
-  
+
   if (radio_button == "day"){
-    graph = day_options;
+    graphic = day_options;
   } else if(radio_button == "week"){
-    graph = week_options;
+    graphic = week_options;
   } else if(radio_button == "month"){
-    graph = month_options;
+    graphic = month_options;
   } else if (radio_button == "year"){
-    graph = year_options;
+    graphic = year_options;
   }
+
+      graphic.ykeys = [];
+      graphic.labels = [];  
 
   $.getJSON("/reports/labels", function(data) {
     for(i=0; i < data.length; i++){
-      graph.ykeys.push(data[i]);
-      graph.labels.push(data[i]);          
+      graphic.ykeys.push(data[i]);
+      graphic.labels.push(data[i]);          
     }
   });
 };
@@ -178,50 +181,48 @@ function arrayFilter(data,checkeds){
   return response;     
 }; 
 
-function graph_checkeds(checkeds, data, radio_button){
-
-  //if there is checkeds, then filter the data, if checked is empty don't filter the data
-
-  if (radio_button == "day"){
-    current_chart = Morris.Line(day_options);
-  } else if(radio_button == "week"){
-    current_chart = Morris.Line(week_options);
-  } else if(radio_button == "month"){
-    current_chart = Morris.Bar(month_options);
-  } else if (radio_button == "year"){
-    current_chart = Morris.Bar(year_options);
-  }
-
-  if (checkeds.length) {
-         current_chart.setData(arrayFilter(data,checkeds));
-        }
-  else {
-         current_chart.setData(data);
-        }
-};
-
-$("#datepicker").change(function(e) {
-  $("#testchart").addClass("loading");
-  //Get the date
-  var date = $( "#datepicker" ).datepicker( "getDate" ),
-      month = date.getMonth(); 
-  $("#current_month").html(" Current month: " + monthNames[month]);
-  //set chart
-  setChart(date);
-});
+$("#reload").click(function(e){
+  //Remove from DOM the elements created by morris before, so they don't crush on each click event
+  $('svg').remove();
+  $(".morris-hover.morris-default-style").remove(); 
+  uri = set_url(); 
+  var date = $( "#datepicker" ).datepicker( "getDate" ); 
+  setChart(uri,date);
+})
 
 $("#circuit-table").change(function(e){
-  var checkeds_raw =  _.filter(checks, function(check){ return check.checked; }), //all checks
-      checkeds = _.map(checkeds_raw,function(checks){ return checks.id}); //only chekeds
-  var date = $( "#datepicker" ).datepicker( "getDate" ) || new Date();//set the date 
-  var url = set_url(); //sets the url depending on radio buttons, defaul "/reports/data_tool_day"
-
+  var checkeds_raw =  _.filter(checks, function(check){ return check.checked; }),
+      checkeds = _.map(checkeds_raw,function(checks){ return checks.id}),
+      response;
+  var date = new Date();
   date.setHours(0,0,0,0);
-
   $("#testchart").addClass("loading");
-  
-  $.getJSON(url.url + "/" + date, function(data){
-      graph_checkeds(checkeds,data,url.radio_button);
-      $("#testchart").removeClass("loading");    
-    });
+  uri = set_url(); 
+  $.getJSON(uri  + "/" + date, function(data){
+      response = data;
+      var l = checkeds.length,
+          arrayAux = [];
+      if (checkeds.length) {
+      while(l--){ 
+        for(var i = 0; i < response.length; i++ ){
+         if(response[i].hasOwnProperty(checkeds[l])){
+          
+          arrayAux.push(response[i]); }
+        
+           }        
+        };
+        response = arrayAux;     
+     };
+    $("#testchart").removeClass("loading");        
+    current_chart.setData(response);
+  });
+
+});
+
+
+$("#datepicker").change(function(e) {
+  //Get the date
+  var date = $( "#datepicker" ).datepicker( "getDate" );
+  var month = date.getMonth(); 
+  $("#current_month").html(" Current month: " + monthNames[month]);
 });

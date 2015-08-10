@@ -238,9 +238,18 @@ def specific_day_measures(date)
        measures.each do |m|
          if d["dt"] == m.dt.to_time.to_i && d["circuit"] == m.circuit
          d["watts"] = m.watts
-         end
+         else 
+         d["watts"] = 0  
+         end         
        end
      end
+
+    a = []
+      data.each do |d|
+        hash = {d["circuit"] => d["watts"], :dt => d["dt"]}
+        a.push(hash)
+      end
+      return a
   end
   
     def last_five_measures
