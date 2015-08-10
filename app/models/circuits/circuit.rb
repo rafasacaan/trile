@@ -76,6 +76,7 @@ def specific_day_measures(date)
   end
 
   def week_measures
+    #Dejar igual que el month_measures. Barras de energia por hora
     Circuit.find_by_sql(["SELECT * FROM(                     "+
                          "SELECT                             "+
                          "measures.watts,                    "+
