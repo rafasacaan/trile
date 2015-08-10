@@ -33,10 +33,13 @@ var area_options = {
     return d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear()+' '+hours+':'+minutes.substr(-2); 
   },
    xLabelFormat:function(date){
-     d = new Date(date);
-     return d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear();
+      d = new Date(date);
+     var hours = d.getHours();
+     var minutes = "0" + d.getMinutes();
+     var seconds = "0" + d.getSeconds();
+     return hours +':'+ minutes.substr(-2);
    },
-
+   postUnits: " w"
 };
   var current_chart = null;
   
