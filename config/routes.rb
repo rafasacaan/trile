@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'infographics/index'
+
   resources :circuits do
       get 'data_tool', on: :collection, as: :"data-tool"
     end

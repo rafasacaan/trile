@@ -194,7 +194,7 @@ $("#circuit-table").change(function(e){
   var checkeds_raw =  _.filter(checks, function(check){ return check.checked; }),
       checkeds = _.map(checkeds_raw,function(checks){ return checks.id}),
       response;
-  var date = new Date();
+  var date = $( "#datepicker" ).datepicker( "getDate" ) || new Date();
   date.setHours(0,0,0,0);
   $("#testchart").addClass("loading");
   uri = set_url(); 

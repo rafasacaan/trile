@@ -42,7 +42,8 @@ def specific_day_measures(date, variation)
                          "abs(                                   "+
                          "lag(watts)over()::float/watts - 1      "+ 
                          "  )*100                                "+ 
-                         "end) as rnum                           "+
+                         "end) as variation_last,                "+
+                         "(case when(lead(watts) over () is NULL) THEN 100 ELSE abs(lead(watts)over()::float/watts - 1)*100 end) as  variation_next "+
                          "FROM                                   "+ 
                          "#{Apartment::Tenant.current}.measures  "+
                          "WHERE                                  "+ 
@@ -52,11 +53,10 @@ def specific_day_measures(date, variation)
                          "ORDER BY                               "+
                          "measures.created_at ASC ) AS stats     "+
                          "WHERE                                  "+
-                         "rnum >= ?;                             ",
-                          self.id,
-                          date.beginning_of_day,
-                          date.end_of_day,
-                          var])
+                         "variation_last > #{var} and variation_next > #{var} OR "+
+                         "variation_last < #{var} and variation_next > #{var} OR "+
+                         "variation_last > #{var} and variation_next < #{var}; ",
+                          self.id,date.beginning_of_day,date.end_of_day])
     end
 
   def today_measures(variation)
@@ -72,7 +72,8 @@ def specific_day_measures(date, variation)
                          "abs(                                  "+
                          "lag(watts)over()::float/watts - 1     "+ 
                          "  )*100                               "+ 
-                         "end) as rnum                          "+
+                         "end) as variation_last,               "+
+                         "(case when(lead(watts) over () is NULL) THEN 100 ELSE abs(lead(watts)over()::float/watts - 1)*100 end) as  variation_next "+
                          "FROM                                  "+ 
                          "#{Apartment::Tenant.current}.measures "+
                          "WHERE                                 "+ 
@@ -82,14 +83,17 @@ def specific_day_measures(date, variation)
                          "ORDER BY                              "+
                          "measures.created_at ASC ) AS stats    "+
                          "WHERE                                 "+
-                         "rnum >= ?;                            ",
+                         "variation_last > #{var} and variation_next > #{var} OR "+
+                         "variation_last < #{var} and variation_next > #{var} OR "+
+                         "variation_last > #{var} and variation_next < #{var}; ",
                           self.id,
                           Time.now.midnight,
-                          Time.now,
-                          var])
+                          Time.now])
     end
 
-  def week_measures
+  def week_measures(date)
+    date = if date then date else Date.yesterday end
+    #don't forget to refactor routes and controller it shuold be named hours_day 
     Circuit.find_by_sql(["SELECT trunc(cast(SUM(Watts) AS numeric),2) AS \"watts\", hours      "+
                          "FROM(                                                                "+
                          "SELECT                                                               "+
@@ -101,12 +105,13 @@ def specific_day_measures(date, variation)
                          "#{Apartment::Tenant.current}.measures                                "+
                          "WHERE                                                                "+ 
                          "measures.circuit_id = ? AND                                          "+
-                         "measures.created_at >= ?                                             "+
+                         "measures.created_at >= ? AND                                         "+
+                         "measures.created_at <= ?                                             "+
                          "ORDER BY                                                             "+
                          "hours ASC ) AS stats                                                 "+
                          "GROUP BY 2                                                           ",
                           self.id,
-                          Time.now.midnight - 3.hours,
+                          date.beginning_of_day,date.end_of_day
                           ])
     #measures.where("created_at >= ?", 1.week.ago.utc).select("created_at, watts").order(:created_at)
   end
@@ -195,27 +200,35 @@ def specific_day_measures(date, variation)
         format(data) 
   end
 
-  def data_tool_day(date)
-    data = Circuit.find_by_sql(["SELECT * FROM(              "+
-                         "SELECT                             "+
-                         "circuits.description,              "+
-                         "measures.watts,                    "+
-                         "measures.created_at,               "+
-                         "row_number() OVER () as rnum       "+
-                         "FROM                               "+ 
+  def data_tool_day(date,variation)
+    var = if variation then variation else 10 end
+    data = Circuit.find_by_sql(["SELECT * FROM(                 "+
+                         "SELECT                                "+
+                         "circuits.description,                 "+
+                         "measures.watts,                       "+
+                         "measures.created_at,                  "+
+                         "(case                                 "+ 
+                         "WHEN(lag(watts) over () is NULL)      "+
+                         "THEN 100                              "+  
+                         "ELSE                                  "+
+                         "abs(                                  "+
+                         "lag(watts)over()::float/watts - 1     "+ 
+                         "  )*100                               "+ 
+                         "end) as rnum                          "+
+                         "FROM                                  "+ 
                          "#{Apartment::Tenant.current}.measures,"+
                          "#{Apartment::Tenant.current}.circuits "+
-                         "WHERE                              "+ 
-                         "circuits.id = measures.circuit_id  "+
-                         "AND                                "+
-                         "measures.created_at >= ?           "+
-                         "AND                                "+
-                         "measures.created_at <= ?           "+
-                         "ORDER BY                           "+
-                         "measures.created_at ASC ) AS stats "+
-                         "WHERE                              "+
-                         "mod(rnum,5) = 0;                   ",
-                         date,date.end_of_day])
+                         "WHERE                                 "+ 
+                         "circuits.id = measures.circuit_id     "+
+                         "AND                                   "+
+                         "measures.created_at >= ?              "+
+                         "AND                                   "+
+                         "measures.created_at <= ?              "+
+                         "ORDER BY                              "+
+                         "measures.created_at ASC ) AS stats    "+
+                         "WHERE                                 "+
+                         "rnum >= ?;                      ",
+                         date,date.end_of_day, var])
         
                         format(data) 
     end
@@ -264,6 +277,7 @@ def specific_day_measures(date, variation)
         a.push(hash)
       end
       return a
+
   end
   
     def last_five_measures

@@ -41,7 +41,8 @@ var area_options = {
      var seconds = "0" + d.getSeconds();
      return hours +':'+ minutes.substr(-2);
    },
-   postUnits: " W"
+   postUnits: " W",
+   smooth: false
 };
   var current_chart = null;
   
@@ -57,7 +58,8 @@ var area_options = {
       return date.getDate()+'/'+(date.getMonth()+1); 
     },
     dateFormat: function (x) { return new Date(x.label*1000); },
-    xLabelAngle: 60
+    xLabelAngle: 60,
+    postUnits: " Wh"
   };
 
   var week_options = {
@@ -67,7 +69,9 @@ var area_options = {
     ykeys: ['watts'],
     labels: [],
     barColors:['#F44336'],
-    xLabelAngle: 60
+    xLabelAngle: 60,
+    postUnits: " Wh",
+    resize: true
   };
 
   var year_options = {
@@ -77,7 +81,8 @@ var area_options = {
     ykeys: ['watts'],
     labels: [],
     barColors:['#F44336'],
-    xLabelAngle: 60
+    xLabelAngle: 60,
+    postUnits: " Wh"
   };
 
 $.getJSON("/reports/today_measures/" + parseInt($("#testchart").data("circuit")), function(data) {

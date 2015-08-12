@@ -10,7 +10,7 @@
     <% end %>
     <div class="nav notify-row" id="top_menu">
     <ul class="nav top-menu">
-     <h5> Bienvenido <%= current_user.name.titleize %> ! </h5>
+     <h5> Welcome <%= current_user.name.titleize %> ! </h5>
     </ul>
   </div>
     <!--logo end-->
@@ -22,7 +22,7 @@
       <li class="dropdown" id="logoutico">
       <%= link_to destroy_user_session_path, method: :delete, class: 'dropdown-toggle' do %>
       <i class="fa fa-sign-out"></i>
-      Salir
+      Exit
       <% end %>
     </li>
       <% end %> 

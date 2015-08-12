@@ -5,13 +5,13 @@ before_action :set_circuit, except:[:welcome_index,
 									:data_tool_day,
 									:data_tool_week,
 									:data_tool_month,
-									:data_tool_year ] 
+									:data_tool_year] 
 before_action :set_circuits, only:[:welcome_index,
 								   :labels,
 								   :data_tool_day,
 								   :data_tool_week,
 								   :data_tool_month,
-								   :data_tool_year ]
+								   :data_tool_year]
 
 
 	def today_measures
@@ -19,7 +19,7 @@ before_action :set_circuits, only:[:welcome_index,
 	end
 
 	def week_measures
-		render json: @circuit.week_measures()
+		render json: @circuit.week_measures(params[:date])
 	end
 
 	def month_measures
@@ -37,7 +37,7 @@ before_action :set_circuits, only:[:welcome_index,
 
 	def data_tool_day
 		date = DateTime.parse(params[:date]) || Date.now
-		render json: @circuit.data_tool_day(date)
+		render json: @circuit.data_tool_day(date, params[:variation])
 	end
 
 	def data_tool_week
@@ -65,6 +65,10 @@ before_action :set_circuits, only:[:welcome_index,
 
 	def circuit_type
 		render json: @circuit.type.to_json
+	end
+
+	def infograph
+
 	end
 
 	def labels
