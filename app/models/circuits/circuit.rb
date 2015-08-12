@@ -195,26 +195,18 @@ def specific_day_measures(date, variation)
                          "measures.created_at ASC ) AS stats "+
                          "WHERE                              "+
                          "mod(rnum,5) = 0;                   ",
-                         date.beginning_of_week,date.end_of_week])
-        
+                         date.beginning_of_week,date.end_of_week])        
         format(data) 
   end
 
   def data_tool_day(date,variation)
-    var = if variation then variation else 10 end
+    var = if variation then variation else 20 end
     data = Circuit.find_by_sql(["SELECT * FROM(                 "+
                          "SELECT                                "+
                          "circuits.description,                 "+
                          "measures.watts,                       "+
                          "measures.created_at,                  "+
-                         "(case                                 "+ 
-                         "WHEN(lag(watts) over () is NULL)      "+
-                         "THEN 100                              "+  
-                         "ELSE                                  "+
-                         "abs(                                  "+
-                         "lag(watts)over()::float/watts - 1     "+ 
-                         "  )*100                               "+ 
-                         "end) as rnum                          "+
+                         "row_number() OVER () as rnum          "+
                          "FROM                                  "+ 
                          "#{Apartment::Tenant.current}.measures,"+
                          "#{Apartment::Tenant.current}.circuits "+
@@ -227,9 +219,8 @@ def specific_day_measures(date, variation)
                          "ORDER BY                              "+
                          "measures.created_at ASC ) AS stats    "+
                          "WHERE                                 "+
-                         "rnum >= ?;                      ",
+                         "rnum >= ?;                            ",
                          date,date.end_of_day, var])
-        
                         format(data) 
     end
 

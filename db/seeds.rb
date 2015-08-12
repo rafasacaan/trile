@@ -9,9 +9,6 @@ user.password = '12345678'
 user.password_confirmation = '12345678'
 user.save! 
 
-
-
-
 circuit_list = [
 				[user.id, 'Circuito seed de prueba tipo demanda', 'Demand'],
 				[user.id,'Circuito seed de prueba tipo generacion', 'Generation']

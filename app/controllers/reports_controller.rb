@@ -92,7 +92,7 @@ before_action :set_circuits, only:[:welcome_index,
 		#A new circuit object is created empty as a placeholder for data
 		@circuit = Circuit.new
 		#The circuits of the current tenant are retrived
-		@circuits = Circuit.all
+		@circuits = Circuit.all.includes(:measures)
 		if @circuits.count === 0
 		render json: {}	
 		end
