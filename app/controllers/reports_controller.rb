@@ -19,20 +19,20 @@ before_action :set_circuits, only:[:welcome_index,
 	end
 
 	def week_measures
-		render json: @circuit.week_measures
+		render json: @circuit.week_measures()
 	end
 
 	def month_measures
-		render json: @circuit.month_measures
+		render json: @circuit.month_measures()
 	end
  
 	def year_measures
-		render json: @circuit.year_measures
+		render json: @circuit.year_measures()
 	end
 
 	def specific_date_measures
 		date = DateTime.parse(params[:date]) 
-		render json: @circuit.specific_day_measures(date)
+		render json: @circuit.specific_day_measures(date, params[:variation])
 	end
 
 	def data_tool_day

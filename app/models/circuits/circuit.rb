@@ -29,30 +29,36 @@ class Circuit < ActiveRecord::Base
       end 
  end
 
-def specific_day_measures(date)
-    Circuit.find_by_sql(["SELECT * FROM(                     "+
-                         "SELECT                             "+
-                         "measures.watts,                    "+
-                         "measures.created_at,               "+
-                         "row_number() OVER () as rnum       "+
-                         "FROM                               "+ 
-                         "#{Apartment::Tenant.current}.measures       "+
-                         "WHERE                              "+ 
-                         "measures.circuit_id = ? AND        "+
-                         "measures.created_at >= ? AND       "+
-                         "measures.created_at <= ?           "+
-                         "ORDER BY                           "+
-                         "measures.created_at ASC ) AS stats "+
-                         "WHERE                              "+
-                         "mod(rnum,3) = 0;                   ",
+def specific_day_measures(date, variation)
+    var = if variation then variation else 3 end
+    Circuit.find_by_sql(["SELECT * FROM(                         "+
+                         "SELECT                                 "+
+                         "measures.watts,                        "+
+                         "measures.created_at,                   "+
+                         "(case                                  "+ 
+                         "WHEN(lag(watts) over () is NULL)       "+
+                         "THEN 100                               "+  
+                         "ELSE                                   "+
+                         "abs(                                   "+
+                         "lag(watts)over()::float/watts - 1      "+ 
+                         "  )*100                                "+ 
+                         "end) as rnum                           "+
+                         "FROM                                   "+ 
+                         "#{Apartment::Tenant.current}.measures  "+
+                         "WHERE                                  "+ 
+                         "measures.circuit_id = ? AND            "+
+                         "measures.created_at >= ? AND           "+
+                         "measures.created_at <= ?               "+
+                         "ORDER BY                               "+
+                         "measures.created_at ASC ) AS stats     "+
+                         "WHERE                                  "+
+                         "rnum >= ?;                             ",
                           self.id,
                           date.beginning_of_day,
-                          date.end_of_day])
-    #This method retrieves every measure and it to slow for production. The above is 3 times faster!
-    #measures.where(:created_at => date.beginning_of_day..date.end_of_day).select("created_at, watts").order(:created_at)
-  end
+                          date.end_of_day,
+                          var])
+    end
 
-<<<<<<< HEAD
   def today_measures(variation)
     var = if variation then variation else 3 end
     Circuit.find_by_sql(["SELECT * FROM(                        "+

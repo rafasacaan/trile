@@ -135,6 +135,7 @@ $("a.nav-tab-action").click(function(e) {
         year_options.labels = [];
         year_options.labels.push(data);
       });
+      console.log(data);
       current_chart = Morris.Bar(week_options);
       current_chart.setData(data);
     } else {
