@@ -12,6 +12,8 @@
   graph is an array with the option for the chart to be displayed
   testchart is a Morris object and its attributes will change deppending on the circuit and the tab cliked
 */
+var monthNames = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"]
 
 var area_options = {
   element: 'testchart',
@@ -154,5 +156,8 @@ $("#datepicker").change(function(e) {
   });
  //Remove active class from tabs  
   $("a.nav-tab-action").parent().parent().find(".active").removeClass("active");
+ 
+   var month = date.getMonth(); 
+  $("#current_month").html(" Current month: " + monthNames[month]);
  });
   

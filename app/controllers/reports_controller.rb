@@ -15,7 +15,7 @@ before_action :set_circuits, only:[:welcome_index,
 
 
 	def today_measures
-		render json: @circuit.today_measures
+		render json: @circuit.today_measures(params[:variation])
 	end
 
 	def week_measures
@@ -92,6 +92,10 @@ before_action :set_circuits, only:[:welcome_index,
 		if @circuits.count === 0
 		render json: {}	
 		end
-	end	
+	end
+
+	def circuit_params
+      params.require(type.underscore.to_sym).permit(:date, :variation)
+    end	
 
 end
