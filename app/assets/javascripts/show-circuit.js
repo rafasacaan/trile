@@ -35,13 +35,13 @@ var area_options = {
     return d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear()+' '+hours+':'+minutes.substr(-2); 
   },
    xLabelFormat:function(date){
-     d = new Date(date);
-    var hours = d.getHours();
-    var minutes = "0" + d.getMinutes();
-    var seconds = "0" + d.getSeconds();
+      d = new Date(date);
+     var hours = d.getHours();
+     var minutes = "0" + d.getMinutes();
+     var seconds = "0" + d.getSeconds();
      return hours +':'+ minutes.substr(-2);
    },
-
+   postUnits: " W"
 };
   var current_chart = null;
   
@@ -57,6 +57,16 @@ var area_options = {
       return date.getDate()+'/'+(date.getMonth()+1); 
     },
     dateFormat: function (x) { return new Date(x.label*1000); },
+    xLabelAngle: 60
+  };
+
+  var week_options = {
+    element: 'testchart',
+    data: [],
+    xkey: 'hours',
+    ykeys: ['watts'],
+    labels: [],
+    barColors:['#F44336'],
     xLabelAngle: 60
   };
 
@@ -119,6 +129,13 @@ $("a.nav-tab-action").click(function(e) {
         year_options.labels.push(data);
       });
       current_chart = Morris.Bar(year_options);
+      current_chart.setData(data);
+    } else if (chart == "week"){
+      $.getJSON("/reports/circuit_type/" + parseInt($("#testchart").data("circuit")), function(data) {
+        year_options.labels = [];
+        year_options.labels.push(data);
+      });
+      current_chart = Morris.Bar(week_options);
       current_chart.setData(data);
     } else {
       $.getJSON("/reports/circuit_type/" + parseInt($("#testchart").data("circuit")), function(data) {
