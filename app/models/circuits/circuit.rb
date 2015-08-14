@@ -7,7 +7,7 @@ class Circuit < ActiveRecord::Base
   before_save :default_values
   after_initialize :set_status
   
-  attr_accessor :status, :current_user
+  attr_accessor :status, :current_user, :part
 
  def self.types
       %w(Demand Generation)
@@ -286,7 +286,7 @@ def specific_day_measures(date, variation)
 
     def self.circuits_watts_sum(date)
     date = if date then date else Date.today.beginning_of_day end
-        Circuit.find_by_sql(
+        measures = Circuit.find_by_sql(
             ["SELECT *, "+
             "(Wattshora/sum(Wattshora) over ())*100 as part   "+
             "FROM(                                            "+ 
@@ -310,8 +310,14 @@ def specific_day_measures(date, variation)
             "   created_at >= ?                               "+
             "   ORDER BY created_at ASC) AS stats             "+ 
             "   group by 1) as prev                           ",
-            date])                    
-     end 
+            date])
+        
+        measures.each do |m|
+            m.class.module_eval { attr_accessor :description}
+            m.description = Circuit.select("description").find(m.ids)['description']
+            puts m.description      
+        end
+    end 
     
  private
 
