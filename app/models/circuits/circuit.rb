@@ -283,6 +283,35 @@ def specific_day_measures(date, variation)
        end
        arr.push(a)
     end
+
+    def self.circuits_watts_sum(date)
+    date = if date then date else Date.today.beginning_of_day end
+        Circuit.find_by_sql(
+            ["SELECT *, "+
+            "(Wattshora/sum(Wattshora) over ())*100 as part   "+
+            "FROM(                                            "+ 
+            "SELECT stats.ids, sum(area) as Wattshora         "+
+            " FROM(                                           "+
+            "  SELECT *,                                      "+
+            "  circuit_id as ids,                             "+
+            "  (CASE                                          "+
+            "  WHEN(EXTRACT(epoch FROM (                      "+
+            "  created_at - lag(created_at) over (            "+
+            "  partition by circuit_id order by created_at)   "+
+            "  )) > 30) THEN 0                                "+ 
+            "  ELSE                                           "+ 
+            "  watts * EXTRACT(epoch FROM (                   "+
+            "  created_at - lag(created_at) over (            "+
+            "  partition by circuit_id order by created_at))) "+
+            "  /3600  END) AS area                            "+
+            "  FROM                                           "+
+            "   prv_7.measures                                "+  
+            "   WHERE                                         "+
+            "   created_at >= ?                               "+
+            "   ORDER BY created_at ASC) AS stats             "+ 
+            "   group by 1) as prev                           ",
+            date])                    
+     end 
     
  private
 
