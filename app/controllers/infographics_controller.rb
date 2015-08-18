@@ -1,6 +1,6 @@
 class InfographicsController < ApplicationController
   def index
-  	@circuits = Circuit.circuits_watts_sum(params[:date])
+  	@circuits = Circuit.all()
   	@js_file="infographics"
   end
 end

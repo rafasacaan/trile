@@ -1,18 +1,14 @@
 class ReportsController < ApplicationController
 protect_from_forgery with: :null_session
-before_action :set_circuit, except:[:welcome_index,
-									:labels,
-									:data_tool_day,
-									:data_tool_week,
-									:data_tool_month,
-									:data_tool_year] 
+before_action :set_circuit, only:[:today_measures,
+								  :week_measures,
+								  :month_measures,
+								  :year_measures,
+								  :specific_date_measures,
+								  :last_five,
+								  :circuit_type] 
 before_action :set_circuits, only:[:welcome_index,
-								   :labels,
-								   :data_tool_day,
-								   :data_tool_week,
-								   :data_tool_month,
-								   :data_tool_year]
-
+								   :labels]
 
 	def today_measures
 		render json: @circuit.today_measures(params[:variation])
@@ -35,25 +31,30 @@ before_action :set_circuits, only:[:welcome_index,
 		render json: @circuit.specific_day_measures(date, params[:variation])
 	end
 
-	def data_tool_day
-		date = DateTime.parse(params[:date]) || Date.now
-		render json: @circuit.data_tool_day(date, params[:variation])
+	def donuts
+		date = DateTime.parse(params[:date]) 
+		render json: Circuit.watts_sum(date, params[:type])
 	end
 
-	def data_tool_week
-		date = DateTime.parse(params[:date]) || Date.now
-		render json: @circuit.data_tool_week(date)
-	end
+	# def data_tool_day
+	# 	date = DateTime.parse(params[:date]) || Date.now
+	# 	render json: @circuit.data_tool_day(date, params[:variation])
+	# end
 
-	def data_tool_month
-		date = DateTime.parse(params[:date]) || Date.now
-		render json: Circuit.data_tool_month(date)
-	end
+	# def data_tool_week
+	# 	date = DateTime.parse(params[:date]) || Date.now
+	# 	render json: @circuit.data_tool_week(date)
+	# end
 
-	def data_tool_year
-		date = DateTime.parse(params[:date]) || Date.now
-		render json: @circuit.data_tool_year(date)
-	end
+	# def data_tool_month
+	# 	date = DateTime.parse(params[:date]) || Date.now
+	# 	render json: Circuit.data_tool_month(date)
+	# end
+
+	# def data_tool_year
+	# 	date = DateTime.parse(params[:date]) || Date.now
+	# 	render json: @circuit.data_tool_year(date)
+	# end
 
 	def welcome_index
 		render json: @circuits
@@ -68,7 +69,7 @@ before_action :set_circuits, only:[:welcome_index,
 	end
 
 	def infograph
-
+		render json: Circuit.watts_sum(params[:date])
 	end
 
 	def labels
@@ -99,7 +100,7 @@ before_action :set_circuits, only:[:welcome_index,
 	end
 
 	def circuit_params
-      params.require(type.underscore.to_sym).permit(:date, :variation)
+      params.require(type.underscore.to_sym).permit(:date, :type)
     end	
 
 end

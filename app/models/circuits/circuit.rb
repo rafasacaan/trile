@@ -175,148 +175,164 @@ def specific_day_measures(date, variation)
                           Time.now.at_beginning_of_year ])  
   end
 
-  def data_tool_week(date)
-    data = Circuit.find_by_sql(["SELECT * FROM(              "+
-                         "SELECT                             "+
-                         "circuits.description,              "+
-                         "measures.watts,                    "+
-                         "measures.created_at,               "+
-                         "row_number() OVER () as rnum       "+
-                         "FROM                               "+ 
-                         "#{Apartment::Tenant.current}.measures,"+
-                         "#{Apartment::Tenant.current}.circuits "+
-                         "WHERE                              "+ 
-                         "circuits.id = measures.circuit_id  "+
-                         "AND                                "+
-                         "measures.created_at >= ?           "+
-                         "AND                                "+
-                         "measures.created_at <= ?           "+
-                         "ORDER BY                           "+
-                         "measures.created_at ASC ) AS stats "+
-                         "WHERE                              "+
-                         "mod(rnum,5) = 0;                   ",
-                         date.beginning_of_week,date.end_of_week])        
-        format(data) 
-  end
+  # def data_tool_week(date)
+  #   data = Circuit.find_by_sql(["SELECT * FROM(              "+
+  #                        "SELECT                             "+
+  #                        "circuits.description,              "+
+  #                        "measures.watts,                    "+
+  #                        "measures.created_at,               "+
+  #                        "row_number() OVER () as rnum       "+
+  #                        "FROM                               "+ 
+  #                        "#{Apartment::Tenant.current}.measures,"+
+  #                        "#{Apartment::Tenant.current}.circuits "+
+  #                        "WHERE                              "+ 
+  #                        "circuits.id = measures.circuit_id  "+
+  #                        "AND                                "+
+  #                        "measures.created_at >= ?           "+
+  #                        "AND                                "+
+  #                        "measures.created_at <= ?           "+
+  #                        "ORDER BY                           "+
+  #                        "measures.created_at ASC ) AS stats "+
+  #                        "WHERE                              "+
+  #                        "mod(rnum,5) = 0;                   ",
+  #                        date.beginning_of_week,date.end_of_week])        
+  #       format(data) 
+  # end
 
-  def data_tool_day(date,variation)
-    var = if variation then variation else 20 end
-    data = Circuit.find_by_sql(["SELECT * FROM(                 "+
-                         "SELECT                                "+
-                         "circuits.description,                 "+
-                         "measures.watts,                       "+
-                         "measures.created_at,                  "+
-                         "row_number() OVER () as rnum          "+
-                         "FROM                                  "+ 
-                         "#{Apartment::Tenant.current}.measures,"+
-                         "#{Apartment::Tenant.current}.circuits "+
-                         "WHERE                                 "+ 
-                         "circuits.id = measures.circuit_id     "+
-                         "AND                                   "+
-                         "measures.created_at >= ?              "+
-                         "AND                                   "+
-                         "measures.created_at <= ?              "+
-                         "ORDER BY                              "+
-                         "measures.created_at ASC ) AS stats    "+
-                         "WHERE                                 "+
-                         "rnum >= ?;                            ",
-                         date,date.end_of_day, var])
-                        format(data) 
-    end
+  # def data_tool_day(date,variation)
+  #   var = if variation then variation else 20 end
+  #   data = Circuit.find_by_sql(["SELECT * FROM(                 "+
+  #                        "SELECT                                "+
+  #                        "circuits.description,                 "+
+  #                        "measures.watts,                       "+
+  #                        "measures.created_at,                  "+
+  #                        "row_number() OVER () as rnum          "+
+  #                        "FROM                                  "+ 
+  #                        "#{Apartment::Tenant.current}.measures,"+
+  #                        "#{Apartment::Tenant.current}.circuits "+
+  #                        "WHERE                                 "+ 
+  #                        "circuits.id = measures.circuit_id     "+
+  #                        "AND                                   "+
+  #                        "measures.created_at >= ?              "+
+  #                        "AND                                   "+
+  #                        "measures.created_at <= ?              "+
+  #                        "ORDER BY                              "+
+  #                        "measures.created_at ASC ) AS stats    "+
+  #                        "WHERE                                 "+
+  #                        "rnum >= ?;                            ",
+  #                        date,date.end_of_day, var])
+  #                       format(data) 
+  #   end
 
-    def self.data_tool_month(date)
-    measures = Circuit.find_by_sql(["SELECT trunc(cast(SUM(Watts) AS numeric),2) AS \"watts\", to_char(created_at,'YYYY-MM-DD')::timestamp as dt, circuit "+
-                         "FROM(                                                                                                                        "+
-                         "SELECT                                                                                                                       "+
-                         "#{Apartment::Tenant.current}.circuits.description AS circuit,                                                                "+
-                         "#{Apartment::Tenant.current}.measures.watts *                                                                                "+   
-                         "EXTRACT(epoch FROM (#{Apartment::Tenant.current}.measures.created_at - lag(#{Apartment::Tenant.current}.measures.created_at) "+ 
-                         "over (order by #{Apartment::Tenant.current}.measures.created_at)))/3600 AS Watts,                                            "+
-                         "#{Apartment::Tenant.current}.measures.created_at                                                                             "+
-                         "FROM                                                                                                                         "+ 
-                         "#{Apartment::Tenant.current}.circuits,                                                                                       "+
-                         "#{Apartment::Tenant.current}.measures                                                                                        "+
-                         "WHERE                                                                                                                        "+ 
-                         "measures.created_at >= ? ) AS stats                                                                                          "+
-                         "GROUP BY 2,3                                                                                                                 "+
-                         "ORDER BY dt ASC;                                                                                                             ",
-                          date.at_beginning_of_month])
+  #   def self.data_tool_month(date)
+  #   measures = Circuit.find_by_sql(["SELECT trunc(cast(SUM(Watts) AS numeric),2) AS \"watts\", to_char(created_at,'YYYY-MM-DD')::timestamp as dt, circuit "+
+  #                        "FROM(                                                                                                                        "+
+  #                        "SELECT                                                                                                                       "+
+  #                        "#{Apartment::Tenant.current}.circuits.description AS circuit,                                                                "+
+  #                        "#{Apartment::Tenant.current}.measures.watts *                                                                                "+   
+  #                        "EXTRACT(epoch FROM (#{Apartment::Tenant.current}.measures.created_at - lag(#{Apartment::Tenant.current}.measures.created_at) "+ 
+  #                        "over (order by #{Apartment::Tenant.current}.measures.created_at)))/3600 AS Watts,                                            "+
+  #                        "#{Apartment::Tenant.current}.measures.created_at                                                                             "+
+  #                        "FROM                                                                                                                         "+ 
+  #                        "#{Apartment::Tenant.current}.circuits,                                                                                       "+
+  #                        "#{Apartment::Tenant.current}.measures                                                                                        "+
+  #                        "WHERE                                                                                                                        "+ 
+  #                        "measures.created_at >= ? ) AS stats                                                                                          "+
+  #                        "GROUP BY 2,3                                                                                                                 "+
+  #                        "ORDER BY dt ASC;                                                                                                             ",
+  #                         date.at_beginning_of_month])
   
-    circuits = Circuit.select('description')
-    data = []
-    days_in_month = (date.at_beginning_of_month..date.at_end_of_month)
+  #   circuits = Circuit.select('description')
+  #   data = []
+  #   days_in_month = (date.at_beginning_of_month..date.at_end_of_month)
     
-    days_in_month.each do |day|
-      circuits.each do |c|
-        #revisar y reparar esta parte de los time zone. Todo tiene que quedar sincronizado. Rails, el server y la bdd
-        data << {"dt" => day.to_time.to_i - 3.hours, "watts" => 0, "circuit" => c.description}
-      end
-    end
+  #   days_in_month.each do |day|
+  #     circuits.each do |c|
+  #       #revisar y reparar esta parte de los time zone. Todo tiene que quedar sincronizado. Rails, el server y la bdd
+  #       data << {"dt" => day.to_time.to_i - 3.hours, "watts" => 0, "circuit" => c.description}
+  #     end
+  #   end
 
-    data.each do |d|
-       measures.each do |m|
-         if d["dt"] == m.dt.to_time.to_i && d["circuit"] == m.circuit
-          d["watts"] = m.watts
-          puts d["watts"]
-         end         
-       end
-     end
+  #   data.each do |d|
+  #      measures.each do |m|
+  #        if d["dt"] == m.dt.to_time.to_i && d["circuit"] == m.circuit
+  #         d["watts"] = m.watts
+  #         puts d["watts"]
+  #        end         
+  #      end
+  #    end
 
-  a = []
-      data.each do |d|
-        hash = {d["circuit"] => d["watts"], :dt => d["dt"]}
-        a.push(hash)
-      end
-      return a
+  # a = []
+  #     data.each do |d|
+  #       hash = {d["circuit"] => d["watts"], :dt => d["dt"]}
+  #       a.push(hash)
+  #     end
+  #     return a
 
-  end
+  # end
   
-    def last_five_measures
-      #retrieve the last five measures as object
-       data = self.measures.select("watts").order(:created_at).last(10).to_a
-       #two empty arrays one for the circuit id an another for the data itself
-       arr = []
-       a = []
-       arr.push(self.id)
-       data.each do |d|
-        a.push(d.watts)
-       end
-       arr.push(a)
-    end
+  #   def last_five_measures
+  #     #retrieve the last five measures as object
+  #      data = self.measures.select("watts").order(:created_at).last(10).to_a
+  #      #two empty arrays one for the circuit id an another for the data itself
+  #      arr = []
+  #      a = []
+  #      arr.push(self.id)
+  #      data.each do |d|
+  #       a.push(d.watts)
+  #      end
+  #      arr.push(a)
+  #   end
 
-    def self.circuits_watts_sum(date)
-    date = if date then date else Date.today.beginning_of_day end
+    def self.watts_sum(date, type)
+    date = if date then date else Date.today end
+
+    case type
+      when "day"
+        start = date.beginning_of_day
+        ending = date.end_of_day
+      when "week"
+        start = date.beginning_of_week
+        ending = date.end_of_week
+      when "month"
+        start = date.beginning_of_month
+        ending = date.end_of_month
+      when "year"
+        start = date.beginning_of_year
+        ending = date.end_of_year
+      else
+        start = date.beginning_of_day
+        ending = date.end_of_day
+      end
+      
         measures = Circuit.find_by_sql(
-            ["SELECT *, "+
-            "(Wattshora/sum(Wattshora) over ())*100 as part   "+
-            "FROM(                                            "+ 
-            "SELECT stats.ids, sum(area) as Wattshora         "+
-            " FROM(                                           "+
-            "  SELECT *,                                      "+
-            "  circuit_id as ids,                             "+
-            "  (CASE                                          "+
-            "  WHEN(EXTRACT(epoch FROM (                      "+
-            "  created_at - lag(created_at) over (            "+
-            "  partition by circuit_id order by created_at)   "+
-            "  )) > 30) THEN 0                                "+ 
-            "  ELSE                                           "+ 
-            "  watts * EXTRACT(epoch FROM (                   "+
-            "  created_at - lag(created_at) over (            "+
-            "  partition by circuit_id order by created_at))) "+
-            "  /3600  END) AS area                            "+
-            "  FROM                                           "+
-            "   prv_7.measures                                "+  
-            "   WHERE                                         "+
-            "   created_at >= ?                               "+
-            "   ORDER BY created_at ASC) AS stats             "+ 
-            "   group by 1) as prev                           ",
-            date])
-        
-        measures.each do |m|
-            m.class.module_eval { attr_accessor :description}
-            m.description = Circuit.select("description").find(m.ids)['description']
-            puts m.description      
-        end
+            ["SELECT *,                                                              "+
+            "(Wattshora/sum(Wattshora) over ())*100 as \"part\", ids                 "+
+            "FROM(                                                                   "+ 
+            "SELECT stats.descr, ids,sum(area) as Wattshora                          "+
+            " FROM(                                                                  "+
+            "  SELECT *,                                                             "+
+            "  description as descr,                                                 "+
+            "  circuit_id as ids,                                                    "+
+            "  (CASE                                                                 "+
+            "  WHEN(EXTRACT(epoch FROM (                                             "+
+            "  measures.created_at - lag(measures.created_at) over (                 "+
+            "  partition by circuit_id order by measures.created_at)                 "+
+            "  )) > 30) THEN 0                                                       "+ 
+            "  ELSE                                                                  "+ 
+            "  watts * EXTRACT(epoch FROM (                                          "+
+            "  measures.created_at - lag(measures.created_at) over (                 "+
+            "  partition by circuit_id order by measures.created_at)))               "+
+            "  /3600  END) AS area                                                   "+
+            "  FROM                                                                  "+
+            "   measures inner join circuits on (measures.circuit_id = circuits.id)  "+  
+            "   WHERE                                                                "+
+            "   measures.created_at >= ?  AND                                        "+
+            "   measures.created_at <= ?                                             "+
+            "   ORDER BY measures.created_at ASC) AS stats                           "+ 
+            "   group by 1,2) as prev                                                "+
+            "   order by part desc                                                   ",
+            start, ending])        
     end 
     
  private

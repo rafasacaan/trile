@@ -15,6 +15,7 @@
 var monthNames = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"]
 
+
 var area_options = {
   element: 'testchart',
   data: [],
