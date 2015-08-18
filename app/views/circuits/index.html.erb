@@ -21,7 +21,6 @@
                 <span class="badge <%= dashgum_badge_type(circuit.type) %>"><%= circuit.type%></span>
                 <div class="pull-right hidden-phone">
                 <%= link_to '', sti_circuit_path(circuit.type, circuit, :edit,), { class: "btn btn-primary btn-xs fa fa-pencil"} %>
-                <%= link_to '', sti_circuit_path(circuit.type, circuit), method: :delete, data: { confirm: 'Are you sure?'}, class: "btn btn-danger btn-xs fa fa-trash-o" %>
                 </div>
               </div>
             </li>
