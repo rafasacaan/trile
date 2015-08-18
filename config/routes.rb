@@ -31,10 +31,7 @@ Rails.application.routes.draw do
   get  'reports/year_measures/:id', to: 'reports#year_measures'
   get  'reports/circuit_type/:id', to: 'reports#circuit_type'
   get  'reports/specific_date_measures/:id/:date', to: 'reports#specific_date_measures'
-  # get  'reports/data_tool_day/:date', to: 'reports#data_tool_day'
-  # get  'reports/data_tool_week/:date', to: 'reports#data_tool_week'
-  # get  'reports/data_tool_month/:date', to: 'reports#data_tool_month'
-  # get  'reports/data_tool_year/:date', to: 'reports#data_tool_year'
+ 
   get  'reports/labels/', to: 'reports#labels'
   get  'reports/welcome_index/', to: 'reports#welcome_index'
   get  'reports/last_five/:id', to: 'reports#last_five'

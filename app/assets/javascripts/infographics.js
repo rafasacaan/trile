@@ -56,7 +56,7 @@ function setchart(date){
       $("#"+data[i].ids).width((data[i].part)+"%");
       $("#"+data[i].ids).html((data[i].part)+"%");
       $("#"+data[i].ids).css('backgroundColor', options.colors[i]);
-      $("#"+data[i].ids+"-value").html("$" + numberWithDots(Math.round(data[i].wattshora*90*1)/1));
+      $("#"+data[i].ids+"-value").html("$" + numberWithDots(Math.round(data[i].wattshora*0.09*1)/1));
     }
      current_chart = Morris.Donut(options);
     });
