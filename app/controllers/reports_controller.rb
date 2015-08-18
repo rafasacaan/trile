@@ -7,8 +7,7 @@ before_action :set_circuit, only:[:today_measures,
 								  :specific_date_measures,
 								  :last_five,
 								  :circuit_type] 
-before_action :set_circuits, only:[:welcome_index,
-								   :labels]
+before_action :set_circuits, only:[:welcome_index, :labels]
 before_action :authenticate_user!
 	def today_measures
 		render json: @circuit.today_measures(params[:variation])
@@ -36,26 +35,6 @@ before_action :authenticate_user!
 		render json: Circuit.watts_sum(date, params[:type])
 	end
 
-	# def data_tool_day
-	# 	date = DateTime.parse(params[:date]) || Date.now
-	# 	render json: @circuit.data_tool_day(date, params[:variation])
-	# end
-
-	# def data_tool_week
-	# 	date = DateTime.parse(params[:date]) || Date.now
-	# 	render json: @circuit.data_tool_week(date)
-	# end
-
-	# def data_tool_month
-	# 	date = DateTime.parse(params[:date]) || Date.now
-	# 	render json: Circuit.data_tool_month(date)
-	# end
-
-	# def data_tool_year
-	# 	date = DateTime.parse(params[:date]) || Date.now
-	# 	render json: @circuit.data_tool_year(date)
-	# end
-
 	def welcome_index
 		render json: @circuits
 	end
@@ -72,6 +51,8 @@ before_action :authenticate_user!
 		render json: Circuit.watts_sum(params[:date])
 	end
 
+	private
+
 	def labels
 		a = []
 		@circuits.each do |c|
@@ -80,7 +61,6 @@ before_action :authenticate_user!
 		render json: a.to_json
 	end
 
-	private
 
 	def set_circuit
 		@circuit = Circuit.find(params[:id])
@@ -93,7 +73,7 @@ before_action :authenticate_user!
 		#A new circuit object is created empty as a placeholder for data
 		@circuit = Circuit.new
 		#The circuits of the current tenant are retrived
-		@circuits = Circuit.all.includes(:measures)
+		@circuits = Circuit.all
 		if @circuits.count === 0
 		render json: {}	
 		end
