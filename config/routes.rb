@@ -22,10 +22,10 @@ Rails.application.routes.draw do
   root 'welcome#index'
 
   #Endpoints for graphs
-  get  'reports/today_measures/:id', to: 'reports#today_measures'
-  get  'reports/week_measures/:id', to: 'reports#week_measures'
-  get  'reports/month_measures/:id', to: 'reports#month_measures'
-  get  'reports/year_measures/:id', to: 'reports#year_measures'
+  get  'reports/today_measures/:id/:date', to: 'reports#today_measures'
+  get  'reports/week_measures/:id/:date', to: 'reports#week_measures'
+  get  'reports/month_measures/:id/:date', to: 'reports#month_measures'
+  get  'reports/year_measures/:id/:date', to: 'reports#year_measures'
   get  'reports/circuit_type/:id', to: 'reports#circuit_type'
   get  'reports/specific_date_measures/:id/:date', to: 'reports#specific_date_measures'
   get  'reports/labels/', to: 'reports#labels'

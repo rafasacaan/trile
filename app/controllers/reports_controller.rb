@@ -14,15 +14,18 @@ before_action :authenticate_user!
 	end
 
 	def week_measures
-		render json: @circuit.week_measures(params[:date])
+		date = DateTime.parse(params[:date]) 
+		render json: @circuit.week_measures(date)
 	end
 
 	def month_measures
-		render json: @circuit.month_measures()
+		date = DateTime.parse(params[:date])
+		render json: @circuit.month_measures(date)
 	end
  
 	def year_measures
-		render json: @circuit.year_measures()
+		date = DateTime.parse(params[:date])
+		render json: @circuit.year_measures(date)
 	end
 
 	def specific_date_measures

@@ -92,7 +92,7 @@ def specific_day_measures(date, variation)
     end
 
   def week_measures(date)
-    date = if date then date else Date.yesterday end
+    date = if date then date else Date.today end
     Circuit.find_by_sql(["SELECT trunc(cast(SUM(Watts) AS numeric),2) AS \"watts\", hours      "+
                          "FROM(                                                                "+
                          "SELECT                                                               "+
@@ -114,7 +114,8 @@ def specific_day_measures(date, variation)
                           ])
   end
 
-  def month_measures
+  def month_measures(date)
+    date = if date then date else Date.today end
     measures = Circuit.find_by_sql(["SELECT trunc(cast(SUM(Watts) AS numeric),2) AS \"watts\", to_char((created_at),'YYYY-MM-DD') as dt               "+
                          "FROM(                                                                                                                       "+
                          "SELECT                                                                                                                      "+
@@ -128,15 +129,18 @@ def specific_day_measures(date, variation)
                          "WHERE                                                                "+ 
                          "circuits.id = ? AND                                                  "+
                          "measures.circuit_id = ? AND                                          "+
+                         "measures.created_at <= ? AND                                         "+
                          "measures.created_at >= ? ) AS stats                                  "+
                          "GROUP BY 2                                                           "+
                          "ORDER BY dt ASC;                                                     ",
                           self.id,
                           self.id,
-                          Time.now.at_beginning_of_month])
+                          date.end_of_month,
+                          date.at_beginning_of_month
+                          ])
  	
     data = []
-    days_in_month = (Date.today.at_beginning_of_month..Date.today.at_end_of_month).map {|day| data << {"dt" => day.to_time.to_i, "watts" => 0}}
+    days_in_month = (date.at_beginning_of_month..date.at_end_of_month).map {|day| data << {"dt" => day.to_time.to_i, "watts" => 0}}
      
     data.each do |d|
       measures.each do |m|
@@ -148,7 +152,8 @@ def specific_day_measures(date, variation)
   
   end
  
-  def year_measures
+  def year_measures(date)
+    if date then date else Date.today end
     Circuit.find_by_sql(["SELECT dt, trunc(cast(\"Wattshora\" AS numeric),2) AS \"watts\"                                                                                                                                      "+
                          "FROM ( SELECT to_char(dt,'TMmon') as dt                                                                                                                                                              "+
                          "FROM generate_series('2015-01-01 00:00'::timestamp, '2015-12-31 00:00'::timestamp, '1 month'::interval) dt) AS t1                                                                                    "+
@@ -170,7 +175,7 @@ def specific_day_measures(date, variation)
                          "ON (t1.dt = t2.mon);",
                           self.id,
                           self.id,
-                          Time.now.at_beginning_of_year ])  
+                          date.at_beginning_of_year ])  
   end
 
 

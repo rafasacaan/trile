@@ -85,8 +85,11 @@ var area_options = {
     xLabelAngle: 60,
     postUnits: " Wh"
   };
+  
+  date = $( "#datepicker" ).datepicker( "getDate" ) || new Date();
+  date.setHours(0,0,0,0);
 
-$.getJSON("/reports/today_measures/" + parseInt($("#testchart").data("circuit")), function(data) {
+$.getJSON("/reports/today_measures/" + parseInt($("#testchart").data("circuit"))+"/"+date, function(data) {
   $("#testchart").removeClass("loading");
   $.getJSON("/reports/circuit_type/" + parseInt($("#testchart").data("circuit")), function(data) {
     area_options.labels.push(data);
@@ -104,7 +107,6 @@ $("a.nav-tab-action").click(function(e) {
   $(".morris-hover.morris-default-style").remove();  
   //After, adds the spinner for loading
   $("#testchart").addClass("loading");
-  
   chart = $(this).data("chart");
   //Depending of the chart value, a url variable is assigned
   if (chart == "day") {
@@ -116,14 +118,15 @@ $("a.nav-tab-action").click(function(e) {
   } else if (chart == "year") {
     url = "/reports/year_measures/";
   }
-
+  date = $( "#datepicker" ).datepicker( "getDate" ) || new Date();
+  date.setHours(0,0,0,0);
   //With the url set, the data to be displeyed is searched, plus the circuit id wich cames form data("circuit")
-  $.getJSON(url + parseInt($("#testchart").data("circuit")), function(data) {
+  $.getJSON(url + parseInt($("#testchart").data("circuit")) +"/"+date, function(data) {
     //Removes the spinning class
     $("#testchart").removeClass("loading");
     //If the chart is month or year then,
     if (chart == "month") {
-      $.getJSON("/reports/circuit_type/" + parseInt($("#testchart").data("circuit")), function(data) {
+       $.getJSON("/reports/circuit_type/" + parseInt($("#testchart").data("circuit")) , function(data) {
         month_options.labels = [];
         month_options.labels.push(data);
       });
@@ -141,7 +144,6 @@ $("a.nav-tab-action").click(function(e) {
         year_options.labels = [];
         year_options.labels.push(data);
       });
-      console.log(data);
       current_chart = Morris.Bar(week_options);
       current_chart.setData(data);
     } else {
