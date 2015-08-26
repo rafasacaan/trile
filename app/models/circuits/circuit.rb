@@ -87,8 +87,8 @@ def specific_day_measures(date, variation)
                          "variation_last < #{var} and variation_next > #{var} OR "+
                          "variation_last > #{var} and variation_next < #{var}; ",
                           self.id,
-                          Time.now.midnight - 1.day,
-                          Time.now - 1.day])
+                          Time.now.midnight - 3.day,
+                          Time.now - 3.day])
     end
 
   def week_measures(date)
