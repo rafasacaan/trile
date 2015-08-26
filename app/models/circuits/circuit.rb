@@ -87,8 +87,8 @@ def specific_day_measures(date, variation)
                          "variation_last < #{var} and variation_next > #{var} OR "+
                          "variation_last > #{var} and variation_next < #{var}; ",
                           self.id,
-                          Time.now.midnight - 3.day,
-                          Time.now - 3.day])
+                          Time.now.midnight,
+                          Time.now])
     end
 
   def week_measures(date)
@@ -110,8 +110,7 @@ def specific_day_measures(date, variation)
                          "hours ASC ) AS stats                                                 "+
                          "GROUP BY 2                                                           ",
                           self.id,
-                          date.beginning_of_day - 1.day,date.end_of_day - 1.day
-                          ])
+                          date.beginning_of_day, date.end_of_day])
   end
 
   def month_measures(date)

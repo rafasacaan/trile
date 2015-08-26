@@ -12,11 +12,11 @@
         </div>
        </div> 
     <div class="panel-title">
-    <ul class="nav nav-tabs">
-      <li class="active"><a data-toggle="tab" class="nav-tab-action" href="#home" data-chart="day">Spot</a></li>
-      <li><a data-toggle="tab" href="#menu1"  class="nav-tab-action" data-chart="week">Hours/Day</a></li>
-      <li><a data-toggle="tab" href="#menu1"  class="nav-tab-action" data-chart="month">Days/Month</a></li>
-      <li><a data-toggle="tab" href="#menu1" class="nav-tab-action" data-chart="year">Month/Year</a></li>
+    <ul class="nav nav-tabs" id="tab">
+      <li class="active" data-chart="day"><a data-toggle="tab" class="nav-tab-action" href="#home" data-chart="day">Spot</a></li>
+      <li data-chart="week"><a data-toggle="tab" href="#menu1"  class="nav-tab-action" data-chart="week">Hours/Day</a></li>
+      <li data-chart="month"><a data-toggle="tab" href="#menu1"  class="nav-tab-action" data-chart="month">Days/Month</a></li>
+      <li data-chart="year"><a data-toggle="tab" href="#menu1" class="nav-tab-action" data-chart="year">Month/Year</a></li>
     </ul>
     </div>
   </div>
@@ -30,6 +30,8 @@
          </div>
         </div>
         <div class="col-sm-3">
+          <input id="basicExample" type="text" class="time ui-timepicker-input" autocomplete="off">
+          <input id="basicExample2" type="text" class="time ui-timepicker-input" autocomplete="off">
           <div id="datepicker"></div>
           <div class="col-sm-2 col-md-offset-3">
            <button type="button" class="btn btn-success btn-lg mt" id="reload">Reload!</button>

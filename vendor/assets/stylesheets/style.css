@@ -43,6 +43,10 @@ body {
 #edit-form {
  margin-top: 2%;  
 }
+#home-icon-p {
+ margin-right: 20px;
+ text-align: center;
+}
 
 #landing-img {
    width: 100%;  
