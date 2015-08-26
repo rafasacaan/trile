@@ -1,39 +1,65 @@
-<div class="row mt mb">
- <div class="col-md-12">
-      <section class="task-panel tasks-widget">
   <div class="panel-heading">
-        <div class="pull-left"><h5><i class="fa fa-tasks"></i> Mis Circuitos</h5></div>
-        <br>
+      <div class="row">
+        <div class="col-sm-2"><h4>Your Circuits>></h4></div>
+       <div class="col-sm-10">
+        <div class="span pull-right">
+        <% @circuits.each do |c| %>
+          <label class= "mr mt">
+           <input type="radio" id="<%= c.id %>" name="circuits" value="<%= c.id %>" /><%= c.description %>
+          </label>
+          <% end %> 
+          </div>
+        </div>
+       </div> 
+    <div class="panel-title">
+    <ul class="nav nav-tabs">
+      <li class="active"><a data-toggle="tab" class="nav-tab-action" href="#home" data-chart="day">Spot</a></li>
+      <li><a data-toggle="tab" href="#menu1"  class="nav-tab-action" data-chart="week">Hours/Day</a></li>
+      <li><a data-toggle="tab" href="#menu1"  class="nav-tab-action" data-chart="month">Days/Month</a></li>
+      <li><a data-toggle="tab" href="#menu1" class="nav-tab-action" data-chart="year">Month/Year</a></li>
+    </ul>
+    </div>
   </div>
-    <div class="panel-body">
-      <div class="task-content">
-        <ul id="sortable" class="task-list">
-          <% @circuits.each do |circuit| %>
-            <li class="list-<%= dashgum_list_type(circuit.type)%>">
-              <i class=" fa fa-ellipsis-v"></i>                                   
-              <div class="task-title">
-                <span class="badegeShow">
-                <span class="task-title-sp"><%= link_to sti_circuit_path(circuit.type, circuit) do %>
-                  <%=circuit.description.titleize %>
-                  <%end%>
-                </span>
-                </span>
-                <span class="badge <%= dashgum_badge_type(circuit.type) %>"><%= circuit.type%></span>
-                <div class="pull-right hidden-phone">
-                <%= link_to '', sti_circuit_path(circuit.type, circuit, :edit,), { class: "btn btn-primary btn-xs fa fa-pencil"} %>
-                </div>
-              </div>
-            </li>
-          <% end %>
-        </ul>
+ <div class="panel-body">
+  <div class="tab-content">
+    <div id="home" class="tab-pane fade in active">
+      <div class="row">
+        <div class="col-sm-9">
+         <div id="chartcontainer" style="position:relative z-index:1" >  
+          <div id="testchart" data-circuit="" style="height: 250px;" class="loading"></div>
+         </div>
+        </div>
+        <div class="col-sm-3">
+          <div id="datepicker"></div>
+          <div class="col-sm-2 col-md-offset-3">
+           <button type="button" class="btn btn-success btn-lg mt" id="reload">Reload!</button>
+          </div>
+          </div>
       </div>
-        <div class=" add-task-row">
-          <%= link_to "Nuevo Circuito", sti_circuit_path(@type, nil, :new), class: "btn btn-success btn-sm pull-left" %>
-          <%= link_to 'Ver todos los Circuitos', sti_circuit_path, class: "btn btn-default btn-sm pull-right"  %>
+      <hr>
+     <div class="row">
+      <h1>Full day</h1>
+      <div class="col-sm-12">
+       <div id="chartcontainer" style="position:relative z-index:1" >  
+        <div id="testchart2" data-circuit="" style="height: 200px;" class="loading"></div>
+       </div>
+      </div>  
+     </div>
+    </div>
+    <div id="menu1" class="tab-pane fade">
+      <div class="row">
+        <div class="col-sm-9">
+         <div id="chartcontainer" style="position:relative z-index:1" >  
+          <div id="testchart3" data-circuit="" style="height: 250px;" class="loading"></div>
+         </div>
+        </div>
+        <div class="col-sm-3">
+          <div id="datepicker2"></div>
+          <div class="col-sm-2 col-md-offset-3">
+           <button type="button" class="btn btn-success btn-lg mt" id="reload">Reload!</button>
+          </div>
+          </div>
       </div>
-    </div>                    
- </div>
+    </div>
+  </div>
 </div>
-</br>
-<%#= @circuits.klass %>
-<%#= @circuits.inspect %>

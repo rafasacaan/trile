@@ -5,6 +5,7 @@ module CircuitsStatus
 	
 	def set_circuits
 		circuits = Circuit.all
+
 	rescue ActiveRecord::RecordNotFound
 		circuits = Circuit.new
 	end
@@ -12,6 +13,7 @@ module CircuitsStatus
 	def circuits_status
 		@circuits = set_circuits
 		@circuits.each do |c|
+			#To do. Need refactor to improve performance. Measures.last could do the trick faster
 			if c.measures.count == 0
 				c.status = "No measures"
 			else

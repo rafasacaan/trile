@@ -2,7 +2,7 @@ class CircuitsController < ApplicationController
   include CircuitsStatus
   before_action :authenticate_user!
   before_action :set_circuit, only: [:show, :edit, :update, :destroy]
-  before_action :set_circuits, only: [:index, :data_tool]
+  before_action :set_circuits, only: [:index]
   before_action :set_js
   before_action :current_user
   before_action :set_type
@@ -12,13 +12,6 @@ class CircuitsController < ApplicationController
   # GET /circuits
   # GET /circuits.json
   def index
-    #Defines the js file to be loaded
-    @js_file = "index-circuit"
-  end
-
-  #get /circuits/data_tool
-  def data_tool
-     @js_file = "data-tool"      
   end
 
   # GET /circuits/1
@@ -78,8 +71,6 @@ class CircuitsController < ApplicationController
   private
 
     def type
-        puts "********************************************************************"
-        puts Apartment::Tenant.current
         #This sets the circuit type if it is in the params, otherwise it sets it to "Circuit" 
         Circuit.types.include?(params[:type]) ? params[:type] : "Circuit"
     end
@@ -110,7 +101,7 @@ class CircuitsController < ApplicationController
     
     #Set js file
     def set_js
-    @js_file = "index"
+    @js_file = "index-circuit"
     end
 
     def invalid_circuit
