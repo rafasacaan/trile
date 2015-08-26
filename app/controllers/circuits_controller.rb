@@ -2,7 +2,7 @@ class CircuitsController < ApplicationController
   include CircuitsStatus
   before_action :authenticate_user!
   before_action :set_circuit, only: [:show, :edit, :update, :destroy]
-  before_action :set_circuits, only: [:index, :data_tool]
+  before_action :set_circuits, only: [:index]
   before_action :set_js
   before_action :current_user
   before_action :set_type
