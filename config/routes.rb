@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   get 'infographics/index'
+  get 'infographics/peak'
 
   resources :circuits, except: :destroy
   resources :demands, controller: 'circuits', type: 'Demand', except: :destroy
@@ -32,6 +33,7 @@ Rails.application.routes.draw do
   get  'reports/welcome_index/', to: 'reports#welcome_index'
   get  'reports/last_five/:id', to: 'reports#last_five'
   get  'reports/donuts/:date/:type', to: 'reports#donuts'
+  get  'reports/peaks/:date/:type', to: 'reports#peaks'
 
 
 #API endpoints

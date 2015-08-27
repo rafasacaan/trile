@@ -50,8 +50,9 @@ before_action :authenticate_user!
 		render json: @circuit.type.to_json
 	end
 
-	def infograph
-		render json: Circuit.watts_sum(params[:date])
+	def peaks
+		date = DateTime.parse(params[:date]) 
+		render json: Circuit.peaks(date, params[:type])
 	end
 
 	private

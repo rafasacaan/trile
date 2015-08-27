@@ -1,0 +1,57 @@
+
+<div class="row">
+ 
+ <div class="col-xs-6 col-md-6">
+   <div id="donut-example" ></div>  
+ </div>
+ <div class="col-xs-4 col-xs-offset-2 col-md-4 col-md-offset-2" id="donut-calendar">
+   <div class="row">
+   <div id="datepicker"></div>
+   </div>
+   <div class="row mt">
+      <div class="btn-group mt ml" data-toggle="buttons" id="radio">
+          <label class="btn btn-primary active">
+            <input type="radio" name="options" value = "day" id="option1" autocomplete="off" checked> Day
+          </label>
+          <label class="btn btn-primary">
+            <input type="radio" name="options" value = "week" id="option2" autocomplete="off"> Week
+          </label>
+          <label class="btn btn-primary">
+            <input type="radio" name="options" value = "month" id="option3" autocomplete="off"> Month
+          </label>
+          <label class="btn btn-primary">
+            <input type="radio" name="options" value = "year" id="option4" autocomplete="off"> Year
+          </label>
+      </div>
+    </div>    
+ </div>
+</div>
+  
+  <div class="row">
+   <div class="col-xs-6 col-md-6" id="donut-calendar">
+    <% @circuits.each do |c| %>
+      <div class="row">
+        <div class="col-xs-2 col-md-2"><%= c.description %></div>
+        <div class="col-xs-9 col-md-9">
+          <div class="progress progress-striped active">
+          <div id="<%= c.id %>" class="progress-bar progress-bar-<%=cycle("success","info","warning","danger")%>" role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100" style="width:%">
+         <span class="sr-only">% Complete</span>
+         </div>
+        </div>
+        </div>
+        <div class="col-xs-1 col-md-1" id="<%= c.id.to_s + "-"%>value"></div>
+      </div>
+    <%end%>
+   </div>
+  
+    <div class="col-xs-1 col-xs-offset-2 col-sm-1 col-sm-offset-2" id = "reloadButton">
+        <button type="button" class="btn btn-success btn-lg" id="reload">Reload!</button>
+    </div>
+  
+  </div>
+			
+</div>
+
+
+
+

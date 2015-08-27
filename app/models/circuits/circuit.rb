@@ -241,7 +241,46 @@ def specific_day_measures(date, variation)
        end
        arr.push(a)
     end
+ 
 
+def self.peaks(date,type)
+    date = if date then date else Date.today end
+
+    case type
+      when "day"
+        start = date.beginning_of_day
+        ending = date.end_of_day
+      when "week"
+        start = date.beginning_of_week
+        ending = date.end_of_week
+      when "month"
+        start = date.beginning_of_month
+        ending = date.end_of_month
+      when "year"
+        start = date.beginning_of_year
+        ending = date.end_of_year
+      else
+        start = date.beginning_of_day
+        ending = date.end_of_day
+      end
+
+    Circuit.find_by_sql(["SELECT max(watts), description, id as ids
+                            FROM(
+                             SELECT
+                             measures.watts,
+                             circuits.description,
+                             circuits.id
+                             FROM
+                             measures,
+                             circuits 
+                             WHERE
+                             measures.circuit_id = circuits.id AND 
+                             measures.created_at >= ? AND
+                             measures.created_at <= ?) as stats
+                             GROUP BY 2,3;",start, ending])
+  end
+
+  
  private
 
   def format(data)

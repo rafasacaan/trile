@@ -219,7 +219,6 @@ $("#reload").on("click", function(e){
       });
       var dates = interval();
       var filters = _.filter(data, function(d){
-      console.log(new Date(d.created_at).getTime(),dates[0],dates[1]);
       return ( new Date(d.created_at).getTime() >= dates[0] && new Date(d.created_at).getTime() <= dates[1]); 
       });
       current_chart = Morris.Area(area_options);
