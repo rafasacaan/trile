@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   get 'infographics/index'
   get 'infographics/peak'
+  get 'infographics/sum_energy'
 
   resources :circuits, except: :destroy
   resources :demands, controller: 'circuits', type: 'Demand', except: :destroy

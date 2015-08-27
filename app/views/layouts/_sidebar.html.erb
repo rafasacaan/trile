@@ -1,21 +1,28 @@
 <aside><!--  MAIN SIDEBAR MENU -->
   <div id="sidebar"  class="nav-collapse"><!-- sidebar menu start-->
       <ul class="sidebar-menu" id="nav-accordion">       
+        
         <li>
          <%= link_to root_url do %>
         <i class="fa fa-home fa-2x centered" id="report"></i><p class="centered" id="home-icon-p">Home</p>
         <% end %>
         </li>
+        
         <li>
          <%= link_to circuits_path() do %>
         <i class="fa fa-flash fa-2x centered" id="report"></i><p class="centered">My Circuits</p>
         <% end %>
-        </li>        
-        <li>
-         <%= link_to infographics_index_path do %>
-        <i class="fa fa-tasks fa-2x centered" id="report"></i><p class="centered">Infographics</p>
-        <% end %>
         </li>
+
+        <li class="sub-menu">
+          <a href="javascript:;"><i class="fa fa-tasks fa-2x centered" id="report"></i><p class="centered">Infographics</p></a>
+          <ul class="sub-menu">
+             <li><%= link_to "Energy", infographics_index_path %></li> 
+             <li><%= link_to "Peaks",  infographics_peak_path() %></li>
+             <li><%= link_to "Sum Energy",  infographics_sum_energy_path() %></li>
+          </ul>
+        </li>
+
 
         <li class="sub-menu">
          <a href="javascript:;"><i class="fa fa-cogs fa-2x centered" id="report"></i><p class="centered">Config panel</p></a>

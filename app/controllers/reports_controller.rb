@@ -55,6 +55,11 @@ before_action :authenticate_user!
 		render json: Circuit.peaks(date, params[:type])
 	end
 
+	def sum_energy_week
+		date = DateTime.parse(params[:date]) 
+		render json: Circuit.sum_energy_week(date, params[:type])
+	end
+
 	private
 
 	def labels

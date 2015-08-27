@@ -280,6 +280,28 @@ def self.peaks(date,type)
                              GROUP BY 2,3;",start, ending])
   end
 
+  def self.sum_energy_week(date)
+  date = if date then date else Date.today end
+    Circuit.find_by_sql(["SELECT trunc(cast(SUM(Watts) AS numeric),2) AS \"watts\", hours, id  "+
+                         "FROM(                                                                "+
+                         "SELECT                                                               "+
+                         "circuits.id                                                          "+
+                         "measures.watts *                                                     "+
+                         "EXTRACT(epoch FROM (measures.created_at - lag(measures.created_at)   "+
+                         "over (order by measures.created_at)))/3600 AS Watts,                 "+
+                         "to_char(measures.created_at,'HH24') AS hours                         "+
+                         "FROM                                                                 "+ 
+                         "measures,                                                            "+
+                         "circuits                                                             "+
+                         "WHERE                                                                "+ 
+                         "measures.created_at >= ? AND                                         "+
+                         "measures.created_at <= ?                                             "+
+                         "ORDER BY                                                             "+
+                         "hours ASC ) AS stats                                                 "+
+                         "GROUP BY 2,3                                                         ",
+                          date.beginning_of_day, date.end_of_day])
+  end
+
   
  private
 
