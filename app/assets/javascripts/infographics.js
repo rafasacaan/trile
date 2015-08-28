@@ -42,7 +42,6 @@ function setchart(date){
   var date = date || new Date();
   date.setHours(0,0,0,0);
   var type = $("input:radio[name=options]:checked").val();
-  console.log(type);
   $.getJSON("/reports/donuts/"+date +"/" +type, function(data) {
     var sum = 0;
     var datos = [];

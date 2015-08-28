@@ -5,7 +5,6 @@ module CircuitsStatus
 	
 	def set_circuits
 		circuits = Circuit.all
-
 	rescue ActiveRecord::RecordNotFound
 		circuits = Circuit.new
 	end
@@ -17,7 +16,7 @@ module CircuitsStatus
 			if c.measures.count == 0
 				c.status = "No measures"
 			else
-				if (Time.now-c.measures.order(:created_at).last.created_at) > c.alarm_time*60
+				if (Time.now-c.measures.last.created_at) > c.alarm_time*60
 				c.status = "Problem"
 				else
 				c.status = "Ok"	
@@ -25,7 +24,7 @@ module CircuitsStatus
 			end			
 		end
 	end
-	
+
 	def general_status
 		circuits = circuits_status
 		circuits.each do |c|

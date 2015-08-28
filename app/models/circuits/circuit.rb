@@ -5,8 +5,7 @@ class Circuit < ActiveRecord::Base
   scope :generations, -> { where(type: 'generation') }
   before_destroy :ensure_not_referenced_by_any_measure
   before_save :default_values
-  after_initialize :set_status
-  
+    
   attr_accessor :status, :current_user, :part
 
  def self.types
@@ -17,17 +16,7 @@ class Circuit < ActiveRecord::Base
     measures.last 
  end
 
- def set_status
-  if self.measures.count == 0
-          self.status = "No measures"
-      else
-        if (Time.now-self.measures.order(:created_at).last.created_at) > self.alarm_time*60
-          self.status = "Problem"
-        else
-          self.status = "Ok" 
-        end
-      end 
- end
+ 
 
 def specific_day_measures(date, variation)
     var = if variation then variation else 3 end
@@ -178,7 +167,7 @@ def specific_day_measures(date, variation)
   end
 
 
-    def self.watts_sum(date, type)
+def self.watts_sum(date, type)
     date = if date then date else Date.today end
 
     case type
@@ -226,7 +215,8 @@ def specific_day_measures(date, variation)
             "   ORDER BY measures.created_at ASC) AS stats                           "+ 
             "   group by 1,2) as prev                                                "+
             "   order by part desc                                                   ",
-            start, ending])        
+            start, ending]) 
+       
     end 
     
     def last_five_measures
@@ -282,14 +272,14 @@ def self.peaks(date,type)
 
   def self.sum_energy_week(date)
   date = if date then date else Date.today end
-    Circuit.find_by_sql(["SELECT trunc(cast(SUM(Watts) AS numeric),2) AS \"watts\", hours, id  "+
+    measures = Circuit.find_by_sql(["SELECT trunc(cast(SUM(Wh) AS numeric),2) AS Wh, time_unit, id "+
                          "FROM(                                                                "+
                          "SELECT                                                               "+
-                         "circuits.id                                                          "+
+                         "circuits.id,                                                         "+
                          "measures.watts *                                                     "+
                          "EXTRACT(epoch FROM (measures.created_at - lag(measures.created_at)   "+
-                         "over (order by measures.created_at)))/3600 AS Watts,                 "+
-                         "to_char(measures.created_at,'HH24') AS hours                         "+
+                         "over (order by measures.created_at)))/3600 AS Wh,                    "+
+                         "to_char(measures.created_at,'HH24') AS time_unit                     "+
                          "FROM                                                                 "+ 
                          "measures,                                                            "+
                          "circuits                                                             "+
@@ -297,12 +287,44 @@ def self.peaks(date,type)
                          "measures.created_at >= ? AND                                         "+
                          "measures.created_at <= ?                                             "+
                          "ORDER BY                                                             "+
-                         "hours ASC ) AS stats                                                 "+
-                         "GROUP BY 2,3                                                         ",
-                          date.beginning_of_day, date.end_of_day])
+                         "time_unit ASC ) AS stats                                             "+
+                         "GROUP BY 2,3                                                          ",
+                         date.beginning_of_day, date.end_of_day])
   end
 
-  
+  def self.sum_energy_month(date)
+    date = if date then date else Date.today end
+    measures = Circuit.find_by_sql(["SELECT * FROM circuit_sum_day "+
+                                  "WHERE                           "+
+                                  "time_unit <= ? AND              "+
+                                  "time_unit >= ?;                 ",
+                                   date.end_of_month,
+                                   date.at_beginning_of_month
+                                   ])
+    #
+    one_day_of_month_for_each_circuit_id = []
+    days_in_month = (date.at_beginning_of_month..date.at_end_of_month)
+    circuits_ids = Circuit.select('id').as_json.map!{|c| c['id']}
+    
+    days_in_month.each do |d|
+      circuits_ids.each do |c|
+        one_day_of_month_for_each_circuit_id << {"time_unit" => d.to_time.to_i, "wh" => 0, "id" => c}
+      end
+    end
+
+        one_day_of_month_for_each_circuit_id.each do |circuit_day|
+          measures.each.each do |m|
+          if m.time_unit.to_time.to_i == circuit_day["time_unit"] && circuit_day["id"] == m.id
+            circuit_day["wh"] = m.Wh
+          end 
+        end
+        circuit_day["time_unit"] = DateTime.strptime(circuit_day["time_unit"].to_s,'%s').strftime("%d/%m/%y")
+      end
+
+     return one_day_of_month_for_each_circuit_id 
+   
+  end
+
  private
 
   def format(data)

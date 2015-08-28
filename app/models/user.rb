@@ -18,25 +18,6 @@ class User < ActiveRecord::Base
   end
   
 
-def energy_sum_current_month(id = self.id)
-  energy = User.find_by_sql(["SELECT SUM(Watts) AS \"Wattshora\", to_char(created_at,'Mon') as mon, extract(year from created_at) as year,\"type\"   "+     
-                            "FROM(                                                                                                                   "+
-                            "SELECT                                                                                                                  "+
-                            "circuits.type as \"type\",                                                                                              "+
-                            "measures.created_at,                                                                                                    "+
-                            "measures.watts *                                                                                                        "+ 
-                            "EXTRACT(epoch FROM (measures.created_at - lag(measures.created_at)                                                      "+
-                            "over (order by measures.created_at)))/3600 AS Watts                                                                     "+   
-                            "FROM                                                                                                                    "+
-                            "public.users,                                                                                                           "+
-                            "#{self.schema_name}.circuits,                                                                                           "+
-                            "#{self.schema_name}.measures                                                                                            "+
-                            "WHERE                                                                                                                   "+ 
-                            "users.id = ? AND                                                                                                        "+ 
-                            "measures.created_at >= ?) AS foo                                                                                        "+
-                            "GROUP BY 2,3,4;",id, Time.now.at_beginning_of_month])
-  end
-
 private
 
     def set_auth_token

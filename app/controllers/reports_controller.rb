@@ -6,7 +6,8 @@ before_action :set_circuit, only:[:today_measures,
 								  :year_measures,
 								  :specific_date_measures,
 								  :last_five,
-								  :circuit_type] 
+								  :circuit_type
+								  ] 
 before_action :set_circuits, only:[:welcome_index, :labels]
 before_action :authenticate_user!
 	def today_measures
@@ -33,11 +34,6 @@ before_action :authenticate_user!
 		render json: @circuit.specific_day_measures(date, params[:variation])
 	end
 
-	def donuts
-		date = DateTime.parse(params[:date]) 
-		render json: Circuit.watts_sum(date, params[:type])
-	end
-
 	def welcome_index
 		render json: @circuits
 	end
@@ -50,6 +46,11 @@ before_action :authenticate_user!
 		render json: @circuit.type.to_json
 	end
 
+	def donuts
+		date = DateTime.parse(params[:date]) 
+		render json: Circuit.watts_sum(date, params[:type])
+	end
+
 	def peaks
 		date = DateTime.parse(params[:date]) 
 		render json: Circuit.peaks(date, params[:type])
@@ -57,7 +58,17 @@ before_action :authenticate_user!
 
 	def sum_energy_week
 		date = DateTime.parse(params[:date]) 
-		render json: Circuit.sum_energy_week(date, params[:type])
+		render json: Circuit.sum_energy_week(date)
+	end
+
+	def sum_energy_month
+		date = DateTime.parse(params[:date]) 
+		render json: Circuit.sum_energy_month(date)
+	end
+
+	def sum_energy_year
+		date = DateTime.parse(params[:date]) 
+		render json: Circuit.sum_energy_year(date)
 	end
 
 	private

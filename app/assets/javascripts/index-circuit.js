@@ -264,7 +264,6 @@ $("#tab a").on("click",function(e) {
         month_options.labels = [];
         month_options.labels.push(data);
       });
-       console.log(data);
       current_chart = Morris.Bar(month_options);
       current_chart.setData(data);
     } else if (chart == "year"){
