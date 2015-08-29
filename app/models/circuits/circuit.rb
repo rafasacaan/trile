@@ -147,12 +147,12 @@ def specific_day_measures(date, variation)
                          "FROM generate_series('2015-01-01 00:00'::timestamp, '2015-12-31 00:00'::timestamp, '1 month'::interval) dt) AS t1                                                                                    "+
                          "LEFT OUTER JOIN (SELECT SUM (stats.Watts) AS \"Wattshora\", stats.mon                                                                                                                                "+
                          "FROM ( SELECT                                                                                                                                                                                        "+                             
-                         "#{Apartment::Tenant.current}.measures.watts * EXTRACT(epoch FROM (#{Apartment::Tenant.current}.measures.created_at - lag(#{Apartment::Tenant.current}.measures.created_at) over (order by measures.created_at)))/3600 AS Watts, "+                   
+                         "measures.watts * EXTRACT(epoch FROM (measures.created_at - lag(measures.created_at) over (order by measures.created_at)))/3600 AS Watts, "+                   
                          "to_char(measures.created_at,'TMmon') AS mon,                                                                                                                                                         "+               
                          "row_number() OVER () as rnum                                                                                                                                                                         "+       
                          "FROM                                                                                                                                                                                                 "+
-                         "public.circuits,                                                                                                                                                                                     "+                               
-                         "#{Apartment::Tenant.current}.measures                                                                                                                                                                         "+                   
+                         "circuits,                                                                                                                                                                                     "+                               
+                         "measures                                                                                                                                                                         "+                   
                          "WHERE                                                                                                                                                                                                "+
                          "circuits.id = ? AND                                                                                                                                                                                  "+                               
                          "measures.circuit_id = ? AND                                                                                                                                                                          "+        
@@ -301,7 +301,7 @@ def self.peaks(date,type)
                                    date.end_of_month,
                                    date.at_beginning_of_month
                                    ])
-    #
+    
     one_day_of_month_for_each_circuit_id = []
     days_in_month = (date.at_beginning_of_month..date.at_end_of_month)
     circuits_ids = Circuit.select('id').as_json.map!{|c| c['id']}
@@ -321,8 +321,23 @@ def self.peaks(date,type)
         circuit_day["time_unit"] = DateTime.strptime(circuit_day["time_unit"].to_s,'%s').strftime("%d/%m/%y")
       end
 
-     return one_day_of_month_for_each_circuit_id 
-   
+       return one_day_of_month_for_each_circuit_id 
+  end
+
+  def self.sum_energy_year(date)
+    if date then date else Date.today end
+    Circuit.find_by_sql(["SELECT tmp.time_unit, stat.wh, stat.id
+                          FROM(select to_char(DATE '2015-01-01' + (interval '1' month * generate_series(0,11)),'Mon') as time_unit) as tmp 
+                          left outer join (
+                          select
+                          to_char(to_date(replace(time_unit,'-','/'), 'YYYY MM DD'),'Mon') as mon,
+                          trunc(cast(sum(\"Wh\") AS numeric),2) as \"wh\",
+                          id
+                          from prv_7.circuit_sum_day
+                          where time_unit > ?   
+                          group by 1, 3) as stat
+                          on tmp.time_unit = stat.mon",
+                          date.at_beginning_of_year ])  
   end
 
  private

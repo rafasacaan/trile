@@ -58,7 +58,7 @@ body {
 }
 
 #testchart.loading {
-  background-image: image-url("loading_spinner.gif");
+  background-image: url("loading_spinner.gif");
   background-position: center;
   background-repeat: no-repeat;
 }

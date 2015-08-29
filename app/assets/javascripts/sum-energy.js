@@ -131,6 +131,7 @@ $("#reload").on("click", function(e){
   }
      current_chart = Morris.Bar(week_options);
      current_chart.setData(clean_data);
+     $("#testchart").removeClass("loading");
   });
   //This takes care of .active class for the navs
   $(this).parent().parent().find(".active").removeClass("active");

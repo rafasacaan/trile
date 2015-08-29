@@ -36,6 +36,10 @@ var current_chart = null;
 
 $(function(){
   setchart();
+  var type = $("input:radio[name=options]:checked").val();
+   var date = $( "#datepicker" ).datepicker( "getDate" ); 
+   var date = $.datepicker.formatDate('MM dd, yy', new Date(date));
+  $('#message').text("You are looking the " + type + " of " + date);
 });
 
 function setchart(date){
@@ -67,6 +71,10 @@ $("#reload").click(function(e){
   $(".morris-hover.morris-default-style").remove(); 
   var date = $( "#datepicker" ).datepicker( "getDate" ); 
   setchart(date);
+  var type = $("input:radio[name=options]:checked").val();
+   var date = $( "#datepicker" ).datepicker( "getDate" ); 
+   var date = $.datepicker.formatDate('MM dd, yy', new Date(date));
+  $('#message').text("You are looking the " + type + " of " + date);
 })
 
 function numberWithDots(x) {
