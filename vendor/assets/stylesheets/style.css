@@ -27,6 +27,11 @@ body {
 #donut-example{
     margin-bottom: 4%;
 }
+
+#form-hor{
+padding-left: 18px;
+}
+
 #donut-calendar{
     margin-top: 2%;
 }

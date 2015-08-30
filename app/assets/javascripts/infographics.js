@@ -36,7 +36,7 @@ var current_chart = null;
 
 $(function(){
   setchart();
-  var type = $("input:radio[name=options]:checked").val();
+   var type = $("input:radio[name=options]:checked").val();
    var date = $( "#datepicker" ).datepicker( "getDate" ); 
    var date = $.datepicker.formatDate('MM dd, yy', new Date(date));
   $('#message').text("You are looking the " + type + " of " + date);

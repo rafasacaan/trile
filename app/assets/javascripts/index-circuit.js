@@ -188,8 +188,6 @@ $("#reload").on("click", function(e){
   date.setHours(0,0,0,0);
   //With the url set, the data to be displeyed is searched, plus the circuit id wich cames form data("circuit")
   $.getJSON(url + parseInt(checked) +"/"+date, function(data) {
-     //Removes the spinning class
-    $("#testchart3").removeClass("loading");
     //If the chart is month or year then,
     if (chart == "month") {
        $.getJSON("/reports/circuit_type/" + parseInt(checked) , function(data) {
@@ -225,7 +223,10 @@ $("#reload").on("click", function(e){
       current_chart.setData(filters);
       current_chart_2 = Morris.Area(area_options_2);
       current_chart_2.setData(data);
-  }});
+    }
+     //Removes the spinning class
+    $("#testchart").removeClass("loading");
+  });
   //This takes care of .active class for the navs
   $(this).parent().parent().find(".active").removeClass("active");
   $(this).parent().addClass("active");
@@ -239,26 +240,32 @@ $("#tab a").on("click",function(e) {
   $('svg').remove();
   $(".morris-hover.morris-default-style").remove();  
   //After, adds the spinner for loading
-  $("#testchart3").addClass("loading");
+  $("#testchart").addClass("loading");
   chart = $(this).data("chart");
   //Depending of the chart value, a url variable is assigned
   if (chart == "day") {
     url = "/reports/today_measures/";
-  } else if (chart == "week") {
+     $("#form-hor").show();
+     $("#full-day").show();
+  } else if (chart == "week") {    
     url = "/reports/week_measures/";
+    $("#form-hor").hide();
+    $("#full-day").hide();
   } else if (chart == "month") {
     url = "/reports/month_measures/";
+    $("#form-hor").hide();
+    $("#full-day").hide();
   } else if (chart == "year") {
     url = "/reports/year_measures/";
+    $("#form-hor").hide();
+    $("#full-day").hide();
   }
 
   date = $( "#datepicker" ).datepicker( "getDate" ) || new Date();
   date.setHours(0,0,0,0);
   //With the url set, the data to be displeyed is searched, plus the circuit id wich cames form data("circuit")
   $.getJSON(url + parseInt(checked) +"/"+date, function(data) {
-     //Removes the spinning class
-    $("#testchart3").removeClass("loading");
-    //If the chart is month or year then,
+     //If the chart is month or year then,
     if (chart == "month") {
        $.getJSON("/reports/circuit_type/" + parseInt(checked) , function(data) {
         month_options.labels = [];
@@ -289,7 +296,10 @@ $("#tab a").on("click",function(e) {
       current_chart.setData(data);
       current_chart_2 = Morris.Area(area_options_2);
       current_chart_2.setData(data);
-  }});
+  }
+ //Removes the spinning class
+    $("#testchart").removeClass("loading");
+});
   //This takes care of .active class for the navs
   $(this).parent().parent().find(".active").removeClass("active");
   $(this).parent().addClass("active");
