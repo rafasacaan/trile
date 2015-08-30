@@ -26,7 +26,8 @@ $(function () {
             // (string | optional) the class name you want to apply to that specific message
             class_name: 'my-sticky-class'
         });
- return false;
+      
+  return false;
 
 });        
   
@@ -34,6 +35,7 @@ $(function () {
 $(function () {
     var options = {
         type: 'line',
+        resize: true,
         height: '75',
         width: '90%',        
         lineWidth: 1,
@@ -42,9 +44,9 @@ $(function () {
         fillColor: '',
         highlightLineColor: '#ffffff',
         spotRadius: 4,
-        valueSpots: {':49': '#64FFDA', '50:': 'red'}
-        };
-             
+        valueSpots: {':49': '#64FFDA', '50:': 'red'}};
+        
+            
     $.getJSON("/reports/welcome_index", function(data) {
       for (i = 0; i < data.length; i++){
         $.getJSON("/reports/last_five/" + data[i].id, function(data){
@@ -63,9 +65,3 @@ function average(array) {
      var avg = sum/array.length;        // The function returns the product of p1 and p2
      return avg;
 };
-        
-        
-        
-    
-        
- 
