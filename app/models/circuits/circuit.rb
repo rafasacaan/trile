@@ -289,7 +289,7 @@ def self.peaks(date,type)
                          "ORDER BY                                                             "+
                          "time_unit ASC ) AS stats                                             "+
                          "GROUP BY 2,3                                                          ",
-                         date.beginning_of_day, date.end_of_day])
+                         date.beginning_of_day - 3.hours, date.end_of_day ])
   end
 
   def self.sum_energy_month(date)

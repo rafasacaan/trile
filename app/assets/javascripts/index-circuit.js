@@ -76,7 +76,7 @@ var area_options_2 = {
 };
 
   var month_options = {
-    element: 'testchart',
+    element: 'testchart3',
     data: [],
     xkey: 'dt',
     ykeys: ['watts'],
@@ -156,24 +156,8 @@ var checked= document.querySelector('input[name="circuits"]:checked').value;
   $("#testchart").removeClass("loading");
   $.getJSON("/reports/circuit_type/" + parseInt($("#testchart").data("circuit")), function(data) {
     area_options.labels.push(data);
-  	area_options_2.labels.push(data);
+    area_options_2.labels.push(data);
   });
-
-  var filters = _.find(data, function(d){ return d.created_at > 0 });
-  current_chart = Morris.Area(area_options);
-  current_chart.setData(data);
-  current_chart = Morris.Area(area_options_2);
-  current_chart.setData(data);
-  });
-});
-
-$("a.nav-tab-action").click(function(e) {
-  //Remove from DOM the elements created by morris before, so they don't crush on each click event
-  $('svg').remove();
-  $(".morris-hover.morris-default-style").remove();  
-  //After, adds the spinner for loading
-  $("#testchart3").addClass("loading");
-  chart = $(this).data("chart");
   current_chart = Morris.Area(area_options);
   current_chart.setData(data);
   current_chart_2 = Morris.Area(area_options_2);
@@ -190,7 +174,6 @@ $("#reload").on("click", function(e){
   $(".morris-hover.morris-default-style").remove();
   //After, adds the spinner for loading
   $("#testchart").addClass("loading");
->>>>>>> DemandFocus
   //Depending of the chart value, a url variable is assigned
   if (chart == "day") {
     url = "/reports/today_measures/";
@@ -322,11 +305,13 @@ $("#tab a").on("click",function(e) {
   $(this).parent().addClass("active");
 });//end click
 
+
 function interval(){
 
     var since_hour = $('#basicExample')[0].value || "00:00",
         until_hour = $('#basicExample2')[0].value || "24:00",
         result = [];
+    
     var date_since = $( "#datepicker" ).datepicker( "getDate" ) || new Date();
     
     if(since_hour > until_hour){
@@ -341,7 +326,6 @@ function interval(){
 
     return result
 };
-
 
 
 
