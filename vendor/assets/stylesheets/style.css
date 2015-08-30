@@ -27,6 +27,11 @@ body {
 #donut-example{
     margin-bottom: 4%;
 }
+
+#form-hor{
+padding-left: 18px;
+}
+
 #donut-calendar{
     margin-top: 2%;
 }
@@ -43,6 +48,10 @@ body {
 #edit-form {
  margin-top: 2%;  
 }
+#home-icon-p {
+ margin-right: 20px;
+ text-align: center;
+}
 
 #landing-img {
    width: 100%;  
@@ -54,7 +63,7 @@ body {
 }
 
 #testchart.loading {
-  background-image: image-url("loading_spinner.gif");
+  background-image: url("loading_spinner.gif");
   background-position: center;
   background-repeat: no-repeat;
 }
@@ -241,6 +250,10 @@ hr {
 
 .ml {
     margin-left: 5px;
+    }
+
+.mr {
+    margin-left: 25px;
     }
 
 .no-padding {

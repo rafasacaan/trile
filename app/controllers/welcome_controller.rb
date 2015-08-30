@@ -4,13 +4,11 @@ class WelcomeController < ApplicationController
   include CircuitsStatus
   ########################################################################################################################
   before_action :authenticate_user!
-  before_action :circuits_status 
   before_action :general_status
   ########################################################################################################################
   def index
-    @energy = current_user.energy_sum_current_month(current_user.id)
     #This variable, selects de js file for the index view
     @js_file="welcome"
   end 
-   
+
 end

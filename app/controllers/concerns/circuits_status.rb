@@ -12,10 +12,11 @@ module CircuitsStatus
 	def circuits_status
 		@circuits = set_circuits
 		@circuits.each do |c|
+			#To do. Need refactor to improve performance. Measures.last could do the trick faster
 			if c.measures.count == 0
 				c.status = "No measures"
 			else
-				if (Time.now-c.measures.order(:created_at).last.created_at) > c.alarm_time*60
+				if (Time.now-c.measures.last.created_at) > c.alarm_time*60
 				c.status = "Problem"
 				else
 				c.status = "Ok"	
@@ -23,7 +24,7 @@ module CircuitsStatus
 			end			
 		end
 	end
-	
+
 	def general_status
 		circuits = circuits_status
 		circuits.each do |c|

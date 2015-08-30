@@ -1,0 +1,29 @@
+<div id="monitor" class="panel panel-default tab-box" style="position:relative z-index:2">
+    <div class="panel-heading">
+    	<div class="row">
+    		<div class="col-xs-4 col-sm-4"><i class="fa fa-signal"> Monitoring report</i></div>
+    		<div class="col-xs-4 col-sm-4 text-center"><i class="fa fa-calendar" id="current_month"> Current month: <%= Date.today.strftime("%B") %></i></div>		
+    		<div class="col-xs-4 col-sm-4">
+    			<div class="input-group input-group-sm pull-right">
+    			<input type="text" id="datepicker" class="form-control" placeholder ="specific-date" aria-describedby="sizing-addon3">
+    			</div>	
+    		</div> 
+    	</div> 
+    </div>    
+    <div class="panel-title">
+    	<ul class="nav nav-tabs" id="TabList">
+	  		<div class="btn-group" data-toggle="buttons" id="radio">
+            <label class="btn btn">
+                <input type="radio" name="options" value = "week" id="option2" autocomplete="off"> Hours/Day
+            </label>
+              <label class="btn btn">
+                <input type="radio" name="options" value = "month" id="option3" autocomplete="off"> Days/Month
+              </label>
+            <label class="btn btn">
+                <input type="radio" name="options" value = "year" id="option4" autocomplete="off"> Month/Year
+            </label>
+            </div>
+	  	</ul>   
+    </div>
+   	
+    

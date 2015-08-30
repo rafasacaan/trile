@@ -22,7 +22,8 @@
  *= require to-do
  *= require morris.css
  *= require jquery-ui
- *= require-ui.structure
- *= require-ui.theme 
+ *= require jquery-ui.structure
+ *= require jquery-ui.theme
+ *= require jquery.timepicker
  *= require_self
  */
