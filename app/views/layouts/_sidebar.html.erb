@@ -29,6 +29,7 @@
         <ul class="sub-menu">
           <% if user_signed_in? %>
               <li><%= link_to 'Edit Account', edit_user_registration_path %></li>
+              <li><%= link_to 'New Circuit', new_circuit_path %></li>
               <li><%= link_to 'Api Key', user_path(current_user.id) %></li>
           <% else %>
               <li><%= link_to 'Sign in', new_user_session_path %></li>

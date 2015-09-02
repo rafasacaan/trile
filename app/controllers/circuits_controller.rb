@@ -36,7 +36,7 @@ class CircuitsController < ApplicationController
     
     respond_to do |format|
       if @circuit.save
-        format.html { redirect_to @circuit, notice: 'Circuit was successfully created.' }
+        format.html { redirect_to root_path, notice: 'Circuit was successfully created.' }
         format.json { render :show, status: :created, location: @circuit }
       else
         format.html { render :new }
@@ -49,7 +49,7 @@ class CircuitsController < ApplicationController
   def update
     respond_to do |format|
       if @circuit.update(circuit_params)
-        format.html { redirect_to @circuit, notice: 'Circuit was successfully updated.' }
+        format.html { redirect_to root_path, notice: 'Circuit was successfully updated.' }
         format.json { render :show, status: :ok, location: @circuit }
       else
         format.html { render :edit }
