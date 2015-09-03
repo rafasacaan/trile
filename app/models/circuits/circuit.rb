@@ -6,7 +6,7 @@ class Circuit < ActiveRecord::Base
   before_destroy :ensure_not_referenced_by_any_measure
   before_save :default_values
     
-  attr_accessor :status, :current_user, :part
+ attr_accessor :status, :current_user, :part
 
  def self.types
       %w(Demand Generation)

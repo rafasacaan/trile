@@ -30,10 +30,10 @@ module CircuitsStatus
 		circuits.each do |c|
 			if c.status != "Ok"
 				@status = "Problem"
-				flash[:error] = "Check your circuits, there is something wrong"
+				flash.now[:error] = "Check your circuits, there is something wrong"
 			else
 				@status = "OK"
-				flash[:success] = "All circuits working correctly"
+				flash.now[:success] = "All circuits working correctly"
 			end
 		end
 	end

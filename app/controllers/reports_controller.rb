@@ -5,7 +5,6 @@ before_action :set_circuit, only:[:today_measures,
 								  :month_measures,
 								  :year_measures,
 								  :specific_date_measures,
-								  :last_five,
 								  :circuit_type
 								  ] 
 before_action :set_circuits, only:[:welcome_index, :labels]
@@ -39,6 +38,7 @@ before_action :authenticate_user!
 	end
 
 	def last_five
+		@circuit = Circuit.find(params[:id])
 		render json: @circuit.last_five_measures
 	end
 
