@@ -1,10 +1,10 @@
 
-server '52.4.86.69', user: 'deploy', roles: %w{web app}, my_property: :my_value
+server 'trile.club', user: 'deploy', roles: %w{web app}, my_property: :my_value
 set :stage, :production
 
-role :app, %w{deploy@52.4.86.69}
-role :web, %w{deploy@52.4.86.69}
-role :db,  %w{deploy@52.4.86.69}
+role :app, %w{deploy@trile.club}
+role :web, %w{deploy@trile.club}
+role :db,  %w{deploy@trile.club}
 
 
 # server-based syntax
